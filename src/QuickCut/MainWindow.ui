@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindowClass</class>
+ <widget class="QMainWindow" name="MainWindowClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>310</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QuickCut</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <activeon>:/Resources/logo.png</activeon>
+   </iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblUserActions">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>User Actions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QListWidget" name="lbxActions"/>
+    </item>
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="btnActionCreate">
+        <property name="minimumSize">
+         <size>
+          <width>95</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Create Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionDelete">
+        <property name="minimumSize">
+         <size>
+          <width>95</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Delete Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionDuplicate">
+        <property name="minimumSize">
+         <size>
+          <width>95</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Duplicate Action</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QGroupBox" name="gbxProfile">
+      <property name="title">
+       <string>Profile</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="lblProfile">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cbxProfile"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="btnSetActive">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnDeleteProfile">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnCreateProfile">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Create</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>310</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionFileOpen"/>
+    <addaction name="actionFileSave"/>
+    <addaction name="actionFileSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionFileExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Preferences</string>
+    </property>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme     </string>
+     </property>
+     <addaction name="actionThemeDefault"/>
+     <addaction name="actionThemeDark"/>
+     <addaction name="actionThemeBreezeDark"/>
+     <addaction name="actionThemeBreezeLight"/>
+     <addaction name="actionThemeConsoleDark"/>
+     <addaction name="actionThemeUbuntu"/>
+     <addaction name="separator"/>
+     <addaction name="actionThemeLoadQss"/>
+    </widget>
+    <addaction name="menuTheme"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionViewToolBar"/>
+    <addaction name="actionViewStatusBar"/>
+    <addaction name="separator"/>
+    <addaction name="actionViewRefresh"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelpAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionHelpExamples"/>
+    <addaction name="separator"/>
+    <addaction name="actionHelpCheckUpdates"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuSettings"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionFileOpen"/>
+   <addaction name="actionFileSave"/>
+   <addaction name="actionFileSaveAs"/>
+   <addaction name="separator"/>
+   <addaction name="actionViewRefresh"/>
+   <addaction name="actionFileRestartService"/>
+   <addaction name="actionThemeLoadQss"/>
+   <addaction name="separator"/>
+   <addaction name="actionHelpAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionFileOpen">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/file_open.png</normaloff>:/Resources/file_open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionFileSave">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/file_save.png</normaloff>:/Resources/file_save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionFileSaveAs">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/file_saveas.png</normaloff>:/Resources/file_saveas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save As...</string>
+   </property>
+  </action>
+  <action name="actionFileExit">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/file_exit.png</normaloff>:/Resources/file_exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionHelpAbout">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/help_about.png</normaloff>:/Resources/help_about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionHelpExamples">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/help_search.png</normaloff>:/Resources/help_search.png</iconset>
+   </property>
+   <property name="text">
+    <string>Examples</string>
+   </property>
+  </action>
+  <action name="actionHelpCheckUpdates">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/help_check_updates.png</normaloff>:/Resources/help_check_updates.png</iconset>
+   </property>
+   <property name="text">
+    <string>Check for updates...</string>
+   </property>
+  </action>
+  <action name="actionFully_Map_Key">
+   <property name="text">
+    <string>Fully Map Key</string>
+   </property>
+  </action>
+  <action name="actionViewToolBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/view_toolbar.png</normaloff>:/Resources/view_toolbar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tool Bar</string>
+   </property>
+  </action>
+  <action name="actionViewStatusBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/view_statusbar.png</normaloff>:/Resources/view_statusbar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="actionThemeDefault">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionThemeDark">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dark</string>
+   </property>
+  </action>
+  <action name="actionViewRefresh">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/view_refresh.png</normaloff>:/Resources/view_refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionThemeLoadQss">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/preferences_open_theme.png</normaloff>:/Resources/preferences_open_theme.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Custom Stylesheet...</string>
+   </property>
+  </action>
+  <action name="actionThemeBreezeDark">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Breeze Dark</string>
+   </property>
+  </action>
+  <action name="actionThemeBreezeLight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Breeze Light</string>
+   </property>
+  </action>
+  <action name="actionThemeUbuntu">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ubuntu</string>
+   </property>
+  </action>
+  <action name="actionThemeConsoleDark">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Console Dark</string>
+   </property>
+  </action>
+  <action name="actionFileRestartService">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Resources/file_restart_service.png</normaloff>:/Resources/file_restart_service.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restart Service</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>lbxActions</tabstop>
+  <tabstop>btnActionCreate</tabstop>
+  <tabstop>btnActionDelete</tabstop>
+  <tabstop>btnActionDuplicate</tabstop>
+  <tabstop>cbxProfile</tabstop>
+  <tabstop>btnCreateProfile</tabstop>
+  <tabstop>btnSetActive</tabstop>
+ </tabstops>
+ <resources>
+  <include location="MainWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>

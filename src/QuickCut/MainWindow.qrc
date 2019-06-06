@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/logo.png</file>
+        <file>Resources/btn_start_recording.png</file>
+        <file>Resources/btn_stop_recording.png</file>
+        <file>Resources/file_exit.png</file>
+        <file>Resources/file_open.png</file>
+        <file>Resources/file_save.png</file>
+        <file>Resources/file_saveas.png</file>
+        <file>Resources/help_about.png</file>
+        <file>Resources/help_check_updates.png</file>
+        <file>Resources/help_help.png</file>
+        <file>Resources/help_search.png</file>
+        <file>Resources/preferences.png</file>
+        <file>Resources/preferences_open_theme.png</file>
+        <file>Resources/preferences_theme.png</file>
+        <file>Resources/view_refresh.png</file>
+        <file>Resources/view_statusbar.png</file>
+        <file>Resources/view_toolbar.png</file>
+        <file>Resources/file_restart_service.png</file>
+    </qresource>
+</RCC>

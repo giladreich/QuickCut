@@ -1,0 +1,7 @@
+bin/
+.vs/
+*.aps
+GeneratedFiles/
+Release/
+Debug/
+data*/
