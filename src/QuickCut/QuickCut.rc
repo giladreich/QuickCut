@@ -1,4 +1,0 @@
-//#include <Windows.h>
-
-IDI_ICON1               ICON    DISCARDABLE     "QuickCut.ico"
-//CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST  "QuickCut.exe.manifest"

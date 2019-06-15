@@ -361,7 +361,7 @@
     <ClInclude Include="Preferences.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="QuickCut.rc" />
+    <ResourceCompile Include="Resources\QuickCut.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

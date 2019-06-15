@@ -210,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="QuickCutConsoleWindows.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\QuickCutConsole.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

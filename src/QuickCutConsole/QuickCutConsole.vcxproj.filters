@@ -59,6 +59,13 @@
     <ClInclude Include="..\QuickCutShared\QSingleApplication\QSingleInstance.h">
       <Filter>Source Files\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="QuickCutConsole.h" />
+    <ClInclude Include="QuickCutConsole.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\QuickCutConsole.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

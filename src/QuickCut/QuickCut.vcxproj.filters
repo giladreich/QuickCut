@@ -125,10 +125,10 @@
       <Filter>Source Files\Windows</Filter>
     </QtMoc>
     <QtMoc Include="..\QuickCutShared\QtService\qtservice.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shared\QtService</Filter>
     </QtMoc>
     <QtMoc Include="..\QuickCutShared\QtService\qtservice_win.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shared\QtService</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +184,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="QuickCut.rc">
+    <ResourceCompile Include="Resources\QuickCut.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
