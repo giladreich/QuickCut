@@ -5,6 +5,7 @@
         <file>theme_breezeLight.qss</file>
         <file>theme_console.qss</file>
         <file>theme_ubuntu.qss</file>
+        <file>theme_darkorange.qss</file>
     </qresource>
     <qresource prefix="/qss_icons">
         <file>rc/up_arrow_disabled.png</file>
@@ -131,5 +132,10 @@
         <file>dark/radio_checked_disabled.svg</file>
         <file>dark/radio_unchecked.svg</file>
         <file>dark/radio_unchecked_disabled.svg</file>
+    </qresource>
+    <qresource prefix="/darkorange">
+        <file>darkorange/checkbox.png</file>
+        <file>darkorange/down_arrow.png</file>
+        <file>darkorange/handle.png</file>
     </qresource>
 </RCC>
