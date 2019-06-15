@@ -39,8 +39,8 @@ namespace Hook {
     inline void sendReloadSignal()
     {
         const int INPUT_COUNT = 4;
-        int vkKey1 = std::strtol("82", nullptr, 16);
-        int vkKey2 = std::strtol("81", nullptr, 16);
+        int vkKey1 = std::strtol("86", nullptr, 16);
+        int vkKey2 = std::strtol("87", nullptr, 16);
         INPUT in[INPUT_COUNT] = { 0 };
         for (int i = 0; i < INPUT_COUNT; i++)
         {

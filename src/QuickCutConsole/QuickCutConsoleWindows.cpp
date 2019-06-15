@@ -5,14 +5,13 @@
 #include "Profile.h"
 
 #include <QDebug>
-#include <QFile>
 #include <QDir>
 #include <QProcess>
 
 
 // The GUI will send this pattern of key codes to notify that profile changes has been made
 // so it knows when to reload the profile data.
-#define RESERVED_RELOAD_KEY "82818281"
+#define RESERVED_RELOAD_KEY "86878687"
 
 #define KEY_WAS_DOWN_MASK 0x80
 #define KEY_IS_DOWN_MASK  0x01
