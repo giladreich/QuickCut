@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>QuickCut</Name>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Title>QuickCut</Title>
     <Publisher>Gilad Reich</Publisher>
     <ProductUrl>www.greich.com</ProductUrl>
