@@ -24,7 +24,7 @@ public:
     bool GetTokenByName(HANDLE & hToken, const WCHAR * szProcName);
 
 private:
-    void killHookIfRunning();
+    bool killHookIfRunning();
 
 public:
     static QuickCutServiceWindows * s_pInstance;

@@ -112,6 +112,8 @@ void QuickCutConsole::executeProcess(const std::string & szProc, const std::stri
     }
     qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: " << szCommand;
 
+    // Writing as script temporary to disk to avoid any white spaces issues 
+    // that QProcess doesn't handle very well...
     QString szFilePath = applicationDirPath() + "/tempCmd" + szExt;
     QFile file(szFilePath);
     file.open(QIODevice::ReadWrite);

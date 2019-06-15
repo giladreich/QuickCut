@@ -3,17 +3,20 @@
 #include "pch.h"
 
 #include <QDebug>
+#include <QThread>
+#include <QTimer>
 #include <QStandardPaths>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QProcess>
+#include <QSettings>
 #include <QtService/QtService>
 
 #include "ActionEditWindow.h"
 #include "AboutWindow.h"
 #include "CheckUpdatesWindow.h"
 #include "ExamplesWindow.h"
-#include <QProcess>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -30,17 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initPreferences();
     initProfiles();
-
-    QProcess::execute("QuickCutService -i"); // TODO: Figure out how the installer executes this command.
-
-    QtServiceController service("QuickCut Service");
-    service.stop();
-    service.start();
-    //if (!service.isRunning())
-    //{
-    //    service.start();
-    //    ui->statusBar->showMessage("Activated QuickCut Service.");
-    //}
+    activateHook();
 
     statusBar()->showMessage("Ready.");
 }
@@ -99,6 +92,52 @@ void MainWindow::connectSlots()
     connect(ui->btnActionCreate,    &QPushButton::clicked, this, &MainWindow::onBtnActionCreate);
     connect(ui->btnActionDelete,    &QPushButton::clicked, this, &MainWindow::onBtnActionDelete);
     connect(ui->btnActionDuplicate, &QPushButton::clicked, this, &MainWindow::onBtnActionDuplicate);
+}
+
+void MainWindow::activateHook()
+{
+    QProcess::execute("QuickCutService -i"); // TODO: Configure from installer.
+    QtServiceController service("QuickCut Service");
+    if (!service.isRunning())
+    {
+        service.start();
+        ui->statusBar->showMessage("Activated QuickCut Service.");
+    }
+
+#ifdef Q_OS_WIN
+    // TODO: Configure from installer.
+    // Don't start the service right when win boots.
+    QProcess::execute("sc config \"QuickCut Service\" start=delayed-auto");
+    QProcess::execute("sc failure \"QuickCut Service\" actions=restart/60000/restart/60000/""/60000 reset=86400");
+
+    const QString qcc = QCoreApplication::applicationDirPath() + "/QuickCutConsole.exe";
+
+    // Approach 1:
+    //QProcess::execute("schtasks /Create /TN \"QuickCut\" /SC ONLOGON /TR \"" + qcc + "\"");
+
+    // Approach 2:
+    //QSettings settings(R"(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)", QSettings::NativeFormat);
+    //const QString value(settings.value("QuickCutConsole", QString()).toString());
+    //if (value.isEmpty() || value != qcc)
+    //    settings.setValue("QuickCutConsole", qcc);
+
+    // Approach 3: <- Simple and works.
+    QDir dir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first());
+    dir.cdUp();
+    QFile::link(qcc, dir.path() + "/Microsoft/Windows/Start Menu/Programs/Startup/QuickCutConsole.lnk");
+
+    // Windows service starts the console hook as the default user using the winsta0\\default 
+    // which sometimes fails(QuickCutServiceWindows::RunProcessAsUserW), so if the user starts QuickCut
+    // GUI, we use the chance to start QuickCutConsole as the current user just in case.
+    QTimer::singleShot(5000, [] {
+        QThread * t = QThread::create([] {
+            QProcess::execute("taskkill /im QuickCutConsole.exe /f");
+            QThread::msleep(500);
+            QProcess::execute("QuickCutConsole");
+        });
+        t->start();
+    });
+#endif
 }
 
 
@@ -553,7 +592,7 @@ void MainWindow::onActionFileRestartService()
 {
     QtServiceController service("QuickCut Service");
     service.stop();
-    service.start();
+    activateHook();
 }
 
 void MainWindow::onActionFileExit()

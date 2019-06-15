@@ -23,6 +23,7 @@ public:
 
     void connectSlots();
 
+    void activateHook();
     void initPreferences();
     void initProfiles();
 

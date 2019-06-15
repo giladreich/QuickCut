@@ -30,8 +30,6 @@ QuickCutServiceWindows::~QuickCutServiceWindows()
 
 void QuickCutServiceWindows::start()
 {
-    killHookIfRunning();
-
     QuickCutService::start();
 
     std::wstring szProc = (QCoreApplication::applicationDirPath() + "/" + QUICKCUT_CONSOLE).toStdWString();
@@ -60,10 +58,15 @@ void QuickCutServiceWindows::stop()
 }
 
 
-void QuickCutServiceWindows::killHookIfRunning()
+bool QuickCutServiceWindows::killHookIfRunning()
 {
     if (isProcessRunning(QUICKCUT_CONSOLE))
+    {
         QProcess::execute("taskkill /im " QUICKCUT_CONSOLE " /f");
+        return true;
+    }
+
+    return false;
 }
 
 bool QuickCutServiceWindows::isProcessRunning(const QString & szProc)
