@@ -1,57 +1,56 @@
 
-<p align="center"><img src="pictures/logo.png" width=256 height=256></p>
+<p align="center"><img src="pictures/logo.png" width=200 height=200></p>
 
 # QuickCut
 
-QuickCut is a shortcut keyboard manager that allows you to map keys and activate specified processes.
+QuickCut is a shortcut keyboard manager that both facilitates key mapping and activates specified processes.
 
-QuickCut allows you shorthand access to your most used apps at the convenience of your chosen keyboard keys. It allows you to tailor your keyboard layoutdesign making your time as effecient as possible.
-
+QuickCut allows for shorthand access to selected apps at the convenience of your chosen keyboard keys. It allows you to tailor your keyboard layout design making your time as effecient as possible.
 
 ## Getting Started
 
 Download links can be found [here](https://github.com/giladreich/QuickCut/releases).
 
 
-QuickCut is designed to be as portable as possible by using `Profiles` and `Actions` in a one to many relationship(profile can create multiple actions) that are saved in `Json` format, so you can easily change between each profile to create different working environment depending on the selected profile(which also makes it easier sharing your profiles with others).
+QuickCut is designed to use `Profiles` and `Actions` in a one to many relationship (each profile can create multiple actions) that are saved in `JSON` format. This enables convenient change between multiple profiles creating different working environments depending on the selected profile (making it easier to share your profiles with others).
 
 ### Creating your first `Profile`
 
-When you first starting QuickCut, you'll see the following window:
+When getting started with QuickCut, the following window appears:
 
 ![Create Profile](/pictures/create_profile.png)
 
 ![Create Profile](/pictures/first_main_window.png)
 
-Don't forget that you can create multiple profiles. As soon as you click the `Default` button, all the shortcuts for the selected profile will be activated.
+As soon as you click the `Default` button, all shortcuts for the selected profile will be activated.
 
 ### Creating your first `Action`
 
-There are two type of actions:
+There are two types of actions:
 
-* Key Mapping - Fully maps a desired key to the specified key(no restart required).
-* Start Application - Maps a desired key to do the specified action, i.e open specific directory or your favorite application.
+* Key Mapping - maps a desired key to the specified key (no restart required).
+* Start Application - maps a desired key to the specified action, i.e open specific directory or your favorite application.
 
-`Key Mapping` should look as the following:
+`Key Mapping` looks as follows:
 
 ![Create Profile](/pictures/action_window_map_screenshot.png)
 
-As soon as you click the green record button, the keycode that related to that key you're targeting will be added to the text-box:
+Clicking the record button will record the desired keycode:
 
 ![Create Profile](/pictures/action_window_map_screenshot_record.png)
 
-`Start Application` should look as the following:
+`Start Application` looks as follows:
 
 ![Create Profile](/pictures/action_window_map_snippingtool.png)
 
-In this example, snipping tool will start as soon as we hit the F14 key.
+SnippingTool will start as soon as we hit the F14 key.
 
-We can also also use multiple keys for a shortcut:
+Multiple keys can be used for a single shortcut:
 
 ![Create Profile](/pictures/action_window_map_keycombo.png)
 
 
-So we end up with a configuration file under `Config/profiles.json` that can be easily shared with others:
+This creates a configuration file under `Config/profiles.json` that can be easily shared:
 
 ```json
 {
@@ -92,19 +91,39 @@ So we end up with a configuration file under `Config/profiles.json` that can be 
 
 ### Summary
 
-We covered the important basics of QuickCut, so we know how to interact with profiles and actions, but there are more features added to QuickCut that you can explore around.
+Above is a demonstration of the basics of QuickCut; how to create profiles and diverse actions.
 
-Note that as soon as you're done creating your profiles and actions, you don't need to worry about the QuickCut GUI to be opened anymore. You can just use your computer regulary and everything should just work.
+Once these steps are completed, you can use your computer as usual. 
+
+Note that you no longer need to keep QuickCut GUI open unless you want to make changes.
+
+### Quick Demo
+
+##### Installing QuickCut
+
+![Create Profile](/pictures/QuickCut_install.gif)
+
+##### Creating your first action
+
+![Create Profile](/pictures/QuickCut_SnippingTool.gif)
+
+##### Opening your favorite directories
+
+![Create Profile](/pictures/QuickCut_open_boost_dir.gif)
+
+##### Choose your favorite theme
+
+![Create Profile](/pictures/QuickCut_themes.gif)
 
 ### Prerequisites
 
 Project Structure:
 
-* QuickCut - The actual GUI.
-* QuickCutConsole - Mapps the actual key strokes and parses the `profiles.json` file.
-* QuickCutService - Responsible for making sure that `QuickCutConsole` is running and also future updater is planned.
+* QuickCut - the actual GUI.
+* QuickCutConsole - maps the actual key strokes and parses the `profiles.json` file.
+* QuickCutService - responsible for making sure that `QuickCutConsole` is running and also future updater is planned.
 
-All QuickCut projects are using the Qt Framework and designed to be portable across different platforms. Currently the code should compile on all platforms, but the the `QuickCutConsole` and `QuickCutService` requires a Unix hook implementation to make this work on different platforms, which I didn't have the time yet to do so(pull requests for this feature are very welcomed!).
+All QuickCut projects use Qt Framework and are designed to be portable across different platforms. Currently the code should compile on all platforms, however the `QuickCutConsole` and `QuickCutService` require a Unix hook implementation to make this work on Linux and MacOS which has yet to be developed (pull requests for this feature are welcomed!).
 
 Requirements for building the project:
 
@@ -119,22 +138,21 @@ Requirements for building the project:
 
 I always connect my laptop to a monitor using external keyboard and mouse.
 
-This is my favorite keyboard that I currently use at home:
+This is preffered keyboard that I currently use at home:
 
 ![Apple Keyboard](/pictures/apple_keyboard.png)
 
-It has F13 til F19 keys which never worked for me, so I looked up for alternative solutions and I found out about `KeyTweak` and some other programs that all they do, is editing the registry using the default functionality Windows has for mapping keys. So I was excited for a second and I though that this actually did it for me, but unfortunately every time you map a key on the windows registry, that requires a full reboot to the system in order to load the new key mapping layout.
-It also doesn't let you map a combination of keys to a key.
+It has F13 til F19 keys which are non-functioning keys I wanted to make use of. In looking for alternative solutions I came across `KeyTweak`, as well as other programs, that edit the registry using the default functionality Windows has for mapping keys. Unfortunately every time you map a key on the windows registry it requires a full reboot to the system in order to load the new key mapping layout. It also doesn't allow for mapping a combination of keys to a key.
 
-Long story short, I though about alternative solutions that brought me to the idea of making a fully interactive application that runs as a background service which does all the key mapping for me with the ability of creating different actions to be as efficient as possible when using the keyboard.
+This brought me to the idea of developing an interactive application that runs as a background service which does all sorts of key mapping invoking different actions to be as efficient as possible when using the keyboard.
 
-For that reason `QuickCut` is here and free to use :)
+For that reason `QuickCut` is here and free to use :).
 
 ## Contributing
 
-Pull-Requests are more than welcome and will be very appreciated. So feel free to contribute if you want to improve the project.
+Pull-Requests are greatly appreciated should you like to contribute to the project. 
 
-Same goes for opening issues, if you have any suggestions, feedback or you found any bugs, please do not hesitate to open an [issue](https://github.com/giladreich/QtDirect3D/issues).
+Same goes for opening issues; if you have any suggestions, feedback or you found any bugs, please do not hesitate to open an [issue](https://github.com/giladreich/QuickCut/issues).
 
 ## Authors
 
@@ -144,5 +162,5 @@ See also the list of [contributors](https://github.com/giladreich/QtDirect3D/gra
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
