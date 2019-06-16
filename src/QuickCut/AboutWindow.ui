@@ -53,7 +53,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -80,7 +80,7 @@
     <item>
      <widget class="QLabel" name="lblVersion">
       <property name="text">
-       <string>Version 1.0</string>
+       <string>Version 1.0.1</string>
       </property>
      </widget>
     </item>
