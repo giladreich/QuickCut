@@ -12,6 +12,7 @@ enum eThemeType
     ThemeBreezeLight,
     ThemeConsoleDark,
     ThemeUbuntu,
+    ThemeDarkOrange,
 
     THEME_COUNT
 };

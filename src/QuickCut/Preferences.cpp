@@ -22,6 +22,7 @@ QString Preferences::getThemeFilePath(eThemeType eType)
     case ThemeBreezeDark:  return ":stylesheet/theme_breezeDark.qss";
     case ThemeBreezeLight: return ":stylesheet/theme_breezeLight.qss";
     case ThemeConsoleDark: return ":stylesheet/theme_console.qss";
+    case ThemeDarkOrange:  return ":stylesheet/theme_darkorange.qss";
     case ThemeUbuntu:
     default:               return ":stylesheet/theme_ubuntu.qss";
     }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>310</width>
+    <width>317</width>
     <height>346</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@
        <widget class="QPushButton" name="btnActionCreate">
         <property name="minimumSize">
          <size>
-          <width>95</width>
+          <width>105</width>
           <height>40</height>
          </size>
         </property>
@@ -62,7 +62,7 @@
        <widget class="QPushButton" name="btnActionDelete">
         <property name="minimumSize">
          <size>
-          <width>95</width>
+          <width>105</width>
           <height>40</height>
          </size>
         </property>
@@ -81,7 +81,7 @@
        <widget class="QPushButton" name="btnActionDuplicate">
         <property name="minimumSize">
          <size>
-          <width>95</width>
+          <width>105</width>
           <height>40</height>
          </size>
         </property>
@@ -183,7 +183,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>310</width>
+     <width>317</width>
      <height>21</height>
     </rect>
    </property>
@@ -217,6 +217,7 @@
      <addaction name="actionThemeBreezeLight"/>
      <addaction name="actionThemeConsoleDark"/>
      <addaction name="actionThemeUbuntu"/>
+     <addaction name="actionThemeDarkOrange"/>
      <addaction name="separator"/>
      <addaction name="actionThemeLoadQss"/>
     </widget>
@@ -442,6 +443,14 @@
    </property>
    <property name="text">
     <string>Restart Service</string>
+   </property>
+  </action>
+  <action name="actionThemeDarkOrange">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dark Orange</string>
    </property>
   </action>
  </widget>

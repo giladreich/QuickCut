@@ -65,12 +65,14 @@ void MainWindow::connectSlots()
     connect(ui->actionThemeBreezeLight, &QAction::triggered, this, [this] { onActionLoadTheme(ThemeBreezeLight, ui->actionThemeBreezeLight); });
     connect(ui->actionThemeConsoleDark, &QAction::triggered, this, [this] { onActionLoadTheme(ThemeConsoleDark, ui->actionThemeConsoleDark); });
     connect(ui->actionThemeUbuntu,      &QAction::triggered, this, [this] { onActionLoadTheme(ThemeUbuntu, ui->actionThemeUbuntu); });
+    connect(ui->actionThemeDarkOrange,  &QAction::triggered, this, [this] { onActionLoadTheme(ThemeDarkOrange, ui->actionThemeDarkOrange); });
     m_qThemeActions.insert(ThemeDefault    , ui->actionThemeDefault);
     m_qThemeActions.insert(ThemeDark       , ui->actionThemeDark);
     m_qThemeActions.insert(ThemeBreezeDark , ui->actionThemeBreezeDark);
     m_qThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
     m_qThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
     m_qThemeActions.insert(ThemeUbuntu     , ui->actionThemeUbuntu);
+    m_qThemeActions.insert(ThemeDarkOrange , ui->actionThemeDarkOrange);
 
     connect(ui->actionThemeLoadQss,     &QAction::triggered, this, &MainWindow::onLoadCustomStylesheet);
 
