@@ -80,7 +80,7 @@
     <item>
      <widget class="QLabel" name="lblVersion">
       <property name="text">
-       <string>Version 1.0.1</string>
+       <string>Version 1.0.2</string>
       </property>
      </widget>
     </item>

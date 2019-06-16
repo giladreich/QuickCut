@@ -78,12 +78,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Gilad Reich"
             VALUE "FileDescription", "QuickCut is a keyboard shortcut manager that allows mapping keys and activate processes."
-            VALUE "FileVersion", "1.0.1.0"
+            VALUE "FileVersion", "1.0.2.0"
             VALUE "InternalName", "QuickCut.exe"
             VALUE "LegalCopyright", "Copyright (C) 2019 Reich"
             VALUE "OriginalFilename", "QuickCut.exe"
             VALUE "ProductName", "QuickCut"
-            VALUE "ProductVersion", "1.0.1.0"
+            VALUE "ProductVersion", "1.0.2.0"
         END
     END
     BLOCK "VarFileInfo"

@@ -68,12 +68,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Gilad Reich"
             VALUE "FileDescription", "QuickCutConsole"
-            VALUE "FileVersion", "1.0.1.0"
+            VALUE "FileVersion", "1.0.2.0"
             VALUE "InternalName", "QuickCutConsole.exe"
             VALUE "LegalCopyright", "Copyright (C) 2019 Reich"
             VALUE "OriginalFilename", "QuickCutConsole.exe"
             VALUE "ProductName", "QuickCut"
-            VALUE "ProductVersion", "1.0.1.0"
+            VALUE "ProductVersion", "1.0.2.0"
         END
     END
     BLOCK "VarFileInfo"

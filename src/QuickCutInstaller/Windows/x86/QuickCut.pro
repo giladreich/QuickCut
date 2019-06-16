@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = QuickCut-x86-1.0.1-installer
+INSTALLER = QuickCut-x86-1.0.2-installer
 
 INPUT = \
     $$PWD/config/config.xml \
