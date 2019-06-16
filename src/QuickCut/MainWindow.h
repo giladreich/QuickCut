@@ -58,6 +58,10 @@ public slots:
     void onBtnActionCreate();
     void onBtnActionDelete();
     void onBtnActionDuplicate();
+    void onBtnActionMoveDown();
+    void onBtnActionMoveUp();
+
+    void listItemSwap(QListWidget * pList, bool bMoveUp);
 
     void onActionSaved();
     void onActionCreated(Action * pAction);

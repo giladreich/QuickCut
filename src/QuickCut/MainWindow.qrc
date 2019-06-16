@@ -18,5 +18,7 @@
         <file>Resources/view_statusbar.png</file>
         <file>Resources/view_toolbar.png</file>
         <file>Resources/file_restart_service.png</file>
+        <file>Resources/btn_movedown.png</file>
+        <file>Resources/btn_moveup.png</file>
     </qresource>
 </RCC>

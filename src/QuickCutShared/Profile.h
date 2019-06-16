@@ -28,6 +28,8 @@ public:
     bool addAction(Action * action);
     bool insertAction(uint32_t iIndex, Action * pAction);
     bool deleteAction(Action * action);
+    bool moveActionDown(int iIndex);
+    bool moveActionUp(int iIndex);
     bool deleteActionByIndex(const uint32_t & iIndex);
 
     void getActionById(const std::string & uuid) const;

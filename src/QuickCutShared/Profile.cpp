@@ -98,6 +98,26 @@ bool Profile::deleteAction(Action * pAction)
     return true;
 }
 
+bool Profile::moveActionDown(int iIndex)
+{
+    if (iIndex < 0 || static_cast<size_t>(iIndex) >= m_vActions.size() - 1)
+        return false;
+
+    std::swap(m_vActions[iIndex], m_vActions[iIndex + 1]);
+
+    return true;
+}
+
+bool Profile::moveActionUp(int iIndex)
+{
+    if (iIndex < 1 || static_cast<size_t>(iIndex) >= m_vActions.size())
+        return false;
+
+    std::swap(m_vActions[iIndex], m_vActions[iIndex - 1]);
+
+    return true;
+}
+
 bool Profile::deleteActionByIndex(const uint32_t & iIndex)
 {
     return deleteAction(getActionByIndex(iIndex));

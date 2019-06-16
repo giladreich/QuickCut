@@ -94,6 +94,9 @@ void MainWindow::connectSlots()
     connect(ui->btnActionCreate,    &QPushButton::clicked, this, &MainWindow::onBtnActionCreate);
     connect(ui->btnActionDelete,    &QPushButton::clicked, this, &MainWindow::onBtnActionDelete);
     connect(ui->btnActionDuplicate, &QPushButton::clicked, this, &MainWindow::onBtnActionDuplicate);
+
+    connect(ui->btnActionMoveDown,  &QPushButton::clicked, this, &MainWindow::onBtnActionMoveDown);
+    connect(ui->btnActionMoveUp,    &QPushButton::clicked, this, &MainWindow::onBtnActionMoveUp);
 }
 
 void MainWindow::activateHook()
@@ -172,6 +175,7 @@ void MainWindow::initPreferences()
     case ThemeBreezeLight: pAction = ui->actionThemeBreezeLight; break;
     case ThemeConsoleDark: pAction = ui->actionThemeConsoleDark; break;;
     case ThemeUbuntu:      pAction = ui->actionThemeUbuntu;      break;
+    case ThemeDarkOrange:  pAction = ui->actionThemeDarkOrange;  break;
     default:
         break;
     }
@@ -446,9 +450,9 @@ void MainWindow::onBtnSetActiveProfile()
 
 void MainWindow::onBtnDeleteProfile()
 {
-    const int iIndex = ui->cbxProfile->currentIndex();
-    Profile * pProfile = m_qProfiles[iIndex];
-    ui->cbxProfile->removeItem(iIndex);
+    const int iCurrIndex = ui->cbxProfile->currentIndex();
+    Profile * pProfile = m_qProfiles[iCurrIndex];
+    ui->cbxProfile->removeItem(iCurrIndex);
     if (isActiveProfile(pProfile) && m_qProfiles.count() > 0)
     {
         m_qszActiveProfile = QString::fromStdString(m_qProfiles.first()->getId());
@@ -456,7 +460,7 @@ void MainWindow::onBtnDeleteProfile()
         ui->cbxProfile->setCurrentIndex(0);
     }
 
-    m_qProfiles.removeAt(iIndex);
+    m_qProfiles.removeAt(iCurrIndex);
 
     saveProfiles();
     reloadProfiles();
@@ -504,49 +508,92 @@ void MainWindow::onBtnActionCreate()
 
 void MainWindow::onBtnActionDelete()
 {
-    const int iIndex = ui->lbxActions->currentRow();
+    const int iCurrIndex = ui->lbxActions->currentRow();
     Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
-    pProfile->deleteActionByIndex(iIndex);
+    pProfile->deleteActionByIndex(iCurrIndex);
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iIndex - 1);
-    if ((iIndex - 1) < 0)
+    ui->lbxActions->setCurrentRow(iCurrIndex - 1);
+    if ((iCurrIndex - 1) < 0)
         ui->btnActionCreate->setFocus();
 }
 
 void MainWindow::onBtnActionDuplicate()
 {
-    const int iIndex = ui->lbxActions->currentRow();
+    const int iCurrIndex = ui->lbxActions->currentRow();
     Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
-    Action * pAction = pProfile->getActionByIndex(iIndex);
+    Action * pAction = pProfile->getActionByIndex(iCurrIndex);
 
     Action * pNewAction = new Action(pAction->getName(), pAction->getType(), pAction->getSrcKey(),
                                      pAction->getDstKey(), pAction->getAppPath(), pAction->getAppArgs());
 
-    pProfile->insertAction(iIndex, pNewAction);
+    pProfile->insertAction(iCurrIndex, pNewAction);
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iIndex + 1);
+    ui->lbxActions->setCurrentRow(iCurrIndex + 1);
+}
+
+void MainWindow::onBtnActionMoveDown()
+{
+    Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
+    pProfile->moveActionDown(ui->lbxActions->currentRow());
+
+    listItemSwap(ui->lbxActions, false);
+    saveProfiles();
+}
+
+void MainWindow::onBtnActionMoveUp()
+{
+    Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
+    pProfile->moveActionUp(ui->lbxActions->currentRow());
+
+    listItemSwap(ui->lbxActions, true);
+    saveProfiles();
+}
+
+void MainWindow::listItemSwap(QListWidget * pList, const bool bMoveUp)
+{
+    const int iCurrIndex = pList->currentRow();
+    if (iCurrIndex == -1) return;
+
+    if (bMoveUp)
+    {
+        if (iCurrIndex > 0)
+        {
+            QListWidgetItem * pItem = pList->takeItem(iCurrIndex);
+            pList->insertItem(iCurrIndex - 1, pItem);
+            pList->setCurrentRow(iCurrIndex - 1);
+        }
+    }
+    else
+    {
+        if (iCurrIndex < pList->count() - 1)
+        {
+            QListWidgetItem * pItem = pList->takeItem(iCurrIndex);
+            pList->insertItem(iCurrIndex + 1, pItem);
+            pList->setCurrentRow(iCurrIndex + 1);
+        }
+    }
 }
 
 void MainWindow::onActionSaved()
 {
-    const int iIndex = ui->lbxActions->currentRow();
+    const int iCurrIndex = ui->lbxActions->currentRow();
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iIndex);
+    ui->lbxActions->setCurrentRow(iCurrIndex);
 }
 
 void MainWindow::onActionCreated(Action * pAction)
 {
-    const int iIndex = ui->lbxActions->currentRow();
+    const int iCurrIndex = ui->lbxActions->currentRow();
     Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
     pProfile->addAction(pAction);
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iIndex == -1 ? 0 : iIndex + 1);
+    ui->lbxActions->setCurrentRow(iCurrIndex == -1 ? 0 : iCurrIndex + 1);
 }
 
 
