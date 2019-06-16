@@ -134,7 +134,7 @@ void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
 void ActionEditWindow::onBtnFilePicker()
 {
     QString szHome = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-    QString szFilePath = QFileDialog::getOpenFileName(this, tr("Load Executable"), szHome, tr("Executable files (*.exe)"));
+    QString szFilePath = QFileDialog::getOpenFileName(this, tr("Open File"), szHome, tr("All files (*.*)"));
     if (szFilePath.isEmpty()) return;
 
     ui->tbxAppPath->setText(szFilePath);
