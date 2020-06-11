@@ -1,5 +1,5 @@
 
-<p align="center"><img src="pictures/logo.png" width=200 height=200></p>
+<p align="center"><img src="/media/logo.png" width=200 height=200></p>
 
 # QuickCut
 
@@ -18,9 +18,9 @@ QuickCut is designed to use `Profiles` and `Actions` in a one to many relationsh
 
 When getting started with QuickCut, the following window appears:
 
-![Create Profile](/pictures/create_profile.png)
+![Create Profile](/media/create_profile.png)
 
-![Create Profile](/pictures/first_main_window.png)
+![Create Profile](/media/first_main_window.png)
 
 As soon as you click the `Default` button, all shortcuts for the selected profile will be activated.
 
@@ -33,21 +33,21 @@ There are two types of actions:
 
 `Key Mapping` looks as follows:
 
-![Create Profile](/pictures/action_window_map_screenshot.png)
+![Create Profile](/media/action_window_map_screenshot.png)
 
 Clicking the record button will record the desired keycode:
 
-![Create Profile](/pictures/action_window_map_screenshot_record.png)
+![Create Profile](/media/action_window_map_screenshot_record.png)
 
 `Start Application` looks as follows:
 
-![Create Profile](/pictures/action_window_map_snippingtool.png)
+![Create Profile](/media/action_window_map_snippingtool.png)
 
 SnippingTool will start as soon as we hit the F14 key.
 
 Multiple keys can be used for a single shortcut:
 
-![Create Profile](/pictures/action_window_map_keycombo.png)
+![Create Profile](/media/action_window_map_keycombo.png)
 
 
 This creates a configuration file under `Config/profiles.json` that can be easily shared:
@@ -101,19 +101,19 @@ Note that you no longer need to keep QuickCut GUI open unless you want to make c
 
 ##### Installing QuickCut
 
-![Create Profile](/pictures/QuickCut_install.gif)
+![Create Profile](/media/QuickCut_install.gif)
 
 ##### Creating your first action
 
-![Create Profile](/pictures/QuickCut_SnippingTool.gif)
+![Create Profile](/media/QuickCut_SnippingTool.gif)
 
 ##### Opening your favorite directories
 
-![Create Profile](/pictures/QuickCut_open_boost_dir.gif)
+![Create Profile](/media/QuickCut_open_boost_dir.gif)
 
 ##### Choose your favorite theme
 
-![Create Profile](/pictures/QuickCut_themes.gif)
+![Create Profile](/media/QuickCut_themes.gif)
 
 ### Prerequisites
 
@@ -140,7 +140,7 @@ I always connect my laptop to a monitor using external keyboard and mouse.
 
 This is preffered keyboard that I currently use at home:
 
-![Apple Keyboard](/pictures/apple_keyboard.png)
+![Apple Keyboard](/media/apple_keyboard.png)
 
 It has F13 til F19 keys which are non-functioning keys I wanted to make use of. In looking for alternative solutions I came across `KeyTweak`, as well as other programs, that edit the registry using the default functionality Windows has for mapping keys. Unfortunately every time you map a key on the windows registry it requires a full reboot to the system in order to load the new key mapping layout. It also doesn't allow for mapping a combination of keys to a key.
 
