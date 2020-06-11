@@ -6,6 +6,12 @@ cmake_minimum_required(VERSION 3.12)
 ##################################################################################################################
 project(QuickCut)
 
+add_definitions(
+    -DUNICODE
+    -D_UNICODE
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${QUICKCUT_SHARED_DIR}
