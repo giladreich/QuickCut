@@ -1,6 +1,6 @@
 [requires]
 boost/1.73.0
-qt/5.15.0@bincrafters/stable
+# qt/5.15.0@bincrafters/stable
 
 
 [generators]
