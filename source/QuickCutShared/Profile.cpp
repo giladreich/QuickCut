@@ -2,7 +2,6 @@
 #include "Profile.h"
 #include "pch.h"
 
-
 Profile::Profile()
     : m_szUuid(createUuid())
     , m_szName("")
@@ -100,8 +99,7 @@ bool Profile::deleteAction(Action * pAction)
 
 bool Profile::moveActionDown(int iIndex)
 {
-    if (iIndex < 0 || static_cast<size_t>(iIndex) >= m_vActions.size() - 1)
-        return false;
+    if (iIndex < 0 || static_cast<size_t>(iIndex) >= m_vActions.size() - 1) return false;
 
     std::swap(m_vActions[iIndex], m_vActions[iIndex + 1]);
 
@@ -110,8 +108,7 @@ bool Profile::moveActionDown(int iIndex)
 
 bool Profile::moveActionUp(int iIndex)
 {
-    if (iIndex < 1 || static_cast<size_t>(iIndex) >= m_vActions.size())
-        return false;
+    if (iIndex < 1 || static_cast<size_t>(iIndex) >= m_vActions.size()) return false;
 
     std::swap(m_vActions[iIndex], m_vActions[iIndex - 1]);
 
@@ -123,15 +120,9 @@ bool Profile::deleteActionByIndex(const uint32_t & iIndex)
     return deleteAction(getActionByIndex(iIndex));
 }
 
-void Profile::getActionById(const std::string & uuid) const
-{
+void Profile::getActionById(const std::string & uuid) const {}
 
-}
-
-void Profile::getActionByName(const std::string & name) const
-{
-
-}
+void Profile::getActionByName(const std::string & name) const {}
 
 Action * Profile::getActionByIndex(const uint32_t & iIndex) const
 {
@@ -140,8 +131,7 @@ Action * Profile::getActionByIndex(const uint32_t & iIndex) const
     return m_vActions[iIndex];
 }
 
-
-Action * Profile::operator [] (uint32_t iIndex)
+Action * Profile::operator[](uint32_t iIndex)
 {
     if (iIndex > m_vActions.size()) return nullptr;
 

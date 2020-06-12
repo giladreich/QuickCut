@@ -4,9 +4,8 @@
 #include <QLineEdit>
 
 #ifdef Q_OS_WIN
-#include <Windows.h>
+#    include <Windows.h>
 #endif
-
 
 class QShortcutInput : public QLineEdit
 {
@@ -30,6 +29,4 @@ public:
 #ifdef Q_OS_WIN
     static HHOOK s_hHook;
 #endif
-
-
 };

@@ -3,7 +3,6 @@
 #include "pch.h"
 #include <utility>
 
-
 Action::Action()
     : m_szUuid(createUuid())
     , m_szName("")
@@ -14,12 +13,14 @@ Action::Action()
     , m_szAppArgs("")
     , m_szCreatedDate(getDateTime())
 {
-
 }
 
-Action::Action(std::string name, const eActionType & type,
-              std::string srcKey, std::string dstKey,
-              std::string appPath, std::string appArgs)
+Action::Action(std::string         name,
+               const eActionType & type,
+               std::string         srcKey,
+               std::string         dstKey,
+               std::string         appPath,
+               std::string         appArgs)
     : m_szUuid(createUuid())
     , m_szName(std::move(name))
     , m_eType(type)
@@ -29,13 +30,16 @@ Action::Action(std::string name, const eActionType & type,
     , m_szAppArgs(std::move(appArgs))
     , m_szCreatedDate(getDateTime())
 {
-
 }
 
-Action::Action(std::string id, std::string name, const eActionType & type,
-               std::string srcKey, std::string dstKey,
-               std::string appPath, std::string appArgs,
-               std::string createdDate)
+Action::Action(std::string         id,
+               std::string         name,
+               const eActionType & type,
+               std::string         srcKey,
+               std::string         dstKey,
+               std::string         appPath,
+               std::string         appArgs,
+               std::string         createdDate)
     : m_szUuid(std::move(id))
     , m_szName(std::move(name))
     , m_eType(type)
@@ -51,9 +55,11 @@ std::string Action::getType(eActionType type)
 {
     switch (type)
     {
-        case ActionKeyMap: return "KeyMap";
-        case ActionAppStart: return "AppStart";
-        
+        case ActionKeyMap:
+            return "KeyMap";
+        case ActionAppStart:
+            return "AppStart";
+
         case ActionUnknown:
         default:
             return "Unknown";

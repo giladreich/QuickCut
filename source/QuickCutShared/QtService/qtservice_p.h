@@ -48,40 +48,39 @@ class QtServiceControllerPrivate
 {
     Q_DECLARE_PUBLIC(QtServiceController)
 public:
-    QString serviceName;
-    QtServiceController *q_ptr;
+    QString               serviceName;
+    QtServiceController * q_ptr;
 };
 
 class QtServiceBasePrivate
 {
     Q_DECLARE_PUBLIC(QtServiceBase)
 public:
-
-    QtServiceBasePrivate(const QString &name);
+    QtServiceBasePrivate(const QString & name);
     ~QtServiceBasePrivate();
 
-    QtServiceBase *q_ptr;
+    QtServiceBase * q_ptr;
 
-    QString serviceDescription;
+    QString                          serviceDescription;
     QtServiceController::StartupType startupType;
-    QtServiceBase::ServiceFlags serviceFlags;
-    QStringList args;
+    QtServiceBase::ServiceFlags      serviceFlags;
+    QStringList                      args;
 
-    static class QtServiceBase *instance;
+    static class QtServiceBase * instance;
 
     QtServiceController controller;
 
     void startService();
-    int run(bool asService, const QStringList &argList);
-    bool install(const QString &account, const QString &password);
+    int  run(bool asService, const QStringList & argList);
+    bool install(const QString & account, const QString & password);
 
     bool start();
 
-    QString filePath() const;
-    bool sysInit();
-    void sysSetPath();
-    void sysCleanup();
-    class QtServiceSysPrivate *sysd;
+    QString                     filePath() const;
+    bool                        sysInit();
+    void                        sysSetPath();
+    void                        sysCleanup();
+    class QtServiceSysPrivate * sysd;
 };
 
 #endif

@@ -3,7 +3,6 @@
 
 #include <QString>
 
-
 enum eThemeType
 {
     ThemeDefault = 0,
@@ -22,15 +21,14 @@ class Preferences
 public:
     Preferences();
 
-    QString getThemeFilePath() const;
+    QString        getThemeFilePath() const;
     static QString getThemeFilePath(eThemeType eType);
-    eThemeType getThemeType() const;
-    void setThemeType(eThemeType eType);
+    eThemeType     getThemeType() const;
+    void           setThemeType(eThemeType eType);
 
 public:
-    bool       m_bViewToolBar;
-    bool       m_bViewStatusBar;
+    bool m_bViewToolBar;
+    bool m_bViewStatusBar;
 
     eThemeType m_eThemeType;
-
 };

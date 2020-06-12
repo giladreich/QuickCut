@@ -3,7 +3,6 @@
 
 #include "QuickCutConsole.h"
 
-
 class QuickCutConsoleUnix : public QuickCutConsole
 {
 
@@ -15,5 +14,4 @@ public:
     bool stop() override;
 
 public:
-
 };

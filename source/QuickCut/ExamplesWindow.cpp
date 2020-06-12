@@ -1,7 +1,6 @@
 
 #include "ExamplesWindow.h"
 
-
 ExamplesWindow::ExamplesWindow(QWidget * parent)
     : QDialog(parent)
     , ui(new Ui::ExamplesWindow())
@@ -9,6 +8,4 @@ ExamplesWindow::ExamplesWindow(QWidget * parent)
     ui->setupUi(this);
 }
 
-ExamplesWindow::~ExamplesWindow()
-{
-}
+ExamplesWindow::~ExamplesWindow() {}

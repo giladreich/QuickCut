@@ -2,9 +2,9 @@
 #include <QtCore/QCoreApplication>
 
 #ifdef Q_OS_WIN
-#include "QuickCutServiceWindows.h"
+#    include "QuickCutServiceWindows.h"
 #elif Q_OS_UNIX
-#include "QuickCutServiceUnix.h"
+#    include "QuickCutServiceUnix.h"
 #endif
 
 int main(int argc, char * argv[])

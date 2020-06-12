@@ -1,7 +1,6 @@
 
 #include "CheckUpdatesWindow.h"
 
-
 CheckUpdatesWindow::CheckUpdatesWindow(QWidget * parent)
     : QDialog(parent)
     , ui(new Ui::CheckUpdatesWindow())
@@ -9,6 +8,4 @@ CheckUpdatesWindow::CheckUpdatesWindow(QWidget * parent)
     ui->setupUi(this);
 }
 
-CheckUpdatesWindow::~CheckUpdatesWindow()
-{
-}
+CheckUpdatesWindow::~CheckUpdatesWindow() {}
