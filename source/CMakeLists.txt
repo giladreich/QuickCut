@@ -15,6 +15,9 @@ set(QUICKCUT_SHARED_DIR ${SOURCE_ROOT_DIR}/QuickCutShared CACHE STRING "")
 ##################################################################################################################
 # Packages
 ##################################################################################################################
+
+# TODO(Gilad): Consider implementing a fall back scenarios, where if we could'nt find the packages, try finding
+# if conan installed, if installed, do "conan install .." command and try to find again after conan setup.
 find_package(Qt5 REQUIRED COMPONENTS
     Core
     Widgets
@@ -23,7 +26,7 @@ find_package(Qt5 REQUIRED COMPONENTS
 if (Qt5_FOUND)
     message(STATUS "[INFO] Qt5 Found -> ${Qt5_DIR}")
 else()
-    message(FATAL_ERROR "[ERROR] Failed to find Qt5. Did you add Qt installation kit bin directory to the system PATH?")
+    message(FATAL_ERROR "[ERROR] Failed to find Qt5. Do you have the appropriate environment variables set?")
 endif()
 
 find_package(Boost REQUIRED)
@@ -40,3 +43,5 @@ endif()
 
 add_subdirectory(QuickCutShared)
 add_subdirectory(QuickCut)
+add_subdirectory(QuickCutConsole)
+add_subdirectory(QuickCutService)
