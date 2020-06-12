@@ -120,7 +120,7 @@ void MainWindow::connectSlots()
 
 void MainWindow::activateHook()
 {
-    QProcess::execute("QuickCutService -i"); // TODO: Configure from installer.
+    QProcess::execute("QuickCutService -i", QStringList()); // TODO: Configure from installer.
     QtServiceController service("QuickCut Service");
     if (!service.isRunning())
     {
@@ -131,9 +131,10 @@ void MainWindow::activateHook()
 #ifdef Q_OS_WIN
     // TODO: Configure from installer.
     // Don't start the service right when win boots.
-    QProcess::execute("sc config \"QuickCut Service\" start=delayed-auto");
+    QProcess::execute("sc config \"QuickCut Service\" start=delayed-auto", QStringList());
     QProcess::execute("sc failure \"QuickCut Service\" actions=restart/60000/restart/60000/"
-                      "/60000 reset=86400");
+                      "/60000 reset=86400",
+                      QStringList());
 
     const QString qcc = QCoreApplication::applicationDirPath() + "/QuickCutConsole.exe";
 
@@ -159,9 +160,9 @@ void MainWindow::activateHook()
     // case.
     QTimer::singleShot(5000, [] {
         QThread * t = QThread::create([] {
-            QProcess::execute("taskkill /im QuickCutConsole.exe /f");
+            QProcess::execute("taskkill /im QuickCutConsole.exe /f", QStringList());
             QThread::msleep(500);
-            QProcess::execute("QuickCutConsole");
+            QProcess::execute("QuickCutConsole", QStringList());
         });
         t->start();
     });

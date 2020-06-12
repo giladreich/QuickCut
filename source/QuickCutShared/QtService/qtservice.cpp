@@ -440,8 +440,10 @@ private:
 QtServiceBase * QtServiceBasePrivate::instance = 0;
 
 QtServiceBasePrivate::QtServiceBasePrivate(const QString & name)
-    : startupType(QtServiceController::ManualStartup)
-    , serviceFlags(0)
+    : q_ptr(Q_NULLPTR)
+    , sysd(Q_NULLPTR)
+    , startupType(QtServiceController::StartupType::ManualStartup)
+    , serviceFlags(QtServiceBase::ServiceFlag::Default)
     , controller(name)
 {
 }
@@ -659,8 +661,8 @@ QtServiceBase::QtServiceBase(int argc, char ** argv, const QString & name)
     d_ptr        = new QtServiceBasePrivate(nm);
     d_ptr->q_ptr = this;
 
-    d_ptr->serviceFlags = 0;
-    d_ptr->sysd         = 0;
+    d_ptr->serviceFlags = QtServiceBase::ServiceFlag::Default;
+    d_ptr->sysd         = Q_NULLPTR;
     for (int i = 0; i < argc; ++i) d_ptr->args.append(QString::fromLocal8Bit(argv[i]));
 }
 

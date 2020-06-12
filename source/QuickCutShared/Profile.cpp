@@ -66,7 +66,7 @@ const std::vector<Action *> & Profile::getActions() const
 
 int Profile::getActionsCount() const
 {
-    return m_vActions.size();
+    return (int)m_vActions.size();
 }
 
 bool Profile::addAction(Action * action)

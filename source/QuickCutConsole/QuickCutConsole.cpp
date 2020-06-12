@@ -116,7 +116,7 @@ void QuickCutConsole::executeProcess(const std::string & szProc, const std::stri
     QTextStream ts(&file);
     ts << szCommand;
     file.close();
-    QProcess::execute(szFilePath);
+    QProcess::execute(szFilePath, QStringList());
     file.remove();
 }
 

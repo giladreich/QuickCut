@@ -137,7 +137,8 @@ void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * pKbd)
     GetKeyNameText(dwMsg, reinterpret_cast<LPTSTR>(lpszName), sizeof(lpszName));
 
     QString str;
-    str.sprintf("ScanCode: %d | VirtualKey: 0x%02X | KeyName: ", pKbd->scanCode, pKbd->vkCode);
+    str.asprintf("ScanCode: %d | VirtualKey: 0x%02X | KeyName: ", pKbd->scanCode,
+                 pKbd->vkCode);
     str += QString::fromUtf16(reinterpret_cast<ushort *>(lpszName));
     qDebug() << str;
 }

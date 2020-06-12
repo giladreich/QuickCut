@@ -61,7 +61,7 @@ bool QuickCutServiceWindows::killHookIfRunning()
 {
     if (isProcessRunning(QUICKCUT_CONSOLE))
     {
-        QProcess::execute("taskkill /im " QUICKCUT_CONSOLE " /f");
+        QProcess::execute("taskkill /im " QUICKCUT_CONSOLE " /f", QStringList());
         return true;
     }
 
