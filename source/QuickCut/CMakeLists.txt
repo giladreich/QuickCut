@@ -164,3 +164,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt5::Gui
     Qt5::Widgets
 )
+
+if(WIN32)
+    set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")
+endif()
