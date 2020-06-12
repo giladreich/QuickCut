@@ -160,6 +160,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+    Qt5::WinMain  # TODO(Gilad): Confirm whether it's required on Unix systems.
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
