@@ -2,7 +2,7 @@
 #pragma once
 
 #include <QCoreApplication>
-
+#include <memory>
 
 class QuickCutConsole : public QCoreApplication
 {
