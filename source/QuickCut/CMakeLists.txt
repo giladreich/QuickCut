@@ -91,8 +91,20 @@ set(RESOURCE_FILES
     ${QSS_FILES}
 )
 
+
+if(WIN32)
+    set(BIN_INFO_RC
+        Resources/QuickCut.rc
+    )
+elseif(UNIX)
+    set(BIN_INFO_RC
+        "" # TODO(Gilad): create resource file for linux.
+    )
+endif()
+
 set(RESOURCE_FILES
     ${RESOURCE_FILES}
+    ${BIN_INFO_RC}
 )
 
 ##################################################################################################################
@@ -112,6 +124,9 @@ source_group("Source Files\\Widgets" FILES
 )
 source_group("Source Files\\Windows" FILES
     ${UI_CXX_FILES}
+)
+source_group("Resources" FILES
+    ${BIN_INFO_RC}
 )
 source_group("Resources\\QtUI" FILES
     ${QUI_FILES}
