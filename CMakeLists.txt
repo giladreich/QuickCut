@@ -10,6 +10,9 @@ project(QuickCut
     DESCRIPTION "QuickCut is the way to master your keyboard."
 )
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 ##################################################################################################################
 # IDE Representation
 ##################################################################################################################
