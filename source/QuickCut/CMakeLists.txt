@@ -20,38 +20,65 @@ include_directories(
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
-set(HEADERS_CXX_FILES
-    MainWindow.h
-    AboutWindow.h
-    ActionEditWindow.h
-    CheckUpdatesWindow.h
-    ExamplesWindow.h
-    Preferences.h
-    QShortcutInput.h
+set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/Action.h
     ${QUICKCUT_SHARED_DIR}/Profile.h
+    ${QUICKCUT_SHARED_DIR}/Profile.cpp
+    ${QUICKCUT_SHARED_DIR}/Action.h
+    ${QUICKCUT_SHARED_DIR}/Action.cpp
     ${QTSINGLEAPP_DIR}/QSingleInstance.h
+    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
+)
+set(QTSERVICE_CXX_FILES
     ${QTSERVICE_DIR}/qtservice.h
     ${QTSERVICE_DIR}/qtservice_p.h
-)
-set(SOURCES_CXX_FILES
-    main.cpp
-    MainWindow.cpp
-    AboutWindow.cpp
-    ActionEditWindow.cpp
-    CheckUpdatesWindow.cpp
-    ExamplesWindow.cpp
-    Preferences.cpp
-    QShortcutInput.cpp
-    ${QUICKCUT_SHARED_DIR}/Action.cpp
-    ${QUICKCUT_SHARED_DIR}/Profile.cpp
-    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
     ${QTSERVICE_DIR}/qtservice.cpp
-    ${QTSERVICE_DIR}/qtservice_win.cpp
+)
+if (WIN32)
+    set(QTSERVICE_CXX_FILES
+        ${QTSERVICE_CXX_FILES}
+        ${QTSERVICE_DIR}/qtservice_win.cpp
+    )
+elseif(UNIX)
+    set(QTSERVICE_CXX_FILES
+        ${QTSERVICE_CXX_FILES}
+        ${QTSERVICE_DIR}/qtservice_unix.cpp
+        ${QTSERVICE_DIR}/qtunixsocket.h
+        ${QTSERVICE_DIR}/qtunixsocket.cpp
+        ${QTSERVICE_DIR}/qtunixserversocket.h
+        ${QTSERVICE_DIR}/qtunixserversocket.cpp
+    )
+endif()
+set(WIDGETS_CXX_FILES
+    QShortcutInput.h
+    QShortcutInput.cpp
+)
+set(UI_CXX_FILES
+    MainWindow.h
+    MainWindow.cpp
+    AboutWindow.h
+    AboutWindow.cpp
+    ActionEditWindow.h
+    ActionEditWindow.cpp
+    CheckUpdatesWindow.h
+    CheckUpdatesWindow.cpp
+    ExamplesWindow.h
+    ExamplesWindow.cpp
+)
+set(MISC_CXX_FILES
+    main.cpp
+    Preferences.h
+    Preferences.cpp
+)
+set(CXX_FILES
+    ${MISC_CXX_FILES}
+    ${UI_CXX_FILES}
+    ${WIDGETS_CXX_FILES}
+    ${QTSERVICE_CXX_FILES}
+    ${SHARED_CXX_FILES}
 )
 
-file(GLOB UI_FILES *.ui)
+file(GLOB QUI_FILES *.ui)
 file(GLOB QRC_FILES 
     MainWindow.qrc
     Styles/stylesheet.qrc
@@ -59,28 +86,43 @@ file(GLOB QRC_FILES
 file(GLOB QSS_FILES Styles/*.qss)
 
 set(RESOURCE_FILES
-    ${UI_FILES}
+    ${QUI_FILES}
     ${QRC_FILES}
     ${QSS_FILES}
 )
 
+set(RESOURCE_FILES
+    ${RESOURCE_FILES}
+)
 
 ##################################################################################################################
 # IDE Representation
 ##################################################################################################################
-source_group("Header Files" FILES
-    ${HEADERS_CXX_FILES}
-)
 source_group("Source Files" FILES
-    ${SOURCES_CXX_FILES}
+    ${MISC_CXX_FILES}
 )
-source_group("Resources\\UI" FILES
-    ${UI_FILES}
+source_group("Source Files\\Shared" FILES
+    ${SHARED_CXX_FILES}
 )
-source_group("Resources\\RC" FILES
+source_group("Source Files\\Shared\\QtService" FILES
+    ${QTSERVICE_CXX_FILES}
+)
+source_group("Source Files\\Widgets" FILES
+    ${WIDGETS_CXX_FILES}
+)
+source_group("Source Files\\Windows" FILES
+    ${UI_CXX_FILES}
+)
+source_group("Resources\\QtUI" FILES
+    ${QUI_FILES}
+)
+source_group("Resources\\QtUI" FILES
+    ${QUI_FILES}
+)
+source_group("Resources\\QtRC" FILES
     ${QRC_FILES}
 )
-source_group("Resources\\RC\\Themes" FILES
+source_group("Resources\\QtRC\\Themes" FILES
     ${QSS_FILES}
 )
 
@@ -97,9 +139,8 @@ set(CMAKE_AUTORCC ON)
 ##################################################################################################################
 # Target
 ##################################################################################################################
-add_executable(${PROJECT_NAME} WIN32
-    ${HEADERS_CXX_FILES}
-    ${SOURCES_CXX_FILES}
+add_executable(${PROJECT_NAME}
+    ${CXX_FILES}
     ${RESOURCE_FILES}
 )
 
