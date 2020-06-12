@@ -10,8 +10,11 @@ project(QuickCut
     DESCRIPTION "QuickCut is the way to master your keyboard."
 )
 
+include(CMakeOptions.cmake)
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
+
 
 ##################################################################################################################
 # IDE Representation
@@ -24,9 +27,28 @@ set_property (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY
     VS_STARTUP_PROJECT QuickCut
 )
 
+
 ##################################################################################################################
 # Submodules
 ##################################################################################################################
 
 add_subdirectory(source)
+
+
+##################################################################################################################
+# clang-format
+##################################################################################################################
+if (USE_CLANG_FORMAT)
+    set(DIRS_TO_FORMAT
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/QuickCut/*
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/QuickCutConsole/*
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/QuickCutService/*
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/QuickCutShared/*
+    )
+    file(GLOB_RECURSE FILES_TO_FORMAT ${DIRS_TO_FORMAT})
+    list(FILTER FILES_TO_FORMAT INCLUDE REGEX "^.*\.(cpp|h|hpp|cc|cxx)$")
+    list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+    include(ClangFormat)
+    clangformat_setup(${FILES_TO_FORMAT})
+endif()
 
