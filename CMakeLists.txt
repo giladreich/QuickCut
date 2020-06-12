@@ -12,8 +12,10 @@ project(QuickCut
 
 include(CMakeOptions.cmake)
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+if (USE_CONAN_PM)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+endif()
 
 
 ##################################################################################################################
