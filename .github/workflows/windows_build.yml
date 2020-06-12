@@ -1,4 +1,4 @@
-name: QuickCut Build Matrix
+name: Windows
 
 on:
   push: {}

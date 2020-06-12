@@ -1,7 +1,7 @@
 
 <p align="center"><img src="/media/logo.png" width=200 height=200></p>
 
-[![CI Status](https://github.com/giladreich/QuickCut/workflows/QuickCut%20Build%20Matrix/badge.svg)](https://github.com/giladreich/QuickCut/actions) [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Windows Status](https://github.com/giladreich/QuickCut/workflows/Windows/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AWindows) [![Linux Status](https://github.com/giladreich/QuickCut/workflows/Linux/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3ALinux) [![MacOS Status](https://github.com/giladreich/QuickCut/workflows/MacOS/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AMacOS) [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 ---
 
