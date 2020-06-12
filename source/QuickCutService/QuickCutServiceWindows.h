@@ -5,7 +5,6 @@
 
 #include <Windows.h>
 
-
 class QuickCutServiceWindows : public QuickCutService
 {
 public:
@@ -28,5 +27,4 @@ private:
 
 public:
     static QuickCutServiceWindows * s_pInstance;
-
 };

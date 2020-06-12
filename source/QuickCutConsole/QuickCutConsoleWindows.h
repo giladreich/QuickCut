@@ -5,7 +5,6 @@
 
 #include <Windows.h>
 
-
 class QuickCutConsoleWindows : public QuickCutConsole
 {
 
@@ -17,10 +16,9 @@ public:
     bool stop() override;
 
     static LRESULT CALLBACK WndProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static bool isKeyDown(byte byKey);
-    static void printKeyName(KBDLLHOOKSTRUCT * pKbd);
+    static bool             isKeyDown(byte byKey);
+    static void             printKeyName(KBDLLHOOKSTRUCT * pKbd);
 
 public:
     static HHOOK s_hHook;
-
 };

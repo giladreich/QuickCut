@@ -3,23 +3,21 @@
 
 #include <QCryptographicHash>
 
-
 namespace
 {
 
-    QString generateKeyHash(const QString & szKey, const QString & szSalt)
-    {
-        QByteArray data;
+QString generateKeyHash(const QString & szKey, const QString & szSalt)
+{
+    QByteArray data;
 
-        data.append(szKey.toUtf8());
-        data.append(szSalt.toUtf8());
-        data = QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
+    data.append(szKey.toUtf8());
+    data.append(szSalt.toUtf8());
+    data = QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
 
-        return data;
-    }
-
+    return data;
 }
 
+} // namespace
 
 QSingleInstance::QSingleInstance(const QString & szKey)
     : m_szKey(szKey)
@@ -30,7 +28,7 @@ QSingleInstance::QSingleInstance(const QString & szKey)
 {
     m_qMemLock.acquire();
     {
-        QSharedMemory fix(m_szSharedMemKey);    // Fix for *nix: http://habrahabr.ru/post/173281/
+        QSharedMemory fix(m_szSharedMemKey); // Fix for *nix: http://habrahabr.ru/post/173281/
         fix.attach();
     }
     m_qMemLock.release();
@@ -43,13 +41,11 @@ QSingleInstance::~QSingleInstance()
 
 bool QSingleInstance::isAnotherRunning()
 {
-    if (m_qSharedMem.isAttached())
-        return false;
+    if (m_qSharedMem.isAttached()) return false;
 
     m_qMemLock.acquire();
     const bool isRunning = m_qSharedMem.attach();
-    if (isRunning)
-        m_qSharedMem.detach();
+    if (isRunning) m_qSharedMem.detach();
     m_qMemLock.release();
 
     return isRunning;
@@ -57,7 +53,7 @@ bool QSingleInstance::isAnotherRunning()
 
 bool QSingleInstance::tryToRun()
 {
-    if (isAnotherRunning())   // Extra check
+    if (isAnotherRunning()) // Extra check
         return false;
 
     m_qMemLock.acquire();
@@ -75,7 +71,6 @@ bool QSingleInstance::tryToRun()
 void QSingleInstance::release()
 {
     m_qMemLock.acquire();
-    if (m_qSharedMem.isAttached())
-        m_qSharedMem.detach();
+    if (m_qSharedMem.isAttached()) m_qSharedMem.detach();
     m_qMemLock.release();
 }

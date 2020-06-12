@@ -7,7 +7,6 @@
 #include <QSharedMemory>
 #include <QSystemSemaphore>
 
-
 class QSingleInstance
 {
     Q_DISABLE_COPY(QSingleInstance)
@@ -21,11 +20,10 @@ public:
     void release();
 
 private:
-    const QString    m_szKey;
-    const QString    m_szMemLockKey;
-    const QString    m_szSharedMemKey;
+    const QString m_szKey;
+    const QString m_szMemLockKey;
+    const QString m_szSharedMemKey;
 
     QSharedMemory    m_qSharedMem;
     QSystemSemaphore m_qMemLock;
-
 };

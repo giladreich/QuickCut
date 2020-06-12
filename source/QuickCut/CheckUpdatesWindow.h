@@ -4,7 +4,6 @@
 #include <QDialog>
 #include "ui_CheckUpdatesWindow.h"
 
-
 class CheckUpdatesWindow : public QDialog
 {
     Q_OBJECT

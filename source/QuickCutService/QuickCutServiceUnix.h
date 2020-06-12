@@ -3,7 +3,6 @@
 
 #include "QuickCutService.h"
 
-
 class QuickCutServiceUnix : public QuickCutService
 {
 public:
@@ -18,5 +17,4 @@ public:
     bool isProcessRunning(const QString & szProc) override;
 
 public:
-
 };

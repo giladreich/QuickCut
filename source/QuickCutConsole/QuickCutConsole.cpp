@@ -8,8 +8,7 @@
 #include <QDir>
 #include <QProcess>
 
-
-QuickCutConsole *        QuickCutConsole::s_pInstance = nullptr;
+QuickCutConsole * QuickCutConsole::s_pInstance = nullptr;
 
 std::unique_ptr<Profile> QuickCutConsole::s_pProfile = nullptr;
 String                   QuickCutConsole::s_qszProfilesPath;
@@ -17,22 +16,19 @@ String                   QuickCutConsole::s_qszProfilesPath;
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
 {
-    if (!s_pInstance)
-        s_pInstance = this;
+    if (!s_pInstance) s_pInstance = this;
 }
 
-QuickCutConsole::~QuickCutConsole()
-{ }
+QuickCutConsole::~QuickCutConsole() {}
 
 bool QuickCutConsole::start()
 {
-    // The QuickCut GUI every changes are made to our profiles, we'll restart the service to reload profiles.
-    if (!loadProfiles())
-        return false;
+    // The QuickCut GUI every changes are made to our profiles, we'll restart the service to
+    // reload profiles.
+    if (!loadProfiles()) return false;
 
     return true;
 }
-
 
 bool QuickCutConsole::stop()
 {
@@ -44,7 +40,8 @@ bool QuickCutConsole::loadProfiles()
     QFileInfo fiProfiles(applicationDirPath() + "/Config/profiles.json");
     if (!fiProfiles.exists())
     {
-        qDebug() << "[QuickCutConsole::loadProfiles] - Profiles file not found: " << fiProfiles.filePath();
+        qDebug() << "[QuickCutConsole::loadProfiles] - Profiles file not found: "
+                 << fiProfiles.filePath();
         return false;
     }
 
@@ -62,7 +59,7 @@ bool QuickCutConsole::loadProfiles()
 
         String profileName  = profileJson.second.get<String>("name", "");
         String lastModified = profileJson.second.get<String>("lastModified", "");
-        int actionsCount    = profileJson.second.get<int>("actionsCount", 0);
+        int    actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         s_pProfile = std::make_unique<Profile>(profileId, profileName, lastModified);
         s_pProfile->setActionsCapacity(actionsCount);
@@ -79,9 +76,8 @@ bool QuickCutConsole::loadProfiles()
             String appArgs     = actionJson.second.get<String>("appArgs", "");
             String createdDate = actionJson.second.get<String>("createdDate", "");
 
-            s_pProfile->addAction(new Action(actionId, actionName,
-                                             Action::getType(actionType), srcKey, dstKey,
-                                             appPath, appArgs, createdDate));
+            s_pProfile->addAction(new Action(actionId, actionName, Action::getType(actionType),
+                                             srcKey, dstKey, appPath, appArgs, createdDate));
         }
 
         break;
@@ -96,10 +92,10 @@ void QuickCutConsole::executeProcess(const std::string & szProc, const std::stri
     // Invoking using the user console will allow for expanded string to work as expected.
 #ifdef Q_OS_WIN
     QString szCommand = "cmd /c start \"\" \"" + QString::fromStdString(szProc) + "\"";
-    QString szExt = ".cmd";
+    QString szExt     = ".cmd";
 #elif Q_OS_UNIX
     QString szCommand = "sh -c '" + QString::fromStdString(szProc) + "'";
-    QString szExt = ".sh";
+    QString szExt     = ".sh";
 #endif
 
     QStringList qArgsTmp = QString::fromStdString(szArgs).trimmed().split(",");
@@ -112,10 +108,10 @@ void QuickCutConsole::executeProcess(const std::string & szProc, const std::stri
     }
     qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: " << szCommand;
 
-    // Writing as script temporary to disk to avoid any white spaces issues 
+    // Writing as script temporary to disk to avoid any white spaces issues
     // that QProcess doesn't handle very well...
     QString szFilePath = applicationDirPath() + "/tempCmd" + szExt;
-    QFile file(szFilePath);
+    QFile   file(szFilePath);
     file.open(QIODevice::ReadWrite);
     QTextStream ts(&file);
     ts << szCommand;
@@ -133,4 +129,3 @@ void QuickCutConsole::log(const QString & szFilePath, const QString & szMessage)
     file.flush();
     file.close();
 }
-

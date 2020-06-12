@@ -7,7 +7,6 @@
 #include "Profile.h"
 #include "Preferences.h"
 
-
 class ExamplesWindow;
 class CheckUpdatesWindow;
 class AboutWindow;
@@ -37,14 +36,13 @@ public:
     bool loadProfiles(const QString & szProfilesPath, QString * pszActiveProfileOut);
     bool loadProfiles(const QString & szProfilesPath, std::string * pszActiveProfileOut);
     bool reloadProfiles();
-    bool saveProfiles(const std::string & szProfilesPath, const std::string & szActiveProfileId);
+    bool saveProfiles(const std::string & szProfilesPath,
+                      const std::string & szActiveProfileId);
     bool saveProfiles(const QString & szProfilesPath, const QString & szActiveProfileId);
     bool saveProfiles();
 
-
     bool isActiveProfile(Profile * pProfile);
     void showEvent(QShowEvent * event) override;
-
 
 public slots:
 
@@ -85,19 +83,17 @@ public slots:
     void onActionLoadTheme(const QString & szQssPath, QAction * pAction = nullptr);
     void onLoadCustomStylesheet();
 
-
 private:
     Ui::MainWindowClass * ui;
 
-    ActionEditWindow *           m_pActionEditWindow;
-    AboutWindow *                m_pAboutWindow;
-    CheckUpdatesWindow *         m_pCheckUpdatesWindow;
-    ExamplesWindow *             m_pExamplesWindow;
-                           
-    QMap<eThemeType, QAction *>  m_qThemeActions;
-    QList<Profile *>             m_qProfiles;
-    QString                      m_qszProfilesPath;
-    QString                      m_qszActiveProfile;
-    Preferences                  m_Preferences;
+    ActionEditWindow *   m_pActionEditWindow;
+    AboutWindow *        m_pAboutWindow;
+    CheckUpdatesWindow * m_pCheckUpdatesWindow;
+    ExamplesWindow *     m_pExamplesWindow;
 
+    QMap<eThemeType, QAction *> m_qThemeActions;
+    QList<Profile *>            m_qProfiles;
+    QString                     m_qszProfilesPath;
+    QString                     m_qszActiveProfile;
+    Preferences                 m_Preferences;
 };

@@ -4,7 +4,6 @@
 #include <QDialog>
 #include "ui_ExamplesWindow.h"
 
-
 class ExamplesWindow : public QDialog
 {
     Q_OBJECT

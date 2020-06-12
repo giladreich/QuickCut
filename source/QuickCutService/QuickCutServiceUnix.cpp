@@ -6,15 +6,14 @@
 #include <QDir>
 #include <QProcess>
 
-
 QuickCutServiceUnix::QuickCutServiceUnix(int argc, char * argv[])
     : QuickCutService(argc, argv)
-{}
+{
+}
 
 QuickCutServiceUnix::~QuickCutServiceUnix()
 {
-    if (isProcessRunning("QuickCutConsole"))
-        QProcess::execute("killall -9 QuickCutConsole");
+    if (isProcessRunning("QuickCutConsole")) QProcess::execute("killall -9 QuickCutConsole");
 }
 
 void QuickCutServiceUnix::start()
@@ -42,8 +41,7 @@ void QuickCutServiceUnix::resume()
 void QuickCutServiceUnix::stop()
 {
     QuickCutService::stop();
-    if (isProcessRunning("QuickCutConsole"))
-        QProcess::execute("killall -9 QuickCutConsole");
+    if (isProcessRunning("QuickCutConsole")) QProcess::execute("killall -9 QuickCutConsole");
 }
 
 bool QuickCutServiceUnix::isProcessRunning(const QString & szProc)

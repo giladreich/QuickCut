@@ -4,7 +4,6 @@
 #include <QDialog>
 #include "ui_AboutWindow.h"
 
-
 class AboutWindow : public QDialog
 {
     Q_OBJECT

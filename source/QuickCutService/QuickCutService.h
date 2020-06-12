@@ -3,7 +3,6 @@
 
 #include "QtService/QtService"
 
-
 class QuickCutService : public QtService<QCoreApplication>
 {
 public:
@@ -20,6 +19,4 @@ public:
     static void log(const QString & szFilePath, const QString & szMessage);
 
 public:
-
-
 };

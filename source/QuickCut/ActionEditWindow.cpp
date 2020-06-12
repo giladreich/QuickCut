@@ -5,7 +5,6 @@
 #include <QStandardPaths>
 #include <QFileDialog>
 
-
 ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode eEditMode)
     : QDialog(parent)
     , ui(new Ui::ActionEditWindow())
@@ -34,9 +33,7 @@ ActionEditWindow::ActionEditWindow(QWidget * parent, Action * pAction)
     fillEntries();
 }
 
-ActionEditWindow::~ActionEditWindow()
-{
-}
+ActionEditWindow::~ActionEditWindow() {}
 
 void ActionEditWindow::fillActionTypes()
 {
@@ -60,13 +57,16 @@ void ActionEditWindow::fillEntries()
 
 void ActionEditWindow::connectSlots()
 {
-    connect(ui->cbxType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ActionEditWindow::onTypeSelChange);
-    connect(ui->btnSrcKeyPlay, &QPushButton::clicked, this, [this] { onBtnKeyPlay(ui->tbxSrcKey, ui->btnSrcKeyPlay); });
-    connect(ui->btnDstKeyPlay, &QPushButton::clicked, this, [this] { onBtnKeyPlay(ui->tbxDstKey, ui->btnDstKeyPlay); });
-    connect(ui->btnFilePicker, &QPushButton::clicked, this, &ActionEditWindow::onBtnFilePicker);
+    connect(ui->cbxType, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &ActionEditWindow::onTypeSelChange);
+    connect(ui->btnSrcKeyPlay, &QPushButton::clicked, this,
+            [this] { onBtnKeyPlay(ui->tbxSrcKey, ui->btnSrcKeyPlay); });
+    connect(ui->btnDstKeyPlay, &QPushButton::clicked, this,
+            [this] { onBtnKeyPlay(ui->tbxDstKey, ui->btnDstKeyPlay); });
+    connect(ui->btnFilePicker, &QPushButton::clicked, this,
+            &ActionEditWindow::onBtnFilePicker);
     connect(ui->btnCancel, &QPushButton::clicked, this, &ActionEditWindow::onBtnCancel);
     connect(ui->btnSave, &QPushButton::clicked, this, &ActionEditWindow::onBtnSave);
-
 }
 
 eEditMode ActionEditWindow::getEditMode()
@@ -109,8 +109,7 @@ void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
 {
     if (pInput->isEnabled())
     {
-        for (auto && widget : findChildren<QWidget *>())
-            widget->setEnabled(true);
+        for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(true);
 
         pBtn->setIcon(QIcon(":/Resources/btn_start_recording.png"));
         pBtn->setFocus();
@@ -121,8 +120,7 @@ void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
     }
     else
     {
-        for (auto && widget : findChildren<QWidget *>())
-            widget->setEnabled(false);
+        for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(false);
 
         pBtn->setIcon(QIcon(":/Resources/btn_stop_recording.png"));
         pBtn->setEnabled(true);
@@ -134,7 +132,8 @@ void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
 void ActionEditWindow::onBtnFilePicker()
 {
     QString szHome = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-    QString szFilePath = QFileDialog::getOpenFileName(this, tr("Open File"), szHome, tr("All files (*.*)"));
+    QString szFilePath =
+        QFileDialog::getOpenFileName(this, tr("Open File"), szHome, tr("All files (*.*)"));
     if (szFilePath.isEmpty()) return;
 
     ui->tbxAppPath->setText(szFilePath);
@@ -142,8 +141,7 @@ void ActionEditWindow::onBtnFilePicker()
 
 void ActionEditWindow::onBtnCancel()
 {
-    if (m_eEditMode == ActionCreate)
-        delete m_pAction;
+    if (m_eEditMode == ActionCreate) delete m_pAction;
 
     close();
 }
@@ -163,10 +161,7 @@ void ActionEditWindow::onBtnSave()
     m_pAction->setName(ui->tbxName->text().toStdString());
     m_pAction->setType(eType);
     m_pAction->setSrcKey(ui->tbxSrcKey->text().toStdString());
-    if (eType == ActionKeyMap)
-    {
-        m_pAction->setDstKey(ui->tbxDstKey->text().toStdString());
-    }
+    if (eType == ActionKeyMap) { m_pAction->setDstKey(ui->tbxDstKey->text().toStdString()); }
     else if (eType == ActionAppStart)
     {
         m_pAction->setAppPath(ui->tbxAppPath->text().toStdString());
