@@ -63,6 +63,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install conan Packge-Manager
+      id: install_pm
+      run: |
+        pip install conan
+        conan -v
+        conan profile new default --detect --force
+
     - name: Download Qt modules
       id: qt
       uses: jurplel/install-qt-action@v2
@@ -75,7 +82,8 @@ jobs:
       id: cmake_configure
       run: |
         mkdir build && cd build
-        cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
+        conan install ..
+        cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DUSE_CONAN_PM=ON
 
     - name: CMake build
       id: cmake_build
@@ -87,7 +95,7 @@ jobs:
       id: prepare
       if: ${{ matrix.config.os }} == 'windows-latest'
       run: |
-        windeployqt bin/
+        windeployqt ./build/bin/
 
     - uses: actions/upload-artifact@v2
       id: upload_artifact
