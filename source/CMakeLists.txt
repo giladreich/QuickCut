@@ -4,10 +4,6 @@ cmake_minimum_required(VERSION 3.12)
 ##################################################################################################################
 # Setup
 ##################################################################################################################
-string(TOLOWER ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID} _ARCHITECTURE)
-set(BUILD_DIR ${CMAKE_BINARY_DIR}/bin/${_ARCHITECTURE}-vc${MSVC_TOOLSET_VERSION})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_DIR})
-
 set(SOURCE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "")
 set(QUICKCUT_DIR ${SOURCE_ROOT_DIR}/QuickCut CACHE STRING "")
 set(QUICKCUT_CONSOLE_DIR ${SOURCE_ROOT_DIR}/QuickCutConsole CACHE STRING "")
