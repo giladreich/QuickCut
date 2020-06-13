@@ -1,0 +1,2 @@
+# QuickCut
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2cdb9cf943a64226b392e2fa6b8e6c40)](https://app.codacy.com/manual/giladreich/QuickCut?utm_source=github.com&utm_medium=referral&utm_content=giladreich/QuickCut&utm_campaign=Badge_Grade_Dashboard)
