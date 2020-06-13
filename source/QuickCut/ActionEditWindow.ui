@@ -326,7 +326,7 @@
   <customwidget>
    <class>QShortcutInput</class>
    <extends>QLineEdit</extends>
-   <header location="global">qshortcutinput.h</header>
+   <header location="global">QShortcutInput.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
