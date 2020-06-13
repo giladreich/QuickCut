@@ -5,6 +5,7 @@ on:
   pull_request: {}
 
 env:
+  PROJECT_NAME: "QuickCut"
   QT_VERSION: 5.15.0
 
 jobs:

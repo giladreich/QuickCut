@@ -14,7 +14,9 @@ include(CMakeOptions.cmake)
 
 if (USE_CONAN_PM)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/conan.cmake)
-    conan_cmake_run(REQUIRES boost/1.73.0 BASIC_SETUP)
+    conan_cmake_run(REQUIRES boost/1.73.0 
+        BASIC_SETUP 
+        BUILD missing)
 
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()

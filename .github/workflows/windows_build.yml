@@ -5,6 +5,7 @@ on:
   pull_request: {}
 
 env:
+  PROJECT_NAME: "QuickCut"
   QT_VERSION: 5.15.0
   MSC_VERSION: "vc142"
 
@@ -69,6 +70,7 @@ jobs:
         pip install conan
         conan -v
         conan profile new default --detect --force
+        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
     - name: Download Qt modules
       id: qt
@@ -82,8 +84,7 @@ jobs:
       id: cmake_configure
       run: |
         mkdir build && cd build
-        conan install ..
-        cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DUSE_CONAN_PM=ON
+        cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
 
     - name: CMake build
       id: cmake_build
@@ -100,5 +101,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       id: upload_artifact
       with:
-        name: ${{ matrix.config.artifact }}
+        name: ${{ env.PROJECT_NAME }}-${{ matrix.config.artifact }}
         path: ./build/bin/
