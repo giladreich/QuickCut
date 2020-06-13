@@ -63,8 +63,7 @@ Start by launching `Qt 5.15.0 (MSVC 2019 32-bit)` and then run the following com
 
 ```sh
 mkdir build-x86 && cd build-x86
-conan install ..
-cmake .. -G "Visual Studio 16 2019" -A Win32 -DUSE_CONAN_PM=ON
+cmake .. -G "Visual Studio 16 2019" -A Win32 -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release -- /M
 windeployqt .\bin\
 ```
@@ -73,8 +72,7 @@ For x64 builds, launch `Qt 5.15.0 (MSVC 2019 64-bit)` and then:
 
 ```sh
 mkdir build-x64 && cd build-x64
-conan install ..
-cmake .. -G "Visual Studio 16 2019" -A x64 -DUSE_CONAN_PM=ON
+cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release -- /M
 windeployqt .\bin\
 ```
@@ -83,12 +81,22 @@ Note that you can launch the generated solution file from the terminal. That way
 
 #### Build on Linux
 
-TODO: Write docs.
+```sh
+mkdir build && cd build
+cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release -- -j
+```
+Note that you can specify how many cores to use when building using the `-j` flag. i.e. for 8 cores `-j8`.
 
 #### Build on MacOS
 
-TODO: Write docs.
+```sh
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release -- -j
+```
 
+Note that you can specify how many cores to use when building using the `-j` flag. i.e. for 8 cores `-j8`.
 
 #### Build using QtCreator
 
