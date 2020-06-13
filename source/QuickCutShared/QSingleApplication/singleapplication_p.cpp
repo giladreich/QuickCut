@@ -45,7 +45,7 @@
 #include "singleapplication.h"
 #include "singleapplication_p.h"
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 #    include <windows.h>
 #    include <lmcons.h>
 #endif
@@ -95,7 +95,7 @@ void SingleApplicationPrivate::genBlockServerName()
 
     if (!(options & SingleApplication::Mode::ExcludeAppPath))
     {
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
         appData.addData(SingleApplication::app_t::applicationFilePath().toLower().toUtf8());
 #else
         appData.addData(SingleApplication::app_t::applicationFilePath().toUtf8());
@@ -105,7 +105,7 @@ void SingleApplicationPrivate::genBlockServerName()
     // User level block requires a user specific data in the hash
     if (options & SingleApplication::Mode::User)
     {
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
         wchar_t username[UNLEN + 1];
         // Specifies size of the buffer on input
         DWORD usernameLength = UNLEN + 1;

@@ -30,7 +30,7 @@ namespace property_tree
 } // namespace property_tree
 } // namespace boost
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 #    define WIN32_LEAN_AND_MEAN
 #    include <Windows.h>
 namespace Hook

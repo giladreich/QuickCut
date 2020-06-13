@@ -5,7 +5,7 @@
 
 QShortcutInput * QShortcutInput::s_pInstance = nullptr;
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 HHOOK QShortcutInput::s_hHook = nullptr;
 #endif
 
@@ -16,6 +16,7 @@ QShortcutInput::QShortcutInput(QWidget * parent)
 
 QShortcutInput::~QShortcutInput()
 {
+#if defined(Q_OS_WIN)
     if (s_hHook)
     {
         qDebug() << "[QShortcutInput::dtor] - Unhooking...";
@@ -23,9 +24,10 @@ QShortcutInput::~QShortcutInput()
         s_pInstance = nullptr;
         s_hHook     = nullptr;
     }
+#endif
 }
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 LRESULT CALLBACK QShortcutInput::WndProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if (nCode < 0 || !s_pInstance) return CallNextHookEx(s_hHook, nCode, wParam, lParam);
@@ -65,9 +67,9 @@ LRESULT CALLBACK QShortcutInput::WndProc(int nCode, WPARAM wParam, LPARAM lParam
 
     return CallNextHookEx(s_hHook, nCode, wParam, lParam);
 }
-#endif // #ifdef Q_OS_WIN
+#endif // #if defined(Q_OS_WIN)
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 void QShortcutInput::focusInEvent(QFocusEvent * event)
 {
     if (!s_hHook)
@@ -78,14 +80,14 @@ void QShortcutInput::focusInEvent(QFocusEvent * event)
         if (!s_hHook) { qDebug() << "[QShortcutInput::focusInEvent] - Hook failed..."; }
     }
 }
-#elif Q_OS_UNIX
+#elif defined(Q_OS_UNIX)
 void QShortcutInput::focusInEvent(QFocusEvent * event)
 {
     // TODO: Add unix hook.
 }
-#endif // #ifdef Q_OS_WIN
+#endif // #if defined(Q_OS_WIN)
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 void QShortcutInput::focusOutEvent(QFocusEvent * event)
 {
     if (s_hHook)
@@ -96,9 +98,9 @@ void QShortcutInput::focusOutEvent(QFocusEvent * event)
         s_hHook     = nullptr;
     }
 }
-#elif Q_OS_UNIX
+#elif defined(Q_OS_UNIX)
 void QShortcutInput::focusOutEvent(QFocusEvent * event)
 {
     // TODO: Add unix hook.
 }
-#endif // #ifdef Q_OS_WIN
+#endif // #if defined(Q_OS_WIN)

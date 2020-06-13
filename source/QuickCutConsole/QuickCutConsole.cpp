@@ -90,10 +90,10 @@ void QuickCutConsole::executeProcess(const std::string & szProc, const std::stri
 {
     // QProc won't expand environment variable strings.
     // Invoking using the user console will allow for expanded string to work as expected.
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
     QString szCommand = "cmd /c start \"\" \"" + QString::fromStdString(szProc) + "\"";
     QString szExt     = ".cmd";
-#elif Q_OS_UNIX
+#elif defined(Q_OS_UNIX)
     QString szCommand = "sh -c '" + QString::fromStdString(szProc) + "'";
     QString szExt     = ".sh";
 #endif

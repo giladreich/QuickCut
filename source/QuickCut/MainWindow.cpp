@@ -128,7 +128,7 @@ void MainWindow::activateHook()
         ui->statusBar->showMessage("Activated QuickCut Service.");
     }
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
     // TODO: Configure from installer.
     // Don't start the service right when win boots.
     QProcess::execute("sc config \"QuickCut Service\" start=delayed-auto", QStringList());
@@ -417,7 +417,9 @@ bool MainWindow::saveProfiles(const std::string & szProfilesPath,
     rootJson.add_child("profiles", profilesJson);
 
     bpt::write_jsonEx(szProfilesPath, rootJson);
+#if defined(Q_OS_WIN)
     Hook::sendReloadSignal();
+#endif
 
     return true;
 }
@@ -706,7 +708,9 @@ void MainWindow::onActionViewStatusBar()
 
 void MainWindow::onActionViewRefresh()
 {
+#if defined(Q_OS_WIN)
     Hook::sendReloadSignal();
+#endif
     initProfiles();
 }
 
