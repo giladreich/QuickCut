@@ -18,11 +18,21 @@ set(QUICKCUT_SHARED_DIR ${SOURCE_ROOT_DIR}/QuickCutShared CACHE STRING "")
 
 # TODO(Gilad): Consider implementing a fall back scenarios, where if we could'nt find the packages, try finding
 # if conan installed, if installed, do "conan install .." command and try to find again after conan setup.
-find_package(Qt5 REQUIRED COMPONENTS
-    Core
-    Widgets
-    Gui
-)
+if(WIN32)
+    find_package(Qt5 REQUIRED COMPONENTS
+        Core
+        Widgets
+        Gui
+    )
+else() # UNIX
+    find_package(Qt5 REQUIRED COMPONENTS
+        Core
+        Widgets
+        Gui
+        Network
+    )
+endif()
+
 if (Qt5_FOUND)
     message(STATUS "[INFO] Qt5 Found -> ${Qt5_DIR}")
 else()

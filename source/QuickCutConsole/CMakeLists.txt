@@ -91,10 +91,16 @@ add_executable(${PROJECT_NAME}
     ${RESOURCE_FILES}
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC
-    Qt5::WinMain # TODO(Gilad): Confirm whether it's required on Unix systems.
-    Qt5::Core
-)
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+        Qt5::WinMain
+        Qt5::Core
+    )
+else() # UNIX
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+        Qt5::Core
+    )
+endif()
 
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")
