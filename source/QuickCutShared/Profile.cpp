@@ -91,7 +91,6 @@ bool Profile::deleteAction(Action * pAction)
     if (itr == m_vActions.end()) return false;
 
     delete pAction;
-    pAction = nullptr;
     m_vActions.erase(itr);
 
     return true;

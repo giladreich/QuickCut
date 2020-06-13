@@ -299,7 +299,7 @@ private:
 QtServiceSysPrivate::QtServiceSysPrivate()
     : QtUnixServerSocket()
     , ident(0)
-    , serviceFlags(0)
+    , serviceFlags(QtServiceBase::ServiceFlag::Default)
 {
 }
 
