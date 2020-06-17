@@ -122,8 +122,9 @@ bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & szProc)
     memset(&startInfo, 0, sizeof(startInfo));
     memset(&procInfo, 0, sizeof(procInfo));
 
+    char siDesktop[]    = "winsta0\\default";
     startInfo.cb        = sizeof(STARTUPINFOA);
-    startInfo.lpDesktop = "winsta0\\default";
+    startInfo.lpDesktop = siDesktop;
 
     bool bSucceed = CreateProcessAsUserA(hToken, szProc.c_str(), nullptr, nullptr, nullptr,
                                          false, 0, nullptr, nullptr, &startInfo, &procInfo);
@@ -160,8 +161,9 @@ bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & szProc)
     memset(&startInfo, 0, sizeof(STARTUPINFO));
     memset(&procInfo, 0, sizeof(PROCESS_INFORMATION));
 
+    wchar_t siDesktop[] = L"winsta0\\default";
     startInfo.cb        = sizeof(STARTUPINFO);
-    startInfo.lpDesktop = L"winsta0\\default";
+    startInfo.lpDesktop = siDesktop;
 
     bool bSucceed =
         CreateProcessAsUser(hToken, szProc.c_str(), nullptr, nullptr, nullptr, false,

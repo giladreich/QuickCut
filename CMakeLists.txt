@@ -22,6 +22,12 @@ if (USE_CONAN_PM)
     conan_basic_setup()
 endif()
 
+if (MSVC)
+    if (MSVC_VERSION GREATER_EQUAL 1910)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /permissive-")
+    endif()
+endif()
+
 
 ##################################################################################################################
 # IDE Representation
