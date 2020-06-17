@@ -89,11 +89,10 @@ file(GLOB QUI_FILES ${RESOURCE_DIR}/ui/*.ui)
 file(GLOB QSS_FILES ${RESOURCE_DIR}/ui/styles/*.qss)
 
 set(RESOURCE_FILES
+    # ${QRC_FILES}
     # ${QUI_FILES}
-    ${QRC_FILES}
     ${QSS_FILES}
 )
-
 
 if(WIN32)
     set(BIN_INFO_RC
@@ -145,10 +144,31 @@ source_group("${RESOURCE_DIR}\\QtRC\\Themes" FILES
 # Qt Framework
 ##################################################################################################################
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTORCC ON)
 # set(CMAKE_AUTOUIC ON)
+
+# qt5_wrap_cpp()
+qt5_add_resources(QRCC_FILES ${QRC_FILES})
 qt5_wrap_ui(QUIC_FILES ${QUI_FILES})
-#qt5_wrap_cpp()
+source_group("Qt_GeneratedFiles" FILES
+    ${QRCC_FILES}
+    ${QUIC_FILES}
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_autogen/mocs_compilation.cpp
+)
+
+# NOTE(Gilad): Only problem with this approach, that CMake will have to re-run the configure step after build and
+# on VS also re-open the project, so filters taking effect, because these files gets generated during compilation.
+# file(GLOB_RECURSE QT_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
+# list(FILTER QT_GENERATED_FILES INCLUDE REGEX "^.*\.(cpp|h|hpp|cc|cxx)$")
+# source_group("Qt_GeneratedFiles" FILES
+#     ${QT_GENERATED_FILES}
+# )
+
+set(RESOURCE_FILES
+    ${RESOURCE_FILES}
+    ${QRCC_FILES}
+    ${QUIC_FILES}
+)
 
 ##################################################################################################################
 # Target
@@ -156,7 +176,6 @@ qt5_wrap_ui(QUIC_FILES ${QUI_FILES})
 add_executable(${PROJECT_NAME}
     ${CXX_FILES}
     ${RESOURCE_FILES}
-    ${QUIC_FILES}
 )
 
 if(WIN32)
