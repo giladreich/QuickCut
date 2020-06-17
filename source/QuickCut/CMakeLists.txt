@@ -69,11 +69,11 @@ set(UI_CXX_FILES
     ExamplesWindow.cpp
 )
 set(MISC_CXX_FILES
-    main.cpp
     Preferences.h
     Preferences.cpp
 )
 set(CXX_FILES
+    main.cpp
     ${MISC_CXX_FILES}
     ${UI_CXX_FILES}
     ${WIDGETS_CXX_FILES}
@@ -139,7 +139,7 @@ set(RESOURCE_FILES
 ##################################################################################################################
 # IDE Representation
 ##################################################################################################################
-source_group("Source Files" FILES
+source_group("Source Files\\Misc" FILES
     ${MISC_CXX_FILES}
 )
 source_group("Source Files\\Shared" FILES
