@@ -15,6 +15,7 @@ add_definitions(
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${QUICKCUT_SHARED_DIR}
+    ${PROJECT_BINARY_DIR} # generated "ui_*.h" files.
 )
 
 ##################################################################################################################
@@ -78,15 +79,15 @@ set(CXX_FILES
     ${SHARED_CXX_FILES}
 )
 
-file(GLOB QUI_FILES *.ui)
-file(GLOB QRC_FILES 
+file(GLOB QUI_FILES Resources/ui/*.ui)
+file(GLOB QRC_FILES
     MainWindow.qrc
     Resources/ui/styles/stylesheet.qrc
 )
 file(GLOB QSS_FILES Resources/ui/styles/*.qss)
 
 set(RESOURCE_FILES
-    ${QUI_FILES}
+    # ${QUI_FILES}
     ${QRC_FILES}
     ${QSS_FILES}
 )
@@ -131,9 +132,6 @@ source_group("Resources" FILES
 source_group("Resources\\QtUI" FILES
     ${QUI_FILES}
 )
-source_group("Resources\\QtUI" FILES
-    ${QUI_FILES}
-)
 source_group("Resources\\QtRC" FILES
     ${QRC_FILES}
 )
@@ -145,11 +143,10 @@ source_group("Resources\\QtRC\\Themes" FILES
 # Qt Framework
 ##################################################################################################################
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-#qt5_wrap_ui()
+# set(CMAKE_AUTOUIC ON)
+qt5_wrap_ui(QUIC_FILES ${QUI_FILES})
 #qt5_wrap_cpp()
-
 
 ##################################################################################################################
 # Target
@@ -157,6 +154,7 @@ set(CMAKE_AUTORCC ON)
 add_executable(${PROJECT_NAME}
     ${CXX_FILES}
     ${RESOURCE_FILES}
+    ${QUIC_FILES}
 )
 
 if(WIN32)
