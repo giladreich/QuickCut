@@ -94,7 +94,7 @@ set(RESOURCE_FILES
 
 if(WIN32)
     set(BIN_INFO_RC
-        Resources/QuickCut.rc
+        Resources/platform/windows/QuickCut.rc
     )
 elseif(UNIX)
     set(BIN_INFO_RC
