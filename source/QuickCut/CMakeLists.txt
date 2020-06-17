@@ -81,9 +81,9 @@ set(CXX_FILES
 file(GLOB QUI_FILES *.ui)
 file(GLOB QRC_FILES 
     MainWindow.qrc
-    Styles/stylesheet.qrc
+    Resources/ui/styles/stylesheet.qrc
 )
-file(GLOB QSS_FILES Styles/*.qss)
+file(GLOB QSS_FILES Resources/ui/styles/*.qss)
 
 set(RESOURCE_FILES
     ${QUI_FILES}
