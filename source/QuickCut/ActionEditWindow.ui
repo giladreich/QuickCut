@@ -137,17 +137,17 @@
         <string notr="true">#btnDstKeyPlay {
     border: none;
     background: none;
-	border-image: url(:/Resources/btn_start_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_start_recording.png) 0 0 0 0 stretch stretch;
     background-color: transparent;
     background-repeat: none;
 }
 
 QPushButton#btnDstKeyPlay[background-image=&quot;play&quot;] {
-	border-image: url(:/Resources/btn_start_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_start_recording.png) 0 0 0 0 stretch stretch;
 }
 
 QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
-	border-image: url(:/Resources/btn_stop_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_stop_recording.png) 0 0 0 0 stretch stretch;
 }</string>
        </property>
        <property name="text">
@@ -198,17 +198,17 @@ QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
         <string notr="true">#btnSrcKeyPlay {
     border: none;
     background: none;
-	border-image: url(:/Resources/btn_start_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_start_recording.png) 0 0 0 0 stretch stretch;
     background-color: transparent;
     background-repeat: none;
 }
 
 QPushButton#btnSrcKeyPlay[background-image=&quot;play&quot;] {
-	border-image: url(:/Resources/btn_start_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_start_recording.png) 0 0 0 0 stretch stretch;
 }
 
 QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
-	border-image: url(:/Resources/btn_stop_recording.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/Resources/icons/btn_stop_recording.png) 0 0 0 0 stretch stretch;
 }</string>
        </property>
        <property name="text">

@@ -75,7 +75,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeon>:/Resources/btn_movedown.png</activeon>
+        <activeon>:/Resources/icons/btn_movedown.png</activeon>
        </iconset>
       </property>
      </widget>
@@ -102,7 +102,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeon>:/Resources/btn_moveup.png</activeon>
+        <activeon>:/Resources/icons/btn_moveup.png</activeon>
        </iconset>
       </property>
      </widget>
@@ -342,7 +342,7 @@
   <action name="actionFileOpen">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/file_open.png</normaloff>:/Resources/file_open.png</iconset>
+     <normaloff>:/Resources/icons/file_open.png</normaloff>:/Resources/icons/file_open.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -351,7 +351,7 @@
   <action name="actionFileSave">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/file_save.png</normaloff>:/Resources/file_save.png</iconset>
+     <normaloff>:/Resources/icons/file_save.png</normaloff>:/Resources/icons/file_save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -360,7 +360,7 @@
   <action name="actionFileSaveAs">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/file_saveas.png</normaloff>:/Resources/file_saveas.png</iconset>
+     <normaloff>:/Resources/icons/file_saveas.png</normaloff>:/Resources/icons/file_saveas.png</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
@@ -369,7 +369,7 @@
   <action name="actionFileExit">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/file_exit.png</normaloff>:/Resources/file_exit.png</iconset>
+     <normaloff>:/Resources/icons/file_exit.png</normaloff>:/Resources/icons/file_exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -378,7 +378,7 @@
   <action name="actionHelpAbout">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/help_about.png</normaloff>:/Resources/help_about.png</iconset>
+     <normaloff>:/Resources/icons/help_about.png</normaloff>:/Resources/icons/help_about.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -387,7 +387,7 @@
   <action name="actionHelpExamples">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/help_search.png</normaloff>:/Resources/help_search.png</iconset>
+     <normaloff>:/Resources/icons/help_search.png</normaloff>:/Resources/icons/help_search.png</iconset>
    </property>
    <property name="text">
     <string>Examples</string>
@@ -396,7 +396,7 @@
   <action name="actionHelpCheckUpdates">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/help_check_updates.png</normaloff>:/Resources/help_check_updates.png</iconset>
+     <normaloff>:/Resources/icons/help_check_updates.png</normaloff>:/Resources/icons/help_check_updates.png</iconset>
    </property>
    <property name="text">
     <string>Check for updates...</string>
@@ -416,7 +416,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/view_toolbar.png</normaloff>:/Resources/view_toolbar.png</iconset>
+     <normaloff>:/Resources/icons/view_toolbar.png</normaloff>:/Resources/icons/view_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Tool Bar</string>
@@ -431,7 +431,7 @@
    </property>
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/view_statusbar.png</normaloff>:/Resources/view_statusbar.png</iconset>
+     <normaloff>:/Resources/icons/view_statusbar.png</normaloff>:/Resources/icons/view_statusbar.png</iconset>
    </property>
    <property name="text">
     <string>Status Bar</string>
@@ -459,7 +459,7 @@
   <action name="actionViewRefresh">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/view_refresh.png</normaloff>:/Resources/view_refresh.png</iconset>
+     <normaloff>:/Resources/icons/view_refresh.png</normaloff>:/Resources/icons/view_refresh.png</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -468,7 +468,7 @@
   <action name="actionThemeLoadQss">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/preferences_open_theme.png</normaloff>:/Resources/preferences_open_theme.png</iconset>
+     <normaloff>:/Resources/icons/preferences_open_theme.png</normaloff>:/Resources/icons/preferences_open_theme.png</iconset>
    </property>
    <property name="text">
     <string>Load Custom Stylesheet...</string>
@@ -512,7 +512,7 @@
   <action name="actionFileRestartService">
    <property name="icon">
     <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/file_restart_service.png</normaloff>:/Resources/file_restart_service.png</iconset>
+     <normaloff>:/Resources/icons/file_restart_service.png</normaloff>:/Resources/icons/file_restart_service.png</iconset>
    </property>
    <property name="text">
     <string>Restart Service</string>
