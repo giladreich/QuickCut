@@ -5,6 +5,7 @@
 #include "ui_ActionEditWindow.h"
 
 class Action;
+class QShortcutInput;
 
 enum eEditMode
 {
@@ -39,6 +40,7 @@ public slots:
 
     void onTypeSelChange(int iIndex);
 
+    //void onBtnKeyPlay(QKeySequenceEdit * pInput, QPushButton * pBtn);
     void onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn);
     void onBtnFilePicker();
     void onBtnCancel();

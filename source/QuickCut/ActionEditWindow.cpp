@@ -1,9 +1,12 @@
 
 #include "ActionEditWindow.h"
 #include "Action.h"
+#include "QShortcutInput.h"
 
 #include <QStandardPaths>
 #include <QFileDialog>
+//#include <QKeySequenceEdit>
+
 
 ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode eEditMode)
     : QDialog(parent)
@@ -11,6 +14,8 @@ ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode eEditMode)
     , m_eEditMode(eEditMode)
 {
     ui->setupUi(this);
+
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     fillActionTypes();
     connectSlots();
@@ -49,6 +54,8 @@ void ActionEditWindow::fillEntries()
     ui->cbxType->setCurrentIndex(iTypeIndex);
     onTypeSelChange(iTypeIndex);
 
+    //ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_pAction->getSrcKey())));
+    //ui->tbxDstKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_pAction->getDstKey())));
     ui->tbxSrcKey->setText(QString::fromStdString(m_pAction->getSrcKey()));
     ui->tbxDstKey->setText(QString::fromStdString(m_pAction->getDstKey()));
     ui->tbxAppPath->setText(QString::fromStdString(m_pAction->getAppPath()));
@@ -105,13 +112,15 @@ void ActionEditWindow::onTypeSelChange(int iIndex)
     }
 }
 
+//void ActionEditWindow::onBtnKeyPlay(QKeySequenceEdit * pInput, QPushButton * pBtn)
 void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
 {
     if (pInput->isEnabled())
     {
         for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(true);
 
-        pBtn->setIcon(QIcon(":/Resources/btn_start_recording.png"));
+        pBtn->setProperty("background-image", "play");
+        pBtn->style()->polish(pBtn);
         pBtn->setFocus();
         pBtn->setEnabled(true);
 
@@ -120,9 +129,10 @@ void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
     }
     else
     {
-        for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(false);
+        for (auto&& widget : findChildren<QWidget*>()) widget->setEnabled(false);
 
-        pBtn->setIcon(QIcon(":/Resources/btn_stop_recording.png"));
+        pBtn->setProperty("background-image", "stop");
+        pBtn->style()->polish(pBtn);
         pBtn->setEnabled(true);
         pInput->setEnabled(true);
         pInput->setFocus();
@@ -161,6 +171,8 @@ void ActionEditWindow::onBtnSave()
     m_pAction->setName(ui->tbxName->text().toStdString());
     m_pAction->setType(eType);
     m_pAction->setSrcKey(ui->tbxSrcKey->text().toStdString());
+    //m_pAction->setSrcKey(ui->tbxSrcKey->keySequence().toString().toStdString());
+    //if (eType == ActionKeyMap) { m_pAction->setDstKey(ui->tbxDstKey->keySequence().toString().toStdString()); }
     if (eType == ActionKeyMap) { m_pAction->setDstKey(ui->tbxDstKey->text().toStdString()); }
     else if (eType == ActionAppStart)
     {
