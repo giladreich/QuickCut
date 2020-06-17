@@ -18,6 +18,8 @@ include_directories(
     ${PROJECT_BINARY_DIR} # generated "ui_*.h" files.
 )
 
+set(RESOURCE_DIR Resources)
+
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
@@ -79,12 +81,12 @@ set(CXX_FILES
     ${SHARED_CXX_FILES}
 )
 
-file(GLOB QUI_FILES Resources/ui/*.ui)
-file(GLOB QRC_FILES
-    MainWindow.qrc
-    Resources/ui/styles/stylesheet.qrc
+set(QRC_FILES
+    ${RESOURCE_DIR}/QuickCut.qrc
+    ${RESOURCE_DIR}/ui/styles/stylesheet.qrc
 )
-file(GLOB QSS_FILES Resources/ui/styles/*.qss)
+file(GLOB QUI_FILES ${RESOURCE_DIR}/ui/*.ui)
+file(GLOB QSS_FILES ${RESOURCE_DIR}/ui/styles/*.qss)
 
 set(RESOURCE_FILES
     # ${QUI_FILES}
@@ -95,7 +97,7 @@ set(RESOURCE_FILES
 
 if(WIN32)
     set(BIN_INFO_RC
-        Resources/platform/windows/QuickCut.rc
+        ${RESOURCE_DIR}/platform/windows/QuickCut.rc
     )
 elseif(UNIX)
     set(BIN_INFO_RC
@@ -126,16 +128,16 @@ source_group("Source Files\\Widgets" FILES
 source_group("Source Files\\Windows" FILES
     ${UI_CXX_FILES}
 )
-source_group("Resources" FILES
+source_group("${RESOURCE_DIR}" FILES
     ${BIN_INFO_RC}
 )
-source_group("Resources\\QtUI" FILES
+source_group("${RESOURCE_DIR}\\QtUI" FILES
     ${QUI_FILES}
 )
-source_group("Resources\\QtRC" FILES
+source_group("${RESOURCE_DIR}\\QtRC" FILES
     ${QRC_FILES}
 )
-source_group("Resources\\QtRC\\Themes" FILES
+source_group("${RESOURCE_DIR}\\QtRC\\Themes" FILES
     ${QSS_FILES}
 )
 

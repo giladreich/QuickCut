@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <activeon>:/Resources/logo.png</activeon>
+    <activeon>:/logo.png</activeon>
    </iconset>
   </property>
   <widget class="QPushButton" name="btnClose">
@@ -47,7 +47,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="MainWindow.qrc">:/Resources/logo.png</pixmap>
+    <pixmap resource="../QuickCut.qrc">:/logo.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -129,7 +129,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="MainWindow.qrc"/>
+  <include location="../QuickCut.qrc"/>
  </resources>
  <connections/>
 </ui>

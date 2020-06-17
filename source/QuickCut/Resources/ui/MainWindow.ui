@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <activeon>:/Resources/logo.png</activeon>
+    <activeon>:/logo.png</activeon>
    </iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -75,7 +75,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeon>:/Resources/icons/btn_movedown.png</activeon>
+        <activeon>:/icons/btn_movedown.png</activeon>
        </iconset>
       </property>
      </widget>
@@ -102,7 +102,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeon>:/Resources/icons/btn_moveup.png</activeon>
+        <activeon>:/icons/btn_moveup.png</activeon>
        </iconset>
       </property>
      </widget>
@@ -341,8 +341,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionFileOpen">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/file_open.png</normaloff>:/Resources/icons/file_open.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/file_open.png</normaloff>:/icons/file_open.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -350,8 +350,8 @@
   </action>
   <action name="actionFileSave">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/file_save.png</normaloff>:/Resources/icons/file_save.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/file_save.png</normaloff>:/icons/file_save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -359,8 +359,8 @@
   </action>
   <action name="actionFileSaveAs">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/file_saveas.png</normaloff>:/Resources/icons/file_saveas.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/file_saveas.png</normaloff>:/icons/file_saveas.png</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
@@ -368,8 +368,8 @@
   </action>
   <action name="actionFileExit">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/file_exit.png</normaloff>:/Resources/icons/file_exit.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/file_exit.png</normaloff>:/icons/file_exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -377,8 +377,8 @@
   </action>
   <action name="actionHelpAbout">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/help_about.png</normaloff>:/Resources/icons/help_about.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/help_about.png</normaloff>:/icons/help_about.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -386,8 +386,8 @@
   </action>
   <action name="actionHelpExamples">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/help_search.png</normaloff>:/Resources/icons/help_search.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/help_search.png</normaloff>:/icons/help_search.png</iconset>
    </property>
    <property name="text">
     <string>Examples</string>
@@ -395,8 +395,8 @@
   </action>
   <action name="actionHelpCheckUpdates">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/help_check_updates.png</normaloff>:/Resources/icons/help_check_updates.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/help_check_updates.png</normaloff>:/icons/help_check_updates.png</iconset>
    </property>
    <property name="text">
     <string>Check for updates...</string>
@@ -415,8 +415,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/view_toolbar.png</normaloff>:/Resources/icons/view_toolbar.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/view_toolbar.png</normaloff>:/icons/view_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Tool Bar</string>
@@ -430,8 +430,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/view_statusbar.png</normaloff>:/Resources/icons/view_statusbar.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/view_statusbar.png</normaloff>:/icons/view_statusbar.png</iconset>
    </property>
    <property name="text">
     <string>Status Bar</string>
@@ -458,8 +458,8 @@
   </action>
   <action name="actionViewRefresh">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/view_refresh.png</normaloff>:/Resources/icons/view_refresh.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/view_refresh.png</normaloff>:/icons/view_refresh.png</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -467,8 +467,8 @@
   </action>
   <action name="actionThemeLoadQss">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/preferences_open_theme.png</normaloff>:/Resources/icons/preferences_open_theme.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/preferences_open_theme.png</normaloff>:/icons/preferences_open_theme.png</iconset>
    </property>
    <property name="text">
     <string>Load Custom Stylesheet...</string>
@@ -511,8 +511,8 @@
   </action>
   <action name="actionFileRestartService">
    <property name="icon">
-    <iconset resource="MainWindow.qrc">
-     <normaloff>:/Resources/icons/file_restart_service.png</normaloff>:/Resources/icons/file_restart_service.png</iconset>
+    <iconset resource="../QuickCut.qrc">
+     <normaloff>:/icons/file_restart_service.png</normaloff>:/icons/file_restart_service.png</iconset>
    </property>
    <property name="text">
     <string>Restart Service</string>
@@ -538,7 +538,7 @@
   <tabstop>btnSetActive</tabstop>
  </tabstops>
  <resources>
-  <include location="MainWindow.qrc"/>
+  <include location="../QuickCut.qrc"/>
  </resources>
  <connections/>
 </ui>
