@@ -2,20 +2,20 @@
 #include "Preferences.h"
 
 Preferences::Preferences()
-    : m_bViewToolBar(true)
-    , m_bViewStatusBar(true)
-    , m_eThemeType(ThemeUbuntu)
+    : m_ViewToolBar(true)
+    , m_ViewStatusBar(true)
+    , m_ThemeType(ThemeUbuntu)
 {
 }
 
 QString Preferences::getThemeFilePath() const
 {
-    return getThemeFilePath(m_eThemeType);
+    return getThemeFilePath(m_ThemeType);
 }
 
-QString Preferences::getThemeFilePath(eThemeType eType)
+QString Preferences::getThemeFilePath(eThemeType type)
 {
-    switch (eType)
+    switch (type)
     {
         case ThemeDefault:
             return "";
@@ -37,10 +37,10 @@ QString Preferences::getThemeFilePath(eThemeType eType)
 
 eThemeType Preferences::getThemeType() const
 {
-    return m_eThemeType;
+    return m_ThemeType;
 }
 
-void Preferences::setThemeType(eThemeType eType)
+void Preferences::setThemeType(eThemeType type)
 {
-    m_eThemeType = eType;
+    m_ThemeType = type;
 }

@@ -58,12 +58,12 @@ public:
     void reset();
 
 private:
-    std::string m_szUuid;
-    std::string m_szName;
-    eActionType m_eType;
-    std::string m_szSrcKey; // string with delimited ',' char. Could have multiple keys.
-    std::string m_szDstKey;
-    std::string m_szAppPath;
-    std::string m_szAppArgs;
-    std::string m_szCreatedDate;
+    std::string m_Uuid;
+    std::string m_Name;
+    eActionType m_Type;
+    std::string m_SrcKey; // string with delimited ',' char. Could have multiple keys.
+    std::string m_DstKey;
+    std::string m_AppPath;
+    std::string m_AppArgs;
+    std::string m_CreatedDate;
 };

@@ -35,17 +35,17 @@ void QuickCutService::resume()
 
 void QuickCutService::stop() {}
 
-bool QuickCutService::isProcessRunning(const QString & szProc)
+bool QuickCutService::isProcessRunning(const QString & process)
 {
     return false;
 }
 
-void QuickCutService::log(const QString & szFilePath, const QString & szMessage)
+void QuickCutService::log(const QString & filePath, const QString & text)
 {
-    QFile file(szFilePath);
+    QFile file(filePath);
     file.open(QFile::WriteOnly);
-    QTextStream text(&file);
-    text << szMessage;
+    QTextStream ts(&file);
+    ts << text;
     file.flush();
     file.close();
 }

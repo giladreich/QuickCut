@@ -27,31 +27,30 @@ public:
     void initProfiles();
 
     // TODO: Implement parser and move all of these.
-    bool loadPreferences(const std::string & szPath, Preferences * pOutPreferences);
-    bool savePreferences(const std::string & szPath, const Preferences & preferences);
+    bool loadPreferences(const std::string & path, Preferences * outPreferences);
+    bool savePreferences(const std::string & path, const Preferences & preferences);
     bool loadPreferences();
     bool savePreferences();
 
-    bool loadProfiles(const std::string & szProfilesPath, std::string * pszActiveProfileOut);
-    bool loadProfiles(const QString & szProfilesPath, QString * pszActiveProfileOut);
-    bool loadProfiles(const QString & szProfilesPath, std::string * pszActiveProfileOut);
+    bool loadProfiles(const std::string & profilesPath, std::string * activeProfileOut);
+    bool loadProfiles(const QString & profilesPath, QString * activeProfileOut);
+    bool loadProfiles(const QString & profilesPath, std::string * activeProfileOut);
     bool reloadProfiles();
-    bool saveProfiles(const std::string & szProfilesPath,
-                      const std::string & szActiveProfileId);
-    bool saveProfiles(const QString & szProfilesPath, const QString & szActiveProfileId);
+    bool saveProfiles(const std::string & profilesPath, const std::string & activeProfileId);
+    bool saveProfiles(const QString & profilesPath, const QString & activeProfileId);
     bool saveProfiles();
 
-    bool isActiveProfile(Profile * pProfile);
+    bool isActiveProfile(Profile * profile);
     void showEvent(QShowEvent * event) override;
 
 public slots:
 
-    void onProfileSelChange(int iIndex);
+    void onProfileSelChange(int index);
     void onBtnSetActiveProfile();
     void onBtnDeleteProfile();
     void onBtnCreateProfile();
 
-    void onActionSelChange(int iIndex);
+    void onActionSelChange(int index);
     void onActionDoubleClicked(const QModelIndex & index);
     void onBtnActionCreate();
     void onBtnActionDelete();
@@ -59,10 +58,10 @@ public slots:
     void onBtnActionMoveDown();
     void onBtnActionMoveUp();
 
-    void listItemSwap(QListWidget * pList, bool bMoveUp);
+    void listItemSwap(QListWidget * list, bool moveUp);
 
     void onActionSaved();
-    void onActionCreated(Action * pAction);
+    void onActionCreated(Action * action);
 
     // File Menu
     void onActionFileOpen();
@@ -79,21 +78,21 @@ public slots:
     void onActionHelpExamples();
     void onActionHelpCheckUpdates();
 
-    void onActionLoadTheme(eThemeType eType, QAction * pAction = nullptr);
-    void onActionLoadTheme(const QString & szQssPath, QAction * pAction = nullptr);
+    void onActionLoadTheme(eThemeType type, QAction * action = nullptr);
+    void onActionLoadTheme(const QString & qssPath, QAction * action = nullptr);
     void onLoadCustomStylesheet();
 
 private:
     Ui::MainWindowClass * ui;
 
-    ActionEditWindow *   m_pActionEditWindow;
-    AboutWindow *        m_pAboutWindow;
-    CheckUpdatesWindow * m_pCheckUpdatesWindow;
-    ExamplesWindow *     m_pExamplesWindow;
+    ActionEditWindow *   m_ActionEditWindow;
+    AboutWindow *        m_AboutWindow;
+    CheckUpdatesWindow * m_CheckUpdatesWindow;
+    ExamplesWindow *     m_ExamplesWindow;
 
-    QMap<eThemeType, QAction *> m_qThemeActions;
-    QList<Profile *>            m_qProfiles;
-    QString                     m_qszProfilesPath;
-    QString                     m_qszActiveProfile;
+    QMap<eThemeType, QAction *> m_ThemeActions;
+    QList<Profile *>            m_Profiles;
+    QString                     m_ProfilesPath;
+    QString                     m_ActiveProfile;
     Preferences                 m_Preferences;
 };

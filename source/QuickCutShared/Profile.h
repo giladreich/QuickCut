@@ -24,25 +24,25 @@ public:
     int                           getActionsCount() const;
 
     bool addAction(Action * action);
-    bool insertAction(uint32_t iIndex, Action * pAction);
+    bool insertAction(uint32_t index, Action * action);
     bool deleteAction(Action * action);
-    bool moveActionDown(int iIndex);
-    bool moveActionUp(int iIndex);
-    bool deleteActionByIndex(const uint32_t & iIndex);
+    bool moveActionDown(int index);
+    bool moveActionUp(int index);
+    bool deleteActionByIndex(const uint32_t & index);
 
     void     getActionById(const std::string & uuid) const;
     void     getActionByName(const std::string & name) const;
-    Action * getActionByIndex(const uint32_t & iIndex) const;
+    Action * getActionByIndex(const uint32_t & index) const;
 
-    Action * operator[](uint32_t iIndex);
+    Action * operator[](uint32_t index);
 
 private:
     void updated();
 
 private:
-    std::string m_szUuid;
-    std::string m_szName;
-    std::string m_szLastModified;
+    std::string m_Uuid;
+    std::string m_Name;
+    std::string m_LastModified;
 
-    std::vector<Action *> m_vActions;
+    std::vector<Action *> m_Actions;
 };

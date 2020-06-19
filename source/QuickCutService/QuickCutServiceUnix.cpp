@@ -21,8 +21,8 @@ void QuickCutServiceUnix::start()
 {
     QuickCutService::start();
 
-    QString proc = QCoreApplication::applicationDirPath() + "/QuickCutConsole";
-    QProcess::execute(proc, QStringList());
+    QString process = QCoreApplication::applicationDirPath() + "/QuickCutConsole";
+    QProcess::execute(process, QStringList());
 }
 
 void QuickCutServiceUnix::pause()
@@ -46,8 +46,8 @@ void QuickCutServiceUnix::stop()
         QProcess::execute("killall -9 QuickCutConsole", QStringList());
 }
 
-bool QuickCutServiceUnix::isProcessRunning(const QString & szProc)
+bool QuickCutServiceUnix::isProcessRunning(const QString & process)
 {
-    Q_UNUSED(szProc);
+    Q_UNUSED(process);
     return false;
 }

@@ -15,11 +15,11 @@ public:
     virtual bool stop();
 
     static bool loadProfiles();
-    static void executeProcess(const std::string & szProc, const std::string & szArgs);
-    static void log(const QString & szFilePath, const QString & szMessage);
+    static void executeProcess(const std::string & process, const std::string & arguments);
+    static void log(const QString & filePath, const QString & text);
 
 public:
-    static QuickCutConsole *              s_pInstance;
-    static std::unique_ptr<class Profile> s_pProfile;
-    static std::string                    s_qszProfilesPath;
+    static QuickCutConsole *              s_Instance;
+    static std::unique_ptr<class Profile> s_Profile;
+    static std::string                    s_ProfilesPath;
 };

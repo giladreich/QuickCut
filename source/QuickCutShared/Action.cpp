@@ -4,14 +4,14 @@
 #include <utility>
 
 Action::Action()
-    : m_szUuid(createUuid())
-    , m_szName("")
-    , m_eType(ActionUnknown)
-    , m_szSrcKey("")
-    , m_szDstKey("")
-    , m_szAppPath("")
-    , m_szAppArgs("")
-    , m_szCreatedDate(getDateTime())
+    : m_Uuid(createUuid())
+    , m_Name("")
+    , m_Type(ActionUnknown)
+    , m_SrcKey("")
+    , m_DstKey("")
+    , m_AppPath("")
+    , m_AppArgs("")
+    , m_CreatedDate(getDateTime())
 {
 }
 
@@ -21,14 +21,14 @@ Action::Action(std::string         name,
                std::string         dstKey,
                std::string         appPath,
                std::string         appArgs)
-    : m_szUuid(createUuid())
-    , m_szName(std::move(name))
-    , m_eType(type)
-    , m_szSrcKey(std::move(srcKey))
-    , m_szDstKey(std::move(dstKey))
-    , m_szAppPath(std::move(appPath))
-    , m_szAppArgs(std::move(appArgs))
-    , m_szCreatedDate(getDateTime())
+    : m_Uuid(createUuid())
+    , m_Name(std::move(name))
+    , m_Type(type)
+    , m_SrcKey(std::move(srcKey))
+    , m_DstKey(std::move(dstKey))
+    , m_AppPath(std::move(appPath))
+    , m_AppArgs(std::move(appArgs))
+    , m_CreatedDate(getDateTime())
 {
 }
 
@@ -40,14 +40,14 @@ Action::Action(std::string         id,
                std::string         appPath,
                std::string         appArgs,
                std::string         createdDate)
-    : m_szUuid(std::move(id))
-    , m_szName(std::move(name))
-    , m_eType(type)
-    , m_szSrcKey(std::move(srcKey))
-    , m_szDstKey(std::move(dstKey))
-    , m_szAppPath(std::move(appPath))
-    , m_szAppArgs(std::move(appArgs))
-    , m_szCreatedDate(std::move(createdDate))
+    : m_Uuid(std::move(id))
+    , m_Name(std::move(name))
+    , m_Type(type)
+    , m_SrcKey(std::move(srcKey))
+    , m_DstKey(std::move(dstKey))
+    , m_AppPath(std::move(appPath))
+    , m_AppArgs(std::move(appArgs))
+    , m_CreatedDate(std::move(createdDate))
 {
 }
 
@@ -80,80 +80,80 @@ std::string Action::getKey(int key)
 
 const std::string & Action::getId() const
 {
-    return m_szUuid;
+    return m_Uuid;
 }
 
 const std::string & Action::getName() const
 {
-    return m_szName;
+    return m_Name;
 }
 
 void Action::setName(const std::string & name)
 {
-    m_szName = name;
+    m_Name = name;
 }
 
 eActionType Action::getType() const
 {
-    return m_eType;
+    return m_Type;
 }
 
 void Action::setType(eActionType type)
 {
-    m_eType = type;
+    m_Type = type;
 }
 
 std::string Action::getSrcKey() const
 {
-    return m_szSrcKey;
+    return m_SrcKey;
 }
 
 void Action::setSrcKey(const std::string & key)
 {
-    m_szSrcKey = key;
+    m_SrcKey = key;
 }
 
 std::string Action::getDstKey() const
 {
-    return m_szDstKey;
+    return m_DstKey;
 }
 
 void Action::setDstKey(const std::string & key)
 {
-    m_szDstKey = key;
+    m_DstKey = key;
 }
 
 const std::string & Action::getAppPath() const
 {
-    return m_szAppPath;
+    return m_AppPath;
 }
 
 void Action::setAppPath(const std::string & path)
 {
-    m_szAppPath = path;
+    m_AppPath = path;
 }
 
 const std::string & Action::getAppArgs() const
 {
-    return m_szAppArgs;
+    return m_AppArgs;
 }
 
 void Action::setAppArgs(const std::string & args)
 {
-    m_szAppArgs = args;
+    m_AppArgs = args;
 }
 
 const std::string & Action::getCreatedDate() const
 {
-    return m_szCreatedDate;
+    return m_CreatedDate;
 }
 
 void Action::reset()
 {
-    m_szName.clear();
-    m_eType = ActionUnknown;
-    m_szSrcKey.clear();
-    m_szDstKey.clear();
-    m_szAppPath.clear();
-    m_szAppArgs.clear();
+    m_Name.clear();
+    m_Type = ActionUnknown;
+    m_SrcKey.clear();
+    m_DstKey.clear();
+    m_AppPath.clear();
+    m_AppArgs.clear();
 }

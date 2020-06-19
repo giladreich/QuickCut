@@ -16,15 +16,15 @@ public:
     void resume() override;
     void stop() override;
 
-    bool isProcessRunning(const QString & szProc) override;
+    bool isProcessRunning(const QString & process) override;
 
-    bool RunProcessAsUserW(const std::wstring & szProc);
-    bool RunProcessAsUserA(const std::string & szProc);
-    bool GetTokenByName(HANDLE & hToken, const WCHAR * szProcName);
+    bool RunProcessAsUserW(const std::wstring & process);
+    bool RunProcessAsUserA(const std::string & process);
+    bool GetTokenByName(HANDLE & token, const WCHAR * process);
 
 private:
     bool killHookIfRunning();
 
 public:
-    static QuickCutServiceWindows * s_pInstance;
+    static QuickCutServiceWindows * s_Instance;
 };

@@ -16,9 +16,9 @@ public:
     bool stop() override;
 
     static LRESULT CALLBACK WndProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static bool             isKeyDown(byte byKey);
-    static void             printKeyName(KBDLLHOOKSTRUCT * pKbd);
+    static bool             isKeyDown(byte key);
+    static void             printKeyName(KBDLLHOOKSTRUCT * kbd);
 
 public:
-    static HHOOK s_hHook;
+    static HHOOK s_Hook;
 };

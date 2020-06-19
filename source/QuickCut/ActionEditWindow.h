@@ -22,7 +22,7 @@ private:
 
 public:
     ActionEditWindow(QWidget * parent);
-    ActionEditWindow(QWidget * parent, Action * pAction);
+    ActionEditWindow(QWidget * parent, Action * action);
     ~ActionEditWindow();
 
     void fillActionTypes();
@@ -33,15 +33,15 @@ public:
 
 signals:
     void onSaved();
-    void onCreated(Action * pAction);
+    void onCreated(Action * action);
     void onClosed();
 
 public slots:
 
-    void onTypeSelChange(int iIndex);
+    void onTypeSelChange(int index);
 
-    //void onBtnKeyPlay(QKeySequenceEdit * pInput, QPushButton * pBtn);
-    void onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn);
+    // void onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * pBtn);
+    void onBtnKeyPlay(QShortcutInput * input, QPushButton * button);
     void onBtnFilePicker();
     void onBtnCancel();
     void onBtnSave();
@@ -49,7 +49,7 @@ public slots:
 private:
     Ui::ActionEditWindow * ui;
 
-    Action * m_pAction;
+    Action * m_Action;
 
-    eEditMode m_eEditMode;
+    eEditMode m_EditMode;
 };

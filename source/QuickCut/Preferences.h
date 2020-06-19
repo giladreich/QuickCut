@@ -22,13 +22,13 @@ public:
     Preferences();
 
     QString        getThemeFilePath() const;
-    static QString getThemeFilePath(eThemeType eType);
+    static QString getThemeFilePath(eThemeType type);
     eThemeType     getThemeType() const;
-    void           setThemeType(eThemeType eType);
+    void           setThemeType(eThemeType type);
 
 public:
-    bool m_bViewToolBar;
-    bool m_bViewStatusBar;
+    bool m_ViewToolBar;
+    bool m_ViewStatusBar;
 
-    eThemeType m_eThemeType;
+    eThemeType m_ThemeType;
 };

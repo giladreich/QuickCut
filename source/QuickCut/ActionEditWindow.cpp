@@ -7,11 +7,10 @@
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
-
-ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode eEditMode)
+ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode editMode)
     : QDialog(parent)
     , ui(new Ui::ActionEditWindow())
-    , m_eEditMode(eEditMode)
+    , m_EditMode(editMode)
 {
     ui->setupUi(this);
 
@@ -24,15 +23,15 @@ ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode eEditMode)
 ActionEditWindow::ActionEditWindow(QWidget * parent)
     : ActionEditWindow(parent, ActionCreate)
 {
-    m_pAction = new Action();
+    m_Action = new Action();
     ui->btnSave->setText("Create");
     onTypeSelChange(0);
 }
 
-ActionEditWindow::ActionEditWindow(QWidget * parent, Action * pAction)
+ActionEditWindow::ActionEditWindow(QWidget * parent, Action * action)
     : ActionEditWindow(parent, ActionEdit)
 {
-    m_pAction = pAction;
+    m_Action = action;
     ui->btnSave->setText("Save");
 
     fillEntries();
@@ -48,18 +47,18 @@ void ActionEditWindow::fillActionTypes()
 
 void ActionEditWindow::fillEntries()
 {
-    ui->tbxName->setText(QString::fromStdString(m_pAction->getName()));
+    ui->tbxName->setText(QString::fromStdString(m_Action->getName()));
 
-    int iTypeIndex = static_cast<int>(m_pAction->getType());
-    ui->cbxType->setCurrentIndex(iTypeIndex);
-    onTypeSelChange(iTypeIndex);
+    int typeIndex = static_cast<int>(m_Action->getType());
+    ui->cbxType->setCurrentIndex(typeIndex);
+    onTypeSelChange(typeIndex);
 
-    //ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_pAction->getSrcKey())));
-    //ui->tbxDstKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_pAction->getDstKey())));
-    ui->tbxSrcKey->setText(QString::fromStdString(m_pAction->getSrcKey()));
-    ui->tbxDstKey->setText(QString::fromStdString(m_pAction->getDstKey()));
-    ui->tbxAppPath->setText(QString::fromStdString(m_pAction->getAppPath()));
-    ui->tbxAppArgs->setText(QString::fromStdString(m_pAction->getAppArgs()));
+    // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_Action->getSrcKey())));
+    // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_Action->getDstKey())));
+    ui->tbxSrcKey->setText(QString::fromStdString(m_Action->getSrcKey()));
+    ui->tbxDstKey->setText(QString::fromStdString(m_Action->getDstKey()));
+    ui->tbxAppPath->setText(QString::fromStdString(m_Action->getAppPath()));
+    ui->tbxAppArgs->setText(QString::fromStdString(m_Action->getAppArgs()));
 }
 
 void ActionEditWindow::connectSlots()
@@ -78,15 +77,15 @@ void ActionEditWindow::connectSlots()
 
 eEditMode ActionEditWindow::getEditMode()
 {
-    return m_eEditMode;
+    return m_EditMode;
 }
 
-void ActionEditWindow::onTypeSelChange(int iIndex)
+void ActionEditWindow::onTypeSelChange(int index)
 {
-    if (iIndex < 0 || iIndex > ActionAppStart) return;
+    if (index < 0 || index > ActionAppStart) return;
 
-    eActionType eType = static_cast<eActionType>(iIndex);
-    if (eType == ActionKeyMap)
+    eActionType type = static_cast<eActionType>(index);
+    if (type == ActionKeyMap)
     {
         ui->lblDstKey->setVisible(true);
         ui->tbxDstKey->setVisible(true);
@@ -98,7 +97,7 @@ void ActionEditWindow::onTypeSelChange(int iIndex)
         ui->lblAppArgs->setVisible(false);
         ui->tbxAppArgs->setVisible(false);
     }
-    else if (eType == ActionAppStart)
+    else if (type == ActionAppStart)
     {
         ui->lblDstKey->setVisible(false);
         ui->tbxDstKey->setVisible(false);
@@ -112,46 +111,46 @@ void ActionEditWindow::onTypeSelChange(int iIndex)
     }
 }
 
-//void ActionEditWindow::onBtnKeyPlay(QKeySequenceEdit * pInput, QPushButton * pBtn)
-void ActionEditWindow::onBtnKeyPlay(QShortcutInput * pInput, QPushButton * pBtn)
+// void ActionEditWindow::onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * button)
+void ActionEditWindow::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 {
-    if (pInput->isEnabled())
+    if (input->isEnabled())
     {
         for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(true);
 
-        pBtn->setProperty("background-image", "play");
-        pBtn->style()->polish(pBtn);
-        pBtn->setFocus();
-        pBtn->setEnabled(true);
+        button->setProperty("background-image", "play");
+        button->style()->polish(button);
+        button->setFocus();
+        button->setEnabled(true);
 
         ui->tbxSrcKey->setEnabled(false);
         ui->tbxDstKey->setEnabled(false);
     }
     else
     {
-        for (auto&& widget : findChildren<QWidget*>()) widget->setEnabled(false);
+        for (auto && widget : findChildren<QWidget *>()) widget->setEnabled(false);
 
-        pBtn->setProperty("background-image", "stop");
-        pBtn->style()->polish(pBtn);
-        pBtn->setEnabled(true);
-        pInput->setEnabled(true);
-        pInput->setFocus();
+        button->setProperty("background-image", "stop");
+        button->style()->polish(button);
+        button->setEnabled(true);
+        input->setEnabled(true);
+        input->setFocus();
     }
 }
 
 void ActionEditWindow::onBtnFilePicker()
 {
-    QString szHome = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-    QString szFilePath =
-        QFileDialog::getOpenFileName(this, tr("Open File"), szHome, tr("All files (*.*)"));
-    if (szFilePath.isEmpty()) return;
+    QString homeDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
+    QString filePath =
+        QFileDialog::getOpenFileName(this, tr("Open File"), homeDir, tr("All files (*.*)"));
+    if (filePath.isEmpty()) return;
 
-    ui->tbxAppPath->setText(szFilePath);
+    ui->tbxAppPath->setText(filePath);
 }
 
 void ActionEditWindow::onBtnCancel()
 {
-    if (m_eEditMode == ActionCreate) delete m_pAction;
+    if (m_EditMode == ActionCreate) delete m_Action;
 
     close();
 }
@@ -164,24 +163,25 @@ void ActionEditWindow::onBtnSave()
         return;
     }
 
-    m_pAction->reset();
+    m_Action->reset();
 
-    eActionType eType = static_cast<eActionType>(ui->cbxType->currentIndex());
+    eActionType type = static_cast<eActionType>(ui->cbxType->currentIndex());
 
-    m_pAction->setName(ui->tbxName->text().toStdString());
-    m_pAction->setType(eType);
-    m_pAction->setSrcKey(ui->tbxSrcKey->text().toStdString());
-    //m_pAction->setSrcKey(ui->tbxSrcKey->keySequence().toString().toStdString());
-    //if (eType == ActionKeyMap) { m_pAction->setDstKey(ui->tbxDstKey->keySequence().toString().toStdString()); }
-    if (eType == ActionKeyMap) { m_pAction->setDstKey(ui->tbxDstKey->text().toStdString()); }
-    else if (eType == ActionAppStart)
+    m_Action->setName(ui->tbxName->text().toStdString());
+    m_Action->setType(type);
+    m_Action->setSrcKey(ui->tbxSrcKey->text().toStdString());
+    // m_Action->setSrcKey(ui->tbxSrcKey->keySequence().toString().toStdString());
+    // if (type == ActionKeyMap) {
+    // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString().toStdString()); }
+    if (type == ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text().toStdString()); }
+    else if (type == ActionAppStart)
     {
-        m_pAction->setAppPath(ui->tbxAppPath->text().toStdString());
-        m_pAction->setAppArgs(ui->tbxAppArgs->text().toStdString());
+        m_Action->setAppPath(ui->tbxAppPath->text().toStdString());
+        m_Action->setAppArgs(ui->tbxAppArgs->text().toStdString());
     }
 
-    if (m_eEditMode == ActionCreate)
-        emit onCreated(m_pAction);
+    if (m_EditMode == ActionCreate)
+        emit onCreated(m_Action);
     else
         emit onSaved();
 
