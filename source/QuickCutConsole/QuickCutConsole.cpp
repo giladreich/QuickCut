@@ -67,17 +67,19 @@ bool QuickCutConsole::loadProfiles()
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            std::string actionId    = actionJson.second.get<std::string>("id", "");
-            std::string actionName  = actionJson.second.get<std::string>("actionName", "");
-            std::string actionType  = actionJson.second.get<std::string>("type", "");
-            std::string srcKey      = actionJson.second.get<std::string>("srcKey", "");
-            std::string dstKey      = actionJson.second.get<std::string>("dstKey", "");
-            std::string appPath     = actionJson.second.get<std::string>("appPath", "");
-            std::string appArgs     = actionJson.second.get<std::string>("appArgs", "");
-            std::string createdDate = actionJson.second.get<std::string>("createdDate", "");
+            std::string actionId     = actionJson.second.get<std::string>("id", "");
+            std::string actionName   = actionJson.second.get<std::string>("actionName", "");
+            std::string actionType   = actionJson.second.get<std::string>("type", "");
+            std::string srcKey       = actionJson.second.get<std::string>("srcKey", "");
+            std::string dstKey       = actionJson.second.get<std::string>("dstKey", "");
+            std::string appPath      = actionJson.second.get<std::string>("appPath", "");
+            std::string appArgs      = actionJson.second.get<std::string>("appArgs", "");
+            std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
+            std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
 
-            s_Profile->addAction(new Action(actionId, actionName, Action::getType(actionType),
-                                            srcKey, dstKey, appPath, appArgs, createdDate));
+            s_Profile->addAction(new Action(actionId, actionName, lastModified,
+                                            Action::getType(actionType), srcKey, dstKey,
+                                            appPath, appArgs, createdDate));
         }
 
         break;

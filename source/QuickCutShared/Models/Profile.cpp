@@ -1,57 +1,43 @@
-
 #include "Profile.h"
 #include "pch.h"
 
-Profile::Profile()
-    : m_Uuid(createUuid())
-    , m_Name("")
-    , m_LastModified(getDateTime())
+Profile::Profile() noexcept
+    : BaseModel()
+    , m_bActive(false)
 {
 }
 
-Profile::Profile(std::string name)
-    : m_Uuid(createUuid())
-    , m_Name(std::move(name))
-    , m_LastModified(getDateTime())
+Profile::Profile(const std::string & id,
+                 const std::string & name,
+                 const std::string & lastModified,
+                 bool                bActive) noexcept
+    : BaseModel(id, name, lastModified)
+    , m_bActive(bActive)
 {
 }
 
-Profile::Profile(std::string id, std::string name, std::string lastModified)
-    : m_Uuid(std::move(id))
-    , m_Name(std::move(name))
-    , m_LastModified(std::move(lastModified))
+Profile::Profile(std::string && id,
+                 std::string && name,
+                 std::string && lastModified,
+                 bool           bActive) noexcept
+    : BaseModel(std::move(id), std::move(name), std::move(lastModified))
+    , m_bActive(bActive)
 {
 }
 
 Profile::~Profile()
 {
-    for (auto itr : m_Actions)
-    {
-        Action * action = itr;
-        delete action;
-    }
     m_Actions.clear();
 }
 
-const std::string & Profile::getId() const
+bool Profile::isActive() const
 {
-    return m_Uuid;
+    return m_bActive;
 }
 
-const std::string & Profile::getName() const
+void Profile::setActive(bool bActive)
 {
-    return m_Name;
-}
-
-void Profile::setName(const std::string & name)
-{
-    m_Name = name;
-    updated();
-}
-
-const std::string & Profile::getLastModified() const
-{
-    return m_LastModified;
+    m_bActive = bActive;
 }
 
 void Profile::setActionsCapacity(int capacity)
@@ -72,7 +58,6 @@ int Profile::getActionsCount() const
 bool Profile::addAction(Action * action)
 {
     m_Actions.emplace_back(action);
-    updated();
 
     return true;
 }
@@ -80,7 +65,6 @@ bool Profile::addAction(Action * action)
 bool Profile::insertAction(uint32_t index, Action * action)
 {
     m_Actions.insert(m_Actions.begin() + index + 1, action);
-    updated();
 
     return true;
 }
@@ -135,9 +119,4 @@ Action * Profile::operator[](uint32_t index)
     if (index > m_Actions.size()) return nullptr;
 
     return m_Actions[index];
-}
-
-void Profile::updated()
-{
-    m_LastModified = getDateTime();
 }

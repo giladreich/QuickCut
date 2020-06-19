@@ -1,23 +1,34 @@
 
 #pragma once
 
+#include "BaseModel.h"
 #include "Action.h"
 #include <vector>
 
-class Profile
+class Profile : public BaseModel
 {
 public:
-    Profile();
-    Profile(std::string name);
-    Profile(std::string id, std::string name, std::string lastModified);
+    // Constructs new profile
+    Profile() noexcept;
+
+    // Constructs existing profile
+    Profile(const std::string & id,
+            const std::string & name,
+            const std::string & lastModified,
+            bool                bActive = false) noexcept;
+
+    Profile(std::string && id,
+            std::string && name,
+            std::string && lastModified,
+            bool           bActive = false) noexcept;
+
+    // Constructs copy
+    Profile(const Profile & profile) = default;
+
     ~Profile();
 
-    const std::string & getId() const;
-
-    const std::string & getName() const;
-    void                setName(const std::string & name);
-
-    const std::string & getLastModified() const;
+    bool isActive() const;
+    void setActive(bool bActive);
 
     void                          setActionsCapacity(int capacity);
     const std::vector<Action *> & getActions() const;
@@ -37,12 +48,6 @@ public:
     Action * operator[](uint32_t index);
 
 private:
-    void updated();
-
-private:
-    std::string m_Uuid;
-    std::string m_Name;
-    std::string m_LastModified;
-
+    bool                  m_bActive;
     std::vector<Action *> m_Actions;
 };

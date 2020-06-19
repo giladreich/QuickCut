@@ -1,42 +1,63 @@
 
 #pragma once
 
-#include <string>
+#include "BaseModel.h"
 
 enum eActionType
 {
-    ActionKeyMap   = 0x00,
-    ActionAppStart = 0x01,
-    ActionUnknown  = 0xFF
+    ActionKeyMap = 0,
+    ActionAppStart,
+    ActionUnknown = 0xFF
 };
 
-class Action
+class Action : public BaseModel
 {
 public:
-    Action();
-    Action(std::string         name,
+    // Constructs new Action
+    Action() noexcept;
+
+    // Constructs new Action
+    Action(const std::string & name,
            const eActionType & type,
-           std::string         srcKey,
-           std::string         dstKey,
-           std::string         appPath,
-           std::string         appArgs);
-    Action(std::string         id,
-           std::string         name,
+           const std::string & srcKey,
+           const std::string & dstKey,
+           const std::string & appPath,
+           const std::string & appArgs) noexcept;
+
+    Action(std::string && name,
+           eActionType && type,
+           std::string && srcKey,
+           std::string && dstKey,
+           std::string && appPath,
+           std::string && appArgs) noexcept;
+
+    // Constructs existing Action
+    Action(const std::string & id,
+           const std::string & name,
+           const std::string & lastModified,
            const eActionType & type,
-           std::string         srcKey,
-           std::string         dstKey,
-           std::string         appPath,
-           std::string         appArgs,
-           std::string         createdDate);
+           const std::string & srcKey,
+           const std::string & dstKey,
+           const std::string & appPath,
+           const std::string & appArgs,
+           const std::string & createdDate) noexcept;
+
+    Action(std::string && id,
+           std::string && name,
+           std::string && lastModified,
+           eActionType && type,
+           std::string && srcKey,
+           std::string && dstKey,
+           std::string && appPath,
+           std::string && appArgs,
+           std::string && createdDate) noexcept;
+
+    // Constructs copy
+    Action(const Action & action) = default;
 
     static std::string getType(eActionType type);
     static eActionType getType(const std::string & type);
     static std::string getKey(int key);
-
-    const std::string & getId() const;
-
-    const std::string & getName() const;
-    void                setName(const std::string & name);
 
     eActionType getType() const;
     void        setType(eActionType type);
@@ -58,8 +79,6 @@ public:
     void reset();
 
 private:
-    std::string m_Uuid;
-    std::string m_Name;
     eActionType m_Type;
     std::string m_SrcKey; // string with delimited ',' char. Could have multiple keys.
     std::string m_DstKey;
