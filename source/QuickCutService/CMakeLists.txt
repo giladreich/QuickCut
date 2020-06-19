@@ -22,10 +22,6 @@ include_directories(
 ##################################################################################################################
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/Profile.h
-    ${QUICKCUT_SHARED_DIR}/Profile.cpp
-    ${QUICKCUT_SHARED_DIR}/Action.h
-    ${QUICKCUT_SHARED_DIR}/Action.cpp
 )
 set(MISC_CXX_FILES
     main.cpp

@@ -1,7 +1,7 @@
 
 #include "QuickCutConsole.h"
 #include "pch.h"
-#include "Profile.h"
+#include "Models/Profile.h"
 
 #include <QDebug>
 #include <QFile>

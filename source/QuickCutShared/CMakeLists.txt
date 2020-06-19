@@ -13,5 +13,6 @@ set(QUICKCUT_SHARED_CXX_FILES
     CACHE STRING "" FORCE
 )
 
+add_subdirectory(Models)
 add_subdirectory(QSingleApplication)
 add_subdirectory(QtService)

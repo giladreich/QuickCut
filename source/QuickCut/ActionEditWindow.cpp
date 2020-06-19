@@ -1,6 +1,6 @@
 
 #include "ActionEditWindow.h"
-#include "Action.h"
+#include "Models/Action.h"
 #include "QShortcutInput.h"
 
 #include <QStandardPaths>

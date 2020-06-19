@@ -4,7 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MainWindow.h"
 
-#include "Profile.h"
+#include "Models/Profile.h"
 #include "Preferences.h"
 
 class ExamplesWindow;
