@@ -244,7 +244,7 @@ void MainWindow::initProfiles()
     {
         m_ProfilesPath = fi.filePath();
 
-        String activeProfile;
+        std::string activeProfile;
         loadProfiles(m_ProfilesPath, &activeProfile);
         m_ActiveProfile = QString::fromStdString(activeProfile);
 
@@ -311,7 +311,7 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
 
     JSON rootJson;
     bpt::read_json(profilesPath, rootJson);
-    *activeProfileOut = rootJson.get<String>("activeProfile", "");
+    *activeProfileOut = rootJson.get<std::string>("activeProfile", "");
     int profileCount  = rootJson.get<int>("profileCount", 0);
     qDeleteAll(m_Profiles);
     m_Profiles.clear();
@@ -320,10 +320,10 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
     JSON profilesJson = rootJson.get_child("profiles");
     for (auto && profileJson : profilesJson)
     {
-        String profileId    = profileJson.second.get<String>("id", "");
-        String profileName  = profileJson.second.get<String>("name", "");
-        String lastModified = profileJson.second.get<String>("lastModified", "");
-        int    actionsCount = profileJson.second.get<int>("actionsCount", 0);
+        std::string profileId    = profileJson.second.get<std::string>("id", "");
+        std::string profileName  = profileJson.second.get<std::string>("name", "");
+        std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
+        int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         Profile * profile = new Profile(profileId, profileName, lastModified);
         profile->setActionsCapacity(actionsCount);
@@ -331,14 +331,14 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            String actionId    = actionJson.second.get<String>("id", "");
-            String actionName  = actionJson.second.get<String>("actionName", "");
-            String actionType  = actionJson.second.get<String>("type", "");
-            String srcKey      = actionJson.second.get<String>("srcKey", "");
-            String dstKey      = actionJson.second.get<String>("dstKey", "");
-            String appPath     = actionJson.second.get<String>("appPath", "");
-            String appArgs     = actionJson.second.get<String>("appArgs", "");
-            String createdDate = actionJson.second.get<String>("createdDate", "");
+            std::string actionId    = actionJson.second.get<std::string>("id", "");
+            std::string actionName  = actionJson.second.get<std::string>("actionName", "");
+            std::string actionType  = actionJson.second.get<std::string>("type", "");
+            std::string srcKey      = actionJson.second.get<std::string>("srcKey", "");
+            std::string dstKey      = actionJson.second.get<std::string>("dstKey", "");
+            std::string appPath     = actionJson.second.get<std::string>("appPath", "");
+            std::string appArgs     = actionJson.second.get<std::string>("appArgs", "");
+            std::string createdDate = actionJson.second.get<std::string>("createdDate", "");
 
             profile->addAction(new Action(actionId, actionName, Action::getType(actionType),
                                           srcKey, dstKey, appPath, appArgs, createdDate));
@@ -352,7 +352,7 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
 
 bool MainWindow::loadProfiles(const QString & profilesPath, QString * activeProfileOut)
 {
-    String activeProfile;
+    std::string activeProfile;
     if (!loadProfiles(profilesPath.toStdString(), &activeProfile)) return false;
 
     *activeProfileOut = QString::fromStdString(activeProfile);

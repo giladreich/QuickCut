@@ -11,7 +11,7 @@
 QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
 
 std::unique_ptr<Profile> QuickCutConsole::s_Profile = nullptr;
-String                   QuickCutConsole::s_ProfilesPath;
+std::string              QuickCutConsole::s_ProfilesPath;
 
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
@@ -49,17 +49,17 @@ bool QuickCutConsole::loadProfiles()
 
     JSON rootJson;
     bpt::read_json(s_ProfilesPath, rootJson);
-    String szActiveProfile = rootJson.get<String>("activeProfile", "");
+    std::string szActiveProfile = rootJson.get<std::string>("activeProfile", "");
 
     JSON profilesJson = rootJson.get_child("profiles");
     for (auto && profileJson : profilesJson)
     {
-        String profileId = profileJson.second.get<String>("id", "");
+        std::string profileId = profileJson.second.get<std::string>("id", "");
         if (profileId != szActiveProfile) continue;
 
-        String profileName  = profileJson.second.get<String>("name", "");
-        String lastModified = profileJson.second.get<String>("lastModified", "");
-        int    actionsCount = profileJson.second.get<int>("actionsCount", 0);
+        std::string profileName  = profileJson.second.get<std::string>("name", "");
+        std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
+        int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         s_Profile = std::make_unique<Profile>(profileId, profileName, lastModified);
         s_Profile->setActionsCapacity(actionsCount);
@@ -67,14 +67,14 @@ bool QuickCutConsole::loadProfiles()
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            String actionId    = actionJson.second.get<String>("id", "");
-            String actionName  = actionJson.second.get<String>("actionName", "");
-            String actionType  = actionJson.second.get<String>("type", "");
-            String srcKey      = actionJson.second.get<String>("srcKey", "");
-            String dstKey      = actionJson.second.get<String>("dstKey", "");
-            String appPath     = actionJson.second.get<String>("appPath", "");
-            String appArgs     = actionJson.second.get<String>("appArgs", "");
-            String createdDate = actionJson.second.get<String>("createdDate", "");
+            std::string actionId    = actionJson.second.get<std::string>("id", "");
+            std::string actionName  = actionJson.second.get<std::string>("actionName", "");
+            std::string actionType  = actionJson.second.get<std::string>("type", "");
+            std::string srcKey      = actionJson.second.get<std::string>("srcKey", "");
+            std::string dstKey      = actionJson.second.get<std::string>("dstKey", "");
+            std::string appPath     = actionJson.second.get<std::string>("appPath", "");
+            std::string appArgs     = actionJson.second.get<std::string>("appArgs", "");
+            std::string createdDate = actionJson.second.get<std::string>("createdDate", "");
 
             s_Profile->addAction(new Action(actionId, actionName, Action::getType(actionType),
                                             srcKey, dstKey, appPath, appArgs, createdDate));

@@ -73,5 +73,3 @@ inline std::string createUuid()
 {
     return QUuid::createUuid().toString().toStdString();
 }
-
-typedef std::string String;
