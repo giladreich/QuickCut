@@ -9,7 +9,7 @@ project(QuickCutConsole)
 add_definitions(
     -DUNICODE
     -D_UNICODE
-    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 )
 
 include_directories(
@@ -26,8 +26,7 @@ set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/Profile.cpp
     ${QUICKCUT_SHARED_DIR}/Action.h
     ${QUICKCUT_SHARED_DIR}/Action.cpp
-    ${QTSINGLEAPP_DIR}/QSingleInstance.h
-    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
+    ${QTSINGLEAPP_CXX_FILES}
 )
 set(MISC_CXX_FILES
     main.cpp

@@ -9,7 +9,7 @@ project(QuickCutService)
 add_definitions(
     -DUNICODE
     -D_UNICODE
-    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 )
 
 include_directories(
