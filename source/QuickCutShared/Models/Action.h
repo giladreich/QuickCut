@@ -54,6 +54,7 @@ public:
 
     // Constructs copy
     Action(const Action & action) = default;
+    Action(Action && action)      = default;
 
     static std::string getType(eActionType type);
     static eActionType getType(const std::string & type);
@@ -77,6 +78,9 @@ public:
     const std::string & getCreatedDate() const;
 
     void reset();
+
+    Action & operator=(const Action & action) = default;
+    Action & operator=(Action && action) = default;
 
 private:
     eActionType m_Type;
