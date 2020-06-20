@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.16)
 
 include(cmake/utility.cmake)
 
@@ -25,7 +25,7 @@ if (USE_CONAN_PM)
     #     BASIC_SETUP
     #     BUILD missing
     # )
-    
+
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
 endif()
