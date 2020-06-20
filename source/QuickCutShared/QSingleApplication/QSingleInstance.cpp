@@ -7,16 +7,16 @@
 namespace
 {
 
-QString generateKeyHash(const QString & szKey, const QString & szSalt)
-{
-    QByteArray data;
+    QString generateKeyHash(const QString & szKey, const QString & szSalt)
+    {
+        QByteArray data;
 
-    data.append(szKey.toUtf8());
-    data.append(szSalt.toUtf8());
-    data = QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
+        data.append(szKey.toUtf8());
+        data.append(szSalt.toUtf8());
+        data = QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
 
-    return data;
-}
+        return data;
+    }
 
 } // namespace
 

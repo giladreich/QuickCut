@@ -11,8 +11,8 @@ AccessModifierOffset: -4
 ConstructorInitializerIndentWidth: 4
 IndentCaseLabels: true
 IndentPPDirectives: AfterHash
-CompactNamespaces: true
-NamespaceIndentation: Inner
+CompactNamespaces: true # Using "BreakBeforeBraces: Allman" will make this be ignored.
+NamespaceIndentation: All
 FixNamespaceComments: true
 SortUsingDeclarations: false
 SortIncludes: false
