@@ -20,6 +20,11 @@ include_directories(
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
+set(PARSER_CXX_FILES
+    ${QUICKCUT_PARSER_DIR}/BaseParser.h
+    ${QUICKCUT_PARSER_DIR}/ProfileParser.h
+    ${QUICKCUT_PARSER_DIR}/ProfileParser.cpp
+)
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
     ${QUICKCUT_SHARED_DIR}/pch.cpp
@@ -55,6 +60,7 @@ set(CXX_FILES
     ${MISC_CXX_FILES}
     ${SHARED_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
+    ${PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
 )
 
@@ -69,6 +75,9 @@ source_group("Source Files\\Shared" FILES
 )
 source_group("Source Files\\Shared\\Models" FILES
     ${QUICKCUT_MODELS_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Parser" FILES
+    ${PARSER_CXX_FILES}
 )
 source_group("Source Files\\Utils" FILES
     ${QUICKCUT_UTILS_CXX_FILES}
