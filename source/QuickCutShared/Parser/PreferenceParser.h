@@ -2,7 +2,7 @@
 #pragma once
 
 #include "BaseParser.h"
-#include "Preferences.h"
+#include "Models/Preferences.h"
 
 class PreferenceParser : public BaseParser<Preferences>
 {

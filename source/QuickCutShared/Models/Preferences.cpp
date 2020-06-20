@@ -14,7 +14,7 @@ QString Preferences::getThemeFilePath() const
     return getThemeFilePath(m_ThemeType);
 }
 
-QString Preferences::getThemeFilePath(eThemeType type)
+QString Preferences::getThemeFilePath(ThemeType type)
 {
     switch (type)
     {
@@ -36,12 +36,12 @@ QString Preferences::getThemeFilePath(eThemeType type)
     }
 }
 
-eThemeType Preferences::getThemeType() const
+ThemeType Preferences::getThemeType() const
 {
     return m_ThemeType;
 }
 
-void Preferences::setThemeType(eThemeType type)
+void Preferences::setThemeType(ThemeType type)
 {
     m_ThemeType = type;
 }

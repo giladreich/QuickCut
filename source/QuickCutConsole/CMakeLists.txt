@@ -25,6 +25,14 @@ set(PARSER_CXX_FILES
     ${QUICKCUT_PARSER_DIR}/ProfileParser.h
     ${QUICKCUT_PARSER_DIR}/ProfileParser.cpp
 )
+set(MODELS_CXX_FILES
+    ${QUICKCUT_MODELS_DIR}/BaseModel.h
+    ${QUICKCUT_MODELS_DIR}/BaseModel.cpp
+    ${QUICKCUT_MODELS_DIR}/Profile.h
+    ${QUICKCUT_MODELS_DIR}/Profile.cpp
+    ${QUICKCUT_MODELS_DIR}/Action.h
+    ${QUICKCUT_MODELS_DIR}/Action.cpp
+)
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
     ${QUICKCUT_SHARED_DIR}/pch.cpp
@@ -59,7 +67,7 @@ endif()
 set(CXX_FILES
     ${MISC_CXX_FILES}
     ${SHARED_CXX_FILES}
-    ${QUICKCUT_MODELS_CXX_FILES}
+    ${MODELS_CXX_FILES}
     ${PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
 )
@@ -74,7 +82,7 @@ source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Models" FILES
-    ${QUICKCUT_MODELS_CXX_FILES}
+    ${MODELS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Parser" FILES
     ${PARSER_CXX_FILES}
