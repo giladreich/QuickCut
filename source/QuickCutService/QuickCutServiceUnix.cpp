@@ -2,10 +2,6 @@
 #include "pch.h"
 #include "QuickCutServiceUnix.h"
 
-#include <QDebug>
-#include <QDir>
-#include <QProcess>
-
 QuickCutServiceUnix::QuickCutServiceUnix(int argc, char * argv[])
     : QuickCutService(argc, argv)
 {

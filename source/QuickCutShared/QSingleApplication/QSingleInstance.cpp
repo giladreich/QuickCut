@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "QSingleInstance.h"
 
 #include <QCryptographicHash>

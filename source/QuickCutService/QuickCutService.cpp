@@ -2,9 +2,6 @@
 #include "pch.h"
 #include "QuickCutService.h"
 
-#include <QFile>
-#include <QTextStream>
-
 QuickCutService::QuickCutService(int argc, char * argv[])
     : QtService<QCoreApplication>(argc, argv, "QuickCut Service")
 {

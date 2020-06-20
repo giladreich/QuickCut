@@ -3,7 +3,6 @@
 
 #include "BaseModel.h"
 #include "Action.h"
-#include <vector>
 
 class Profile : public BaseModel
 {

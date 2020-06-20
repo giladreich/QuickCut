@@ -4,11 +4,6 @@
 #include "Types.h"
 #include "Models/Profile.h"
 
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-#include <QProcess>
-
 QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
 
 std::unique_ptr<Profile> QuickCutConsole::s_Profile = nullptr;

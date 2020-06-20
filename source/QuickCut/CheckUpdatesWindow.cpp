@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "CheckUpdatesWindow.h"
 
 CheckUpdatesWindow::CheckUpdatesWindow(QWidget * parent)

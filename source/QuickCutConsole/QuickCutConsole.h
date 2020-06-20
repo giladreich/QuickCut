@@ -1,8 +1,8 @@
 
 #pragma once
 
+#include "pch.h"
 #include <QCoreApplication>
-#include <memory>
 
 class QuickCutConsole : public QCoreApplication
 {

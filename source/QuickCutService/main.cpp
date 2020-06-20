@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include <QtCore/QCoreApplication>
 
 #if defined(Q_OS_WIN)

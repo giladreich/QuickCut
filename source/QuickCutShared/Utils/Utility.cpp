@@ -2,6 +2,11 @@
 #include "pch.h"
 #include "Utils/Utility.h"
 
+#include <QDateTime>
+#include <QUuid>
+
+#include <regex>
+
 namespace boost
 {
 namespace property_tree
@@ -53,6 +58,8 @@ void sendReloadSignal()
 #endif
 } // namespace Hook
 
+namespace QuickCut
+{
 std::string getDateTime()
 {
     return QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate).toStdString();
@@ -62,3 +69,4 @@ std::string createUuid()
 {
     return QUuid::createUuid().toString().toStdString();
 }
+} // namespace QuickCut

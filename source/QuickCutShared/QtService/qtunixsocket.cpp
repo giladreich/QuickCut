@@ -38,6 +38,7 @@
 **
 ****************************************************************************/
 
+#include "pch.h"
 #include "qtunixsocket.h"
 #include <sys/types.h>
 #include <sys/un.h>

@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "ExamplesWindow.h"
 
 ExamplesWindow::ExamplesWindow(QWidget * parent)
