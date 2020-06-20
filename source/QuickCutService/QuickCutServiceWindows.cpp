@@ -1,8 +1,8 @@
 
 #pragma comment(lib, "userenv.lib")
 
-#include "QuickCutServiceWindows.h"
 #include "pch.h"
+#include "QuickCutServiceWindows.h"
 
 #include <QDebug>
 #include <QDir>

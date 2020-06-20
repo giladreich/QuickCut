@@ -46,7 +46,7 @@ public:
     void     getActionByName(const std::string & name) const;
     Action * getActionByIndex(const uint32_t & index) const;
 
-    Action *  operator[](uint32_t index);
+    Action * operator[](uint32_t index);
 
     Profile & operator=(const Profile & profile) = default;
     Profile & operator=(Profile && profile) = default;

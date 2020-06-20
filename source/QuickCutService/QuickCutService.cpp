@@ -1,7 +1,6 @@
 
-#include "QuickCutService.h"
-
 #include "pch.h"
+#include "QuickCutService.h"
 
 #include <QFile>
 #include <QTextStream>

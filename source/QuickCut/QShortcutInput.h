@@ -1,11 +1,8 @@
 
 #pragma once
 
+#include "pch.h"
 #include <QLineEdit>
-
-#if defined(Q_OS_WIN)
-#    include <Windows.h>
-#endif
 
 class QShortcutInput : public QLineEdit
 {

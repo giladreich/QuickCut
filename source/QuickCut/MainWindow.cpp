@@ -1,6 +1,8 @@
 ﻿
-#include "MainWindow.h"
 #include "pch.h"
+#include "MainWindow.h"
+#include "Types.h"
+#include "Utils/Utility.h"
 
 #include <QDebug>
 #include <QThread>

@@ -1,6 +1,6 @@
 
-#include "QuickCutServiceUnix.h"
 #include "pch.h"
+#include "QuickCutServiceUnix.h"
 
 #include <QDebug>
 #include <QDir>

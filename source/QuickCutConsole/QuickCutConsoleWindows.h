@@ -1,9 +1,8 @@
 
 #pragma once
 
+#include "pch.h"
 #include "QuickCutConsole.h"
-
-#include <Windows.h>
 
 class QuickCutConsoleWindows : public QuickCutConsole
 {
@@ -16,7 +15,7 @@ public:
     bool stop() override;
 
     static LRESULT CALLBACK WndProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static bool             isKeyDown(byte key);
+    static bool             isKeyDown(BYTE key);
     static void             printKeyName(KBDLLHOOKSTRUCT * kbd);
 
 public:

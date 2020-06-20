@@ -1,7 +1,7 @@
 
 
-#include "QuickCutConsoleWindows.h"
 #include "pch.h"
+#include "QuickCutConsoleWindows.h"
 #include "Models/Profile.h"
 
 #include <QDebug>
@@ -39,7 +39,7 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
     KBDLLHOOKSTRUCT * kbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
 
-    static byte    keys[256] = {0};
+    static BYTE    keys[256] = {0};
     static QString pressedKeys;
     static bool    keysAlreadyProcessed = false;
 
@@ -121,7 +121,7 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
     return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 
-bool QuickCutConsoleWindows::isKeyDown(byte key)
+bool QuickCutConsoleWindows::isKeyDown(BYTE key)
 {
     return ((key & KEY_IS_DOWN_MASK) == KEY_IS_DOWN_MASK);
 }

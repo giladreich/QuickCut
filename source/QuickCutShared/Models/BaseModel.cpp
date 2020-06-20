@@ -1,5 +1,6 @@
-#include "BaseModel.h"
 #include "pch.h"
+#include "BaseModel.h"
+#include "Utils/Utility.h"
 
 // TODO(Gilad): Manage lastModified differently after finishing refactoring.
 

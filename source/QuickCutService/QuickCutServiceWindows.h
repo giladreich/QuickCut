@@ -1,9 +1,8 @@
 
 #pragma once
 
+#include "pch.h"
 #include "QuickCutService.h"
-
-#include <Windows.h>
 
 class QuickCutServiceWindows : public QuickCutService
 {
