@@ -1,0 +1,10 @@
+
+cmake_minimum_required(VERSION 3.12)
+
+set(QTSINGLEAPP_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "")
+
+set(QTSINGLEAPP_CXX_FILES
+    ${QTSINGLEAPP_DIR}/QSingleInstance.h
+    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
+    CACHE STRING "" FORCE
+)

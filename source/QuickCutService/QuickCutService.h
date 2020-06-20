@@ -14,9 +14,9 @@ public:
     virtual void resume() override;
     virtual void stop() override;
 
-    virtual bool isProcessRunning(const QString & szProc);
+    virtual bool isProcessRunning(const QString & process);
 
-    static void log(const QString & szFilePath, const QString & szMessage);
+    static void log(const QString & filePath, const QString & text);
 
 public:
 };

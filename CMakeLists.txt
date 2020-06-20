@@ -17,10 +17,15 @@ include(CMakeOptions.cmake)
 
 if (USE_CONAN_PM)
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/conan.cmake)
-    conan_cmake_run(REQUIRES boost/1.73.0 
-        BASIC_SETUP 
-        BUILD missing)
-
+    conan_cmake_run(REQUIRES boost/1.73.0
+        BASIC_SETUP
+        BUILD missing
+    )
+    # conan_cmake_run(REQUIRES qt/5.15.0@bincrafters/stable
+    #     BASIC_SETUP
+    #     BUILD missing
+    # )
+    
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup()
 endif()
@@ -41,7 +46,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # set_property(GLOBAL PROPERTY AUTOGEN_TARGETS_FOLDER Qt_GeneratedFiles)
 
 if(MSVC)
-    set_property (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY 
+    set_property (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY
         VS_STARTUP_PROJECT QuickCut
     )
 endif()

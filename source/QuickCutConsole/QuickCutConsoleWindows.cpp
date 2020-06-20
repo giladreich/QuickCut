@@ -1,8 +1,8 @@
 
 
-#include "QuickCutConsoleWindows.h"
 #include "pch.h"
-#include "Profile.h"
+#include "QuickCutConsoleWindows.h"
+#include "Models/Profile.h"
 
 #include <QDebug>
 #include <QDir>
@@ -15,79 +15,77 @@
 #define KEY_WAS_DOWN_MASK 0x80
 #define KEY_IS_DOWN_MASK  0x01
 
-HHOOK QuickCutConsoleWindows::s_hHook = nullptr;
+HHOOK QuickCutConsoleWindows::s_Hook = nullptr;
 
 QuickCutConsoleWindows::QuickCutConsoleWindows(int argc, char * argv[])
     : QuickCutConsole(argc, argv)
 {
-    s_pInstance = this;
+    s_Instance = this;
 }
 
 QuickCutConsoleWindows::~QuickCutConsoleWindows()
 {
-    if (s_hHook)
+    if (s_Hook)
     {
         qDebug() << "[QuickCutConsoleWindows::dtor] - Unhooking...";
-        UnhookWindowsHookEx(s_hHook);
-        s_hHook = nullptr;
+        UnhookWindowsHookEx(s_Hook);
+        s_Hook = nullptr;
     }
 }
 
 LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    if (nCode < 0) return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+    if (nCode < 0) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
-    KBDLLHOOKSTRUCT * pKbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
+    KBDLLHOOKSTRUCT * kbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
 
-    static byte    byKeys[256] = {0};
-    static QString szPressedKeys;
-    static bool    bKeysProcessed = false;
+    static BYTE    keys[256] = {0};
+    static QString pressedKeys;
+    static bool    keysAlreadyProcessed = false;
 
     // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
     // lParam: (lParam & KF_REPEAT)
-    static DWORD dwPrevVkCode = 0;
+    static DWORD prevVkCode = 0;
 
     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
     {
-        if (dwPrevVkCode == pKbd->vkCode)
-            return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+        if (prevVkCode == kbd->vkCode) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
-        dwPrevVkCode = pKbd->vkCode;
+        prevVkCode = kbd->vkCode;
 
-        if (bKeysProcessed)
+        if (keysAlreadyProcessed)
         {
-            szPressedKeys.clear();
-            bKeysProcessed = false;
+            pressedKeys.clear();
+            keysAlreadyProcessed = false;
         }
 
-        szPressedKeys += QString::number(pKbd->vkCode, 16);
-        qDebug() << "Current Pressed Keys: " << szPressedKeys;
+        pressedKeys += QString::number(kbd->vkCode, 16);
+        qDebug() << "Current Pressed Keys: " << pressedKeys;
 
-        byKeys[pKbd->vkCode] = KEY_WAS_DOWN_MASK | KEY_IS_DOWN_MASK;
-        printKeyName(pKbd);
+        keys[kbd->vkCode] = KEY_WAS_DOWN_MASK | KEY_IS_DOWN_MASK;
+        printKeyName(kbd);
 
-        if (szPressedKeys == RESERVED_RELOAD_KEY)
+        if (pressedKeys == RESERVED_RELOAD_KEY)
         {
             loadProfiles();
             qDebug() << "Refresh signal requested. Reloading profiles.";
-            return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+            return CallNextHookEx(s_Hook, nCode, wParam, lParam);
         }
 
-        if (!s_pProfile) { return CallNextHookEx(s_hHook, nCode, wParam, lParam); }
+        if (!s_Profile) { return CallNextHookEx(s_Hook, nCode, wParam, lParam); }
 
-        for (auto && action : s_pProfile->getActions())
+        for (auto && action : s_Profile->getActions())
         {
-            if (szPressedKeys.toStdString() == action->getSrcKey())
+            if (pressedKeys.toStdString() == action->getSrcKey())
             {
-                qDebug() << "Pressed Keys Match!: " << szPressedKeys
+                qDebug() << "Pressed Keys Match!: " << pressedKeys
                          << " | Actual Keys: " << QString::fromStdString(action->getSrcKey());
-                eActionType eType = action->getType();
-                if (eType == ActionKeyMap)
+                eActionType actionType = action->getType();
+                if (actionType == ActionKeyMap)
                 {
-                    qDebug() << "Mapping key -> " << szPressedKeys << " To -> "
+                    qDebug() << "Mapping key -> " << pressedKeys << " To -> "
                              << QString::fromStdString(action->getDstKey());
-                    szPressedKeys
-                        .clear(); // Make sure to clear keys before sending another key.
+                    pressedKeys.clear(); // Make sure to clear keys before sending another key.
                     static int vkDstCode = 0;
                     vkDstCode = std::strtol(action->getDstKey().c_str(), nullptr, 16);
 
@@ -98,11 +96,11 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
                     return -1; // Don't process the source input.
                 }
-                else if (eType == ActionAppStart)
+                else if (actionType == ActionAppStart)
                 {
                     qDebug() << "Running process -> "
                              << QString::fromStdString(action->getAppPath()) << " With key -> "
-                             << szPressedKeys;
+                             << pressedKeys;
                     executeProcess(action->getAppPath(), action->getAppArgs());
                 }
             }
@@ -111,35 +109,34 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
     if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
     {
-        byKeys[pKbd->vkCode] = KEY_WAS_DOWN_MASK | KEY_IS_DOWN_MASK;
+        keys[kbd->vkCode] = KEY_WAS_DOWN_MASK | KEY_IS_DOWN_MASK;
 
-        if (!bKeysProcessed)
+        if (!keysAlreadyProcessed)
         {
-            dwPrevVkCode   = 0;
-            bKeysProcessed = true;
+            prevVkCode           = 0;
+            keysAlreadyProcessed = true;
         }
     }
 
-    return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+    return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 
-bool QuickCutConsoleWindows::isKeyDown(byte byKey)
+bool QuickCutConsoleWindows::isKeyDown(BYTE key)
 {
-    return ((byKey & KEY_IS_DOWN_MASK) == KEY_IS_DOWN_MASK);
+    return ((key & KEY_IS_DOWN_MASK) == KEY_IS_DOWN_MASK);
 }
 
-void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * pKbd)
+void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * kbd)
 {
-    char  lpszName[256] = {0};
-    DWORD dwMsg         = 1;
-    dwMsg += pKbd->scanCode << 16;
-    dwMsg += pKbd->flags << 24;
-    GetKeyNameText(dwMsg, reinterpret_cast<LPTSTR>(lpszName), sizeof(lpszName));
+    char  keyName[256] = {0};
+    DWORD kbdMsg       = 1;
+    kbdMsg += kbd->scanCode << 16;
+    kbdMsg += kbd->flags << 24;
+    GetKeyNameText(kbdMsg, reinterpret_cast<LPTSTR>(keyName), sizeof(keyName));
 
     QString str;
-    str.asprintf("ScanCode: %d | VirtualKey: 0x%02X | KeyName: ", pKbd->scanCode,
-                 pKbd->vkCode);
-    str += QString::fromUtf16(reinterpret_cast<ushort *>(lpszName));
+    str.asprintf("ScanCode: %d | VirtualKey: 0x%02X | KeyName: ", kbd->scanCode, kbd->vkCode);
+    str += QString::fromUtf16(reinterpret_cast<ushort *>(keyName));
     qDebug() << str;
 }
 
@@ -150,11 +147,11 @@ bool QuickCutConsoleWindows::start()
         qDebug() << "[QuickCutConsoleWindows::start] - Profiles file hasn't been loaded yet.";
     }
 
-    if (!s_hHook)
+    if (!s_Hook)
     {
         qDebug() << "[QuickCutConsoleWindows::start] - Hooking...";
-        s_hHook = SetWindowsHookEx(WH_KEYBOARD_LL, WndProc, nullptr, 0);
-        if (!s_hHook)
+        s_Hook = SetWindowsHookEx(WH_KEYBOARD_LL, WndProc, nullptr, 0);
+        if (!s_Hook)
         {
             qDebug() << "[QuickCutConsoleWindows::start] - Hook failed...";
             return false;
@@ -168,11 +165,11 @@ bool QuickCutConsoleWindows::stop()
 {
     QuickCutConsole::stop();
 
-    if (s_hHook)
+    if (s_Hook)
     {
         qDebug() << "[QuickCutConsoleWindows::stop] - Unhooking...";
-        UnhookWindowsHookEx(s_hHook);
-        s_hHook = nullptr;
+        UnhookWindowsHookEx(s_Hook);
+        s_Hook = nullptr;
     }
 
     return true;

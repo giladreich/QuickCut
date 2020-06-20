@@ -3,10 +3,10 @@
 
 #include <QDebug>
 
-QShortcutInput * QShortcutInput::s_pInstance = nullptr;
+QShortcutInput * QShortcutInput::s_Instance = nullptr;
 
 #if defined(Q_OS_WIN)
-HHOOK QShortcutInput::s_hHook = nullptr;
+HHOOK QShortcutInput::s_Hook = nullptr;
 #endif
 
 QShortcutInput::QShortcutInput(QWidget * parent)
@@ -17,12 +17,12 @@ QShortcutInput::QShortcutInput(QWidget * parent)
 QShortcutInput::~QShortcutInput()
 {
 #if defined(Q_OS_WIN)
-    if (s_hHook)
+    if (s_Hook)
     {
         qDebug() << "[QShortcutInput::dtor] - Unhooking...";
-        UnhookWindowsHookEx(s_hHook);
-        s_pInstance = nullptr;
-        s_hHook     = nullptr;
+        UnhookWindowsHookEx(s_Hook);
+        s_Instance = nullptr;
+        s_Hook     = nullptr;
     }
 #endif
 }
@@ -30,54 +30,54 @@ QShortcutInput::~QShortcutInput()
 #if defined(Q_OS_WIN)
 LRESULT CALLBACK QShortcutInput::WndProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    if (nCode < 0 || !s_pInstance) return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+    if (nCode < 0 || !s_Instance) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
-    KBDLLHOOKSTRUCT * pKbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
+    KBDLLHOOKSTRUCT * kbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
 
     // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
     // lParam: (lParam & KF_REPEAT)
-    static DWORD dwPrevVkCode = 0;
+    static DWORD prevVkCode = 0;
 
-    static QString szKeys;
+    static QString pressedKeys;
 
     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
     {
-        if (dwPrevVkCode == pKbd->vkCode) return -1;
+        if (prevVkCode == kbd->vkCode) return -1;
 
-        dwPrevVkCode = pKbd->vkCode;
+        prevVkCode = kbd->vkCode;
 
-        if (s_pInstance->property("multiShortcuts").toBool())
-            szKeys += QString::number(pKbd->vkCode, 16);
+        if (s_Instance->property("multiShortcuts").toBool())
+            pressedKeys += QString::number(kbd->vkCode, 16);
         else
-            szKeys = QString::number(pKbd->vkCode, 16);
+            pressedKeys = QString::number(kbd->vkCode, 16);
 
-        s_pInstance->setText(szKeys);
+        s_Instance->setText(pressedKeys);
 
         return -1;
     }
 
     if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
     {
-        szKeys.clear();
+        pressedKeys.clear();
 
-        dwPrevVkCode = 0;
+        prevVkCode = 0;
 
         return -1;
     }
 
-    return CallNextHookEx(s_hHook, nCode, wParam, lParam);
+    return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 #endif // #if defined(Q_OS_WIN)
 
 #if defined(Q_OS_WIN)
 void QShortcutInput::focusInEvent(QFocusEvent * event)
 {
-    if (!s_hHook)
+    if (!s_Hook)
     {
         qDebug() << "[QShortcutInput::focusInEvent] - Hooking...";
-        s_pInstance = this;
-        s_hHook     = SetWindowsHookEx(WH_KEYBOARD_LL, WndProc, nullptr, 0);
-        if (!s_hHook) { qDebug() << "[QShortcutInput::focusInEvent] - Hook failed..."; }
+        s_Instance = this;
+        s_Hook     = SetWindowsHookEx(WH_KEYBOARD_LL, WndProc, nullptr, 0);
+        if (!s_Hook) { qDebug() << "[QShortcutInput::focusInEvent] - Hook failed..."; }
     }
 }
 #elif defined(Q_OS_UNIX)
@@ -90,12 +90,12 @@ void QShortcutInput::focusInEvent(QFocusEvent * event)
 #if defined(Q_OS_WIN)
 void QShortcutInput::focusOutEvent(QFocusEvent * event)
 {
-    if (s_hHook)
+    if (s_Hook)
     {
         qDebug() << "[QShortcutInput::focusInEvent] - Unhooking...";
-        UnhookWindowsHookEx(s_hHook);
-        s_pInstance = nullptr;
-        s_hHook     = nullptr;
+        UnhookWindowsHookEx(s_Hook);
+        s_Instance = nullptr;
+        s_Hook     = nullptr;
     }
 }
 #elif defined(Q_OS_UNIX)

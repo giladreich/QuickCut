@@ -9,7 +9,7 @@ project(QuickCutService)
 add_definitions(
     -DUNICODE
     -D_UNICODE
-    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 )
 
 include_directories(
@@ -22,31 +22,7 @@ include_directories(
 ##################################################################################################################
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/Profile.h
-    ${QUICKCUT_SHARED_DIR}/Profile.cpp
-    ${QUICKCUT_SHARED_DIR}/Action.h
-    ${QUICKCUT_SHARED_DIR}/Action.cpp
 )
-set(QTSERVICE_CXX_FILES
-    ${QTSERVICE_DIR}/qtservice.h
-    ${QTSERVICE_DIR}/qtservice_p.h
-    ${QTSERVICE_DIR}/qtservice.cpp
-)
-if (WIN32)
-    set(QTSERVICE_CXX_FILES
-        ${QTSERVICE_CXX_FILES}
-        ${QTSERVICE_DIR}/qtservice_win.cpp
-    )
-elseif(UNIX)
-    set(QTSERVICE_CXX_FILES
-        ${QTSERVICE_CXX_FILES}
-        ${QTSERVICE_DIR}/qtservice_unix.cpp
-        ${QTSERVICE_DIR}/qtunixsocket.h
-        ${QTSERVICE_DIR}/qtunixsocket.cpp
-        ${QTSERVICE_DIR}/qtunixserversocket.h
-        ${QTSERVICE_DIR}/qtunixserversocket.cpp
-    )
-endif()
 set(MISC_CXX_FILES
     main.cpp
     QuickCutService.h
@@ -77,6 +53,7 @@ set(CXX_FILES
     ${MISC_CXX_FILES}
     ${QTSERVICE_CXX_FILES}
     ${SHARED_CXX_FILES}
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 
 ##################################################################################################################
@@ -90,6 +67,9 @@ source_group("Source Files\\Shared" FILES
 )
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
+)
+source_group("Source Files\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("Resources" FILES
     ${RESOURCE_FILES}

@@ -1,8 +1,8 @@
 
 #pragma comment(lib, "userenv.lib")
 
-#include "QuickCutServiceWindows.h"
 #include "pch.h"
+#include "QuickCutServiceWindows.h"
 
 #include <QDebug>
 #include <QDir>
@@ -14,12 +14,12 @@
 
 #define QUICKCUT_CONSOLE "QuickCutConsole.exe"
 
-QuickCutServiceWindows * QuickCutServiceWindows::s_pInstance = nullptr;
+QuickCutServiceWindows * QuickCutServiceWindows::s_Instance = nullptr;
 
 QuickCutServiceWindows::QuickCutServiceWindows(int argc, char * argv[])
     : QuickCutService(argc, argv)
 {
-    s_pInstance = this;
+    s_Instance = this;
 }
 
 QuickCutServiceWindows::~QuickCutServiceWindows()
@@ -31,9 +31,9 @@ void QuickCutServiceWindows::start()
 {
     QuickCutService::start();
 
-    std::wstring szProc =
+    std::wstring process =
         (QCoreApplication::applicationDirPath() + "/" + QUICKCUT_CONSOLE).toStdWString();
-    RunProcessAsUserW(szProc);
+    RunProcessAsUserW(process);
 }
 
 void QuickCutServiceWindows::pause()
@@ -68,49 +68,49 @@ bool QuickCutServiceWindows::killHookIfRunning()
     return false;
 }
 
-bool QuickCutServiceWindows::isProcessRunning(const QString & szProc)
+bool QuickCutServiceWindows::isProcessRunning(const QString & process)
 {
     PROCESSENTRY32 procEntry;
     memset(&procEntry, 0, sizeof(PROCESSENTRY32));
 
-    if (szProc.isEmpty()) return false;
+    if (process.isEmpty()) return false;
 
-    HANDLE hProcSnap = nullptr;
-    hProcSnap        = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcSnap == INVALID_HANDLE_VALUE) return false;
+    HANDLE procSnap = nullptr;
+    procSnap        = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (procSnap == INVALID_HANDLE_VALUE) return false;
 
     procEntry.dwSize = sizeof(PROCESSENTRY32);
-    if (!Process32First(hProcSnap, &procEntry))
+    if (!Process32First(procSnap, &procEntry))
     {
-        CloseHandle(hProcSnap);
+        CloseHandle(procSnap);
         return false;
     }
 
-    wchar_t * szProcW        = new wchar_t[szProc.length() + 1];
-    szProcW[szProc.length()] = '\0';
-    szProc.toWCharArray(szProcW);
+    wchar_t * processW         = new wchar_t[process.length() + 1];
+    processW[process.length()] = '\0';
+    process.toWCharArray(processW);
     do
     {
-        if (_wcsicmp(procEntry.szExeFile, szProcW) == 0) // equals
+        if (_wcsicmp(procEntry.szExeFile, processW) == 0) // equals
         {
-            delete[] szProcW;
-            CloseHandle(hProcSnap);
+            delete[] processW;
+            CloseHandle(procSnap);
             return true;
         }
-    } while (Process32Next(hProcSnap, &procEntry));
+    } while (Process32Next(procSnap, &procEntry));
 
-    delete[] szProcW;
+    delete[] processW;
 
-    CloseHandle(hProcSnap);
+    CloseHandle(procSnap);
     return false;
 }
 
-bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & szProc)
+bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & process)
 {
-    if (szProc.empty()) return false;
+    if (process.empty()) return false;
 
-    HANDLE hToken = nullptr;
-    if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, true, &hToken))
+    HANDLE token = nullptr;
+    if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, true, &token))
     {
         qDebug() << "[QuickCutServiceWindows::RunProcessAsUserA] - Failed to retrieve token "
                     "handle for user.";
@@ -126,10 +126,10 @@ bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & szProc)
     startInfo.cb        = sizeof(STARTUPINFOA);
     startInfo.lpDesktop = siDesktop;
 
-    bool bSucceed = CreateProcessAsUserA(hToken, szProc.c_str(), nullptr, nullptr, nullptr,
-                                         false, 0, nullptr, nullptr, &startInfo, &procInfo);
+    bool succeed = CreateProcessAsUserA(token, process.c_str(), nullptr, nullptr, nullptr,
+                                        false, 0, nullptr, nullptr, &startInfo, &procInfo);
 
-    if (bSucceed)
+    if (succeed)
     {
         qDebug() << "[QuickCutServiceWindows::RunProcessAsUserA] - Successfully created "
                     "process as user.";
@@ -140,16 +140,16 @@ bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & szProc)
                     "as user.";
     }
 
-    CloseHandle(hToken);
-    return bSucceed;
+    CloseHandle(token);
+    return succeed;
 }
 
-bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & szProc)
+bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & process)
 {
-    if (szProc.empty()) return false;
+    if (process.empty()) return false;
 
-    HANDLE hToken = nullptr;
-    if (!GetTokenByName(hToken, L"explorer.exe"))
+    HANDLE token = nullptr;
+    if (!GetTokenByName(token, L"explorer.exe"))
     {
         qDebug() << "[QuickCutServiceWindows::RunProcessAsUserW] - Failed to retrieve "
                     "explorer token handle for user.";
@@ -165,10 +165,10 @@ bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & szProc)
     startInfo.cb        = sizeof(STARTUPINFO);
     startInfo.lpDesktop = siDesktop;
 
-    bool bSucceed =
-        CreateProcessAsUser(hToken, szProc.c_str(), nullptr, nullptr, nullptr, false,
+    bool succeed =
+        CreateProcessAsUser(token, process.c_str(), nullptr, nullptr, nullptr, false,
                             NORMAL_PRIORITY_CLASS, nullptr, nullptr, &startInfo, &procInfo);
-    if (bSucceed)
+    if (succeed)
     {
         qDebug() << "[QuickCutServiceWindows::RunProcessAsUserW] - Successfully created "
                     "process as user.";
@@ -179,39 +179,39 @@ bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & szProc)
                     "as user.";
     }
 
-    CloseHandle(hToken);
-    return bSucceed;
+    CloseHandle(token);
+    return succeed;
 }
 
-bool QuickCutServiceWindows::GetTokenByName(HANDLE & hToken, const WCHAR * szProcName)
+bool QuickCutServiceWindows::GetTokenByName(HANDLE & token, const WCHAR * processName)
 {
-    if (!szProcName) return false;
+    if (!processName) return false;
 
-    HANDLE hProcSnap = nullptr;
-    hProcSnap        = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcSnap == INVALID_HANDLE_VALUE) return false;
+    HANDLE procSnap = nullptr;
+    procSnap        = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (procSnap == INVALID_HANDLE_VALUE) return false;
 
     PROCESSENTRY32 procEntry;
     memset(&procEntry, 0, sizeof(PROCESSENTRY32));
     procEntry.dwSize = sizeof(PROCESSENTRY32);
-    if (!Process32First(hProcSnap, &procEntry))
+    if (!Process32First(procSnap, &procEntry))
     {
-        CloseHandle(hProcSnap);
+        CloseHandle(procSnap);
         return false;
     }
 
     do
     {
-        if (_wcsicmp(procEntry.szExeFile, szProcName) == 0) // equals
+        if (_wcsicmp(procEntry.szExeFile, processName) == 0) // equals
         {
             HANDLE hProcess =
                 OpenProcess(PROCESS_QUERY_INFORMATION, false, procEntry.th32ProcessID);
-            bool bSucceed = OpenProcessToken(hProcess, TOKEN_ALL_ACCESS, &hToken);
-            CloseHandle(hProcSnap);
-            return bSucceed;
+            bool succeed = OpenProcessToken(hProcess, TOKEN_ALL_ACCESS, &token);
+            CloseHandle(procSnap);
+            return succeed;
         }
-    } while (Process32Next(hProcSnap, &procEntry));
+    } while (Process32Next(procSnap, &procEntry));
 
-    CloseHandle(hProcSnap);
+    CloseHandle(procSnap);
     return true;
 }

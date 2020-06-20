@@ -14,7 +14,7 @@ public:
     void resume() override;
     void stop() override;
 
-    bool isProcessRunning(const QString & szProc) override;
+    bool isProcessRunning(const QString & process) override;
 
 public:
 };

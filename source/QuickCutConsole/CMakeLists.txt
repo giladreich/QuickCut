@@ -9,7 +9,7 @@ project(QuickCutConsole)
 add_definitions(
     -DUNICODE
     -D_UNICODE
-    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 )
 
 include_directories(
@@ -22,12 +22,7 @@ include_directories(
 ##################################################################################################################
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/Profile.h
-    ${QUICKCUT_SHARED_DIR}/Profile.cpp
-    ${QUICKCUT_SHARED_DIR}/Action.h
-    ${QUICKCUT_SHARED_DIR}/Action.cpp
-    ${QTSINGLEAPP_DIR}/QSingleInstance.h
-    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
+    ${QTSINGLEAPP_CXX_FILES}
 )
 set(MISC_CXX_FILES
     main.cpp
@@ -58,6 +53,8 @@ endif()
 set(CXX_FILES
     ${MISC_CXX_FILES}
     ${SHARED_CXX_FILES}
+    ${QUICKCUT_MODELS_CXX_FILES}
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 
 ##################################################################################################################
@@ -68,6 +65,12 @@ source_group("Source Files" FILES
 )
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Models" FILES
+    ${QUICKCUT_MODELS_CXX_FILES}
+)
+source_group("Source Files\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("Resources" FILES
     ${RESOURCE_FILES}

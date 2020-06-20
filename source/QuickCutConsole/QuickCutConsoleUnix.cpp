@@ -1,8 +1,8 @@
 
 
-#include "QuickCutConsoleUnix.h"
 #include "pch.h"
-#include "Profile.h"
+#include "QuickCutConsoleUnix.h"
+#include "Models/Profile.h"
 
 #include <QDebug>
 #include <QFile>
@@ -12,7 +12,7 @@
 QuickCutConsoleUnix::QuickCutConsoleUnix(int argc, char * argv[])
     : QuickCutConsole(argc, argv)
 {
-    s_pInstance = this;
+    s_Instance = this;
 }
 
 QuickCutConsoleUnix::~QuickCutConsoleUnix() {}

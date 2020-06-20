@@ -1,6 +1,8 @@
 ﻿
-#include "MainWindow.h"
 #include "pch.h"
+#include "MainWindow.h"
+#include "Types.h"
+#include "Utils/Utility.h"
 
 #include <QDebug>
 #include <QThread>
@@ -21,10 +23,10 @@
 MainWindow::MainWindow(QWidget * parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindowClass)
-    , m_pActionEditWindow(nullptr)
-    , m_pAboutWindow(nullptr)
-    , m_pCheckUpdatesWindow(nullptr)
-    , m_pExamplesWindow(nullptr)
+    , m_ActionEditWindow(nullptr)
+    , m_AboutWindow(nullptr)
+    , m_CheckUpdatesWindow(nullptr)
+    , m_ExamplesWindow(nullptr)
 {
     ui->setupUi(this);
 
@@ -39,8 +41,8 @@ MainWindow::MainWindow(QWidget * parent)
 
 MainWindow::~MainWindow()
 {
-    qDeleteAll(m_qProfiles);
-    m_qProfiles.clear();
+    qDeleteAll(m_Profiles);
+    m_Profiles.clear();
 }
 
 void MainWindow::connectSlots()
@@ -76,13 +78,13 @@ void MainWindow::connectSlots()
             [this] { onActionLoadTheme(ThemeUbuntu, ui->actionThemeUbuntu); });
     connect(ui->actionThemeDarkOrange, &QAction::triggered, this,
             [this] { onActionLoadTheme(ThemeDarkOrange, ui->actionThemeDarkOrange); });
-    m_qThemeActions.insert(ThemeDefault, ui->actionThemeDefault);
-    m_qThemeActions.insert(ThemeDark, ui->actionThemeDark);
-    m_qThemeActions.insert(ThemeBreezeDark, ui->actionThemeBreezeDark);
-    m_qThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
-    m_qThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
-    m_qThemeActions.insert(ThemeUbuntu, ui->actionThemeUbuntu);
-    m_qThemeActions.insert(ThemeDarkOrange, ui->actionThemeDarkOrange);
+    m_ThemeActions.insert(ThemeDefault, ui->actionThemeDefault);
+    m_ThemeActions.insert(ThemeDark, ui->actionThemeDark);
+    m_ThemeActions.insert(ThemeBreezeDark, ui->actionThemeBreezeDark);
+    m_ThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
+    m_ThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
+    m_ThemeActions.insert(ThemeUbuntu, ui->actionThemeUbuntu);
+    m_ThemeActions.insert(ThemeDarkOrange, ui->actionThemeDarkOrange);
 
     connect(ui->actionThemeLoadQss, &QAction::triggered, this,
             &MainWindow::onLoadCustomStylesheet);
@@ -176,91 +178,90 @@ void MainWindow::showEvent(QShowEvent * event)
 
 void MainWindow::initPreferences()
 {
-    QFileInfo fiPre("Config/preferences.json");
-    if (!fiPre.exists())
+    QFileInfo fi("Config/preferences.json");
+    if (!fi.exists())
     {
-        if (!fiPre.dir().exists()) fiPre.dir().mkdir(".");
+        if (!fi.dir().exists()) fi.dir().mkdir(".");
 
-        savePreferences(fiPre.filePath().toStdString(), m_Preferences);
+        savePreferences(fi.filePath().toStdString(), m_Preferences);
     }
     else
     {
-        loadPreferences(fiPre.filePath().toStdString(), &m_Preferences);
+        loadPreferences(fi.filePath().toStdString(), &m_Preferences);
     }
 
-    QAction * pAction = nullptr;
+    QAction * action = nullptr;
     switch (m_Preferences.getThemeType())
     {
         case ThemeDefault:
-            pAction = ui->actionThemeDefault;
+            action = ui->actionThemeDefault;
             break;
         case ThemeDark:
-            pAction = ui->actionThemeDark;
+            action = ui->actionThemeDark;
             break;
         case ThemeBreezeDark:
-            pAction = ui->actionThemeBreezeDark;
+            action = ui->actionThemeBreezeDark;
             break;
         case ThemeBreezeLight:
-            pAction = ui->actionThemeBreezeLight;
+            action = ui->actionThemeBreezeLight;
             break;
         case ThemeConsoleDark:
-            pAction = ui->actionThemeConsoleDark;
+            action = ui->actionThemeConsoleDark;
             break;
-            ;
         case ThemeUbuntu:
-            pAction = ui->actionThemeUbuntu;
+            action = ui->actionThemeUbuntu;
             break;
         case ThemeDarkOrange:
-            pAction = ui->actionThemeDarkOrange;
+            action = ui->actionThemeDarkOrange;
             break;
         default:
             break;
     }
 
-    onActionLoadTheme(m_Preferences.getThemeFilePath(), pAction);
+    onActionLoadTheme(m_Preferences.getThemeFilePath(), action);
 
-    ui->actionViewToolBar->setChecked(m_Preferences.m_bViewToolBar);
-    ui->actionViewStatusBar->setChecked(m_Preferences.m_bViewStatusBar);
-    ui->toolBar->setVisible(m_Preferences.m_bViewToolBar);
-    ui->statusBar->setVisible(m_Preferences.m_bViewStatusBar);
+    ui->actionViewToolBar->setChecked(m_Preferences.m_ViewToolBar);
+    ui->actionViewStatusBar->setChecked(m_Preferences.m_ViewStatusBar);
+    ui->toolBar->setVisible(m_Preferences.m_ViewToolBar);
+    ui->statusBar->setVisible(m_Preferences.m_ViewStatusBar);
 }
 
 void MainWindow::initProfiles()
 {
     ui->cbxProfile->clear();
-    QFileInfo fiProfiles("Config/profiles.json");
-    if (!fiProfiles.exists())
+    QFileInfo fi("Config/profiles.json");
+    if (!fi.exists())
     {
-        if (!fiProfiles.dir().exists()) fiProfiles.dir().mkdir(".");
+        if (!fi.dir().exists()) fi.dir().mkdir(".");
 
-        m_qszProfilesPath = fiProfiles.filePath();
+        m_ProfilesPath = fi.filePath();
         onBtnCreateProfile();
         // First created profile, need to set as default.
-        Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
-        m_qszActiveProfile = QString::fromStdString(pProfile->getId());
+        Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+        m_ActiveProfile   = QString::fromStdString(profile->getId());
         saveProfiles();
         ui->btnSetActive->setEnabled(false);
     }
     else
     {
-        m_qszProfilesPath = fiProfiles.filePath();
+        m_ProfilesPath = fi.filePath();
 
-        String szActiveProfile;
-        loadProfiles(m_qszProfilesPath, &szActiveProfile);
-        m_qszActiveProfile = QString::fromStdString(szActiveProfile);
+        std::string activeProfile;
+        loadProfiles(m_ProfilesPath, &activeProfile);
+        m_ActiveProfile = QString::fromStdString(activeProfile);
 
-        for (auto && pProfile : m_qProfiles)
+        for (auto && profile : m_Profiles)
         {
-            QString szProfileName = QString::fromStdString(pProfile->getName());
-            ui->cbxProfile->addItem(szProfileName);
+            QString profileName = QString::fromStdString(profile->getName());
+            ui->cbxProfile->addItem(profileName);
 
-            if (szActiveProfile != pProfile->getId()) continue; // Not active profile
+            if (activeProfile != profile->getId()) continue; // Not active profile
 
             ui->lbxActions->clear();
-            for (auto && pAction : pProfile->getActions())
-                ui->lbxActions->addItem(QString::fromStdString(pAction->getName()));
+            for (auto && action : profile->getActions())
+                ui->lbxActions->addItem(QString::fromStdString(action->getName()));
 
-            ui->cbxProfile->setCurrentText(szProfileName);
+            ui->cbxProfile->setCurrentText(profileName);
         }
 
         ui->lbxActions->setCurrentRow(0);
@@ -268,30 +269,30 @@ void MainWindow::initProfiles()
 }
 
 #pragma region-- - Parser-- -
-bool MainWindow::loadPreferences(const std::string & szPath, Preferences * pOutPreferences)
+bool MainWindow::loadPreferences(const std::string & path, Preferences * outPreferences)
 {
-    if (szPath.empty() || !pOutPreferences) return false;
+    if (path.empty() || !outPreferences) return false;
 
     JSON rootJson;
-    bpt::read_json(szPath, rootJson);
+    bpt::read_json(path, rootJson);
 
-    int iTheme = rootJson.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    pOutPreferences->setThemeType(static_cast<eThemeType>(iTheme));
-    pOutPreferences->m_bViewToolBar   = rootJson.get<bool>("viewToolBar", true);
-    pOutPreferences->m_bViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
+    int themeType = rootJson.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
+    outPreferences->setThemeType(static_cast<eThemeType>(themeType));
+    outPreferences->m_ViewToolBar   = rootJson.get<bool>("viewToolBar", true);
+    outPreferences->m_ViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
 
     return true;
 }
 
-bool MainWindow::savePreferences(const std::string & szPath, const Preferences & preferences)
+bool MainWindow::savePreferences(const std::string & path, const Preferences & preferences)
 {
-    if (szPath.empty()) return false;
+    if (path.empty()) return false;
 
     JSON rootJson;
     rootJson.put("uiThemeType", preferences.getThemeType());
-    rootJson.put("viewToolBar", preferences.m_bViewToolBar);
-    rootJson.put("viewStatusBar", preferences.m_bViewStatusBar);
-    bpt::write_jsonEx(szPath, rootJson);
+    rootJson.put("viewToolBar", preferences.m_ViewToolBar);
+    rootJson.put("viewStatusBar", preferences.m_ViewStatusBar);
+    bpt::write_jsonEx(path, rootJson);
 
     return true;
 }
@@ -306,107 +307,107 @@ bool MainWindow::savePreferences()
     return savePreferences("Config/preferences.json", m_Preferences);
 }
 
-bool MainWindow::loadProfiles(const std::string & szProfilesPath,
-                              std::string *       pszActiveProfileOut)
+bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * activeProfileOut)
 {
-    if (szProfilesPath.empty()) return false;
+    if (profilesPath.empty()) return false;
 
     JSON rootJson;
-    bpt::read_json(szProfilesPath, rootJson);
-    *pszActiveProfileOut = rootJson.get<String>("activeProfile", "");
-    int profileCount     = rootJson.get<int>("profileCount", 0);
-    qDeleteAll(m_qProfiles);
-    m_qProfiles.clear();
-    m_qProfiles.reserve(profileCount);
+    bpt::read_json(profilesPath, rootJson);
+    *activeProfileOut = rootJson.get<std::string>("activeProfile", "");
+    int profileCount  = rootJson.get<int>("profileCount", 0);
+    qDeleteAll(m_Profiles);
+    m_Profiles.clear();
+    m_Profiles.reserve(profileCount);
 
     JSON profilesJson = rootJson.get_child("profiles");
     for (auto && profileJson : profilesJson)
     {
-        String profileId    = profileJson.second.get<String>("id", "");
-        String profileName  = profileJson.second.get<String>("name", "");
-        String lastModified = profileJson.second.get<String>("lastModified", "");
-        int    actionsCount = profileJson.second.get<int>("actionsCount", 0);
+        std::string profileId    = profileJson.second.get<std::string>("id", "");
+        std::string profileName  = profileJson.second.get<std::string>("name", "");
+        std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
+        int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
-        Profile * pProfile = new Profile(profileId, profileName, lastModified);
-        pProfile->setActionsCapacity(actionsCount);
+        Profile * profile = new Profile(profileId, profileName, lastModified);
+        profile->setActionsCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            String actionId    = actionJson.second.get<String>("id", "");
-            String actionName  = actionJson.second.get<String>("actionName", "");
-            String actionType  = actionJson.second.get<String>("type", "");
-            String srcKey      = actionJson.second.get<String>("srcKey", "");
-            String dstKey      = actionJson.second.get<String>("dstKey", "");
-            String appPath     = actionJson.second.get<String>("appPath", "");
-            String appArgs     = actionJson.second.get<String>("appArgs", "");
-            String createdDate = actionJson.second.get<String>("createdDate", "");
+            std::string actionId     = actionJson.second.get<std::string>("id", "");
+            std::string actionName   = actionJson.second.get<std::string>("actionName", "");
+            std::string actionType   = actionJson.second.get<std::string>("type", "");
+            std::string srcKey       = actionJson.second.get<std::string>("srcKey", "");
+            std::string dstKey       = actionJson.second.get<std::string>("dstKey", "");
+            std::string appPath      = actionJson.second.get<std::string>("appPath", "");
+            std::string appArgs      = actionJson.second.get<std::string>("appArgs", "");
+            std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
+            std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
 
-            pProfile->addAction(new Action(actionId, actionName, Action::getType(actionType),
-                                           srcKey, dstKey, appPath, appArgs, createdDate));
+            profile->addAction(new Action(actionId, actionName, lastModified,
+                                          Action::getType(actionType), srcKey, dstKey, appPath,
+                                          appArgs, createdDate));
         }
 
-        m_qProfiles.push_back(pProfile);
+        m_Profiles.push_back(profile);
     }
 
     return true;
 }
 
-bool MainWindow::loadProfiles(const QString & szProfilesPath, QString * pszActiveProfileOut)
+bool MainWindow::loadProfiles(const QString & profilesPath, QString * activeProfileOut)
 {
-    String szActiveProfile;
-    if (!loadProfiles(szProfilesPath.toStdString(), &szActiveProfile)) return false;
+    std::string activeProfile;
+    if (!loadProfiles(profilesPath.toStdString(), &activeProfile)) return false;
 
-    *pszActiveProfileOut = QString::fromStdString(szActiveProfile);
+    *activeProfileOut = QString::fromStdString(activeProfile);
 
     return true;
 }
 
-bool MainWindow::loadProfiles(const QString & szProfilesPath,
-                              std::string *   pszActiveProfileOut)
+bool MainWindow::loadProfiles(const QString & profilesPath, std::string * activeProfileOut)
 {
-    return loadProfiles(szProfilesPath.toStdString(), pszActiveProfileOut);
+    return loadProfiles(profilesPath.toStdString(), activeProfileOut);
 }
 
 bool MainWindow::reloadProfiles()
 {
-    if (!loadProfiles(m_qszProfilesPath, &m_qszActiveProfile)) return false;
+    if (!loadProfiles(m_ProfilesPath, &m_ActiveProfile)) return false;
 
     onProfileSelChange(ui->cbxProfile->currentIndex());
 
     return true;
 }
 
-bool MainWindow::saveProfiles(const std::string & szProfilesPath,
-                              const std::string & szActiveProfileId)
+bool MainWindow::saveProfiles(const std::string & profilesPath,
+                              const std::string & activeProfileId)
 {
-    if (szProfilesPath.empty() || szActiveProfileId.empty()) return false;
+    if (profilesPath.empty() || activeProfileId.empty()) return false;
 
     JSON rootJson;
-    rootJson.put("activeProfile", szActiveProfileId);
-    rootJson.put("profileCount", m_qProfiles.size());
+    rootJson.put("activeProfile", activeProfileId);
+    rootJson.put("profileCount", m_Profiles.size());
 
     JSON profilesJson;
-    for (auto && pProfile : m_qProfiles)
+    for (auto && profile : m_Profiles)
     {
         JSON profileJson;
-        profileJson.put("id", pProfile->getId());
-        profileJson.put("name", pProfile->getName());
-        profileJson.put("lastModified", pProfile->getLastModified());
-        profileJson.put("actionsCount", pProfile->getActionsCount());
+        profileJson.put("id", profile->getId());
+        profileJson.put("name", profile->getName());
+        profileJson.put("lastModified", profile->getLastModified());
+        profileJson.put("actionsCount", profile->getActionsCount());
 
         JSON actionsJson;
-        for (auto && pAction : pProfile->getActions())
+        for (auto && action : profile->getActions())
         {
             JSON actionJson;
-            actionJson.put("id", pAction->getId());
-            actionJson.put("actionName", pAction->getName());
-            actionJson.put("type", Action::getType(pAction->getType()));
-            actionJson.put("srcKey", pAction->getSrcKey());
-            actionJson.put("dstKey", pAction->getDstKey());
-            actionJson.put("appPath", pAction->getAppPath());
-            actionJson.put("appArgs", pAction->getAppArgs());
-            actionJson.put("createdDate", pAction->getCreatedDate());
+            actionJson.put("id", action->getId());
+            actionJson.put("actionName", action->getName());
+            actionJson.put("type", Action::getType(action->getType()));
+            actionJson.put("srcKey", action->getSrcKey());
+            actionJson.put("dstKey", action->getDstKey());
+            actionJson.put("appPath", action->getAppPath());
+            actionJson.put("appArgs", action->getAppArgs());
+            actionJson.put("createdDate", action->getCreatedDate());
 
             actionsJson.push_back(std::make_pair("", actionJson));
         }
@@ -416,7 +417,7 @@ bool MainWindow::saveProfiles(const std::string & szProfilesPath,
     }
     rootJson.add_child("profiles", profilesJson);
 
-    bpt::write_jsonEx(szProfilesPath, rootJson);
+    bpt::write_jsonEx(profilesPath, rootJson);
 #if defined(Q_OS_WIN)
     Hook::sendReloadSignal();
 #endif
@@ -424,28 +425,27 @@ bool MainWindow::saveProfiles(const std::string & szProfilesPath,
     return true;
 }
 
-bool MainWindow::saveProfiles(const QString & szProfilesPath,
-                              const QString & szActiveProfileId)
+bool MainWindow::saveProfiles(const QString & profilesPath, const QString & activeProfileId)
 {
-    return saveProfiles(szProfilesPath.toStdString(), szActiveProfileId.toStdString());
+    return saveProfiles(profilesPath.toStdString(), activeProfileId.toStdString());
 }
 
 bool MainWindow::saveProfiles()
 {
-    return saveProfiles(m_qszProfilesPath, m_qszActiveProfile);
+    return saveProfiles(m_ProfilesPath, m_ActiveProfile);
 }
 
 // end  --- Parser ---
 #pragma endregion
 
-bool MainWindow::isActiveProfile(Profile * pProfile)
+bool MainWindow::isActiveProfile(Profile * profile)
 {
-    return pProfile->getId() == m_qszActiveProfile.toStdString();
+    return profile->getId() == m_ActiveProfile.toStdString();
 }
 
-void MainWindow::onProfileSelChange(int iIndex)
+void MainWindow::onProfileSelChange(int index)
 {
-    if (iIndex < 0 || iIndex > m_qProfiles.size())
+    if (index < 0 || index > m_Profiles.size())
     {
         ui->lbxActions->clear();
         ui->btnSetActive->setEnabled(false);
@@ -454,20 +454,20 @@ void MainWindow::onProfileSelChange(int iIndex)
         return;
     }
 
-    Profile * pProfile = m_qProfiles[iIndex];
-    ui->btnSetActive->setEnabled(!isActiveProfile(pProfile));
+    Profile * profile = m_Profiles[index];
+    ui->btnSetActive->setEnabled(!isActiveProfile(profile));
     ui->btnDeleteProfile->setEnabled(true);
     ui->btnActionCreate->setEnabled(true);
 
     disconnect(ui->lbxActions, &QListWidget::currentRowChanged, this,
                &MainWindow::onActionSelChange);
     ui->lbxActions->clear();
-    for (auto && pAction : pProfile->getActions())
-        ui->lbxActions->addItem(QString::fromStdString(pAction->getName()));
+    for (auto && action : profile->getActions())
+        ui->lbxActions->addItem(QString::fromStdString(action->getName()));
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
             &MainWindow::onActionSelChange);
 
-    if (!pProfile->getActionsCount())
+    if (!profile->getActionsCount())
         onActionSelChange(-1);
     else
         ui->lbxActions->setCurrentRow(0);
@@ -475,28 +475,28 @@ void MainWindow::onProfileSelChange(int iIndex)
 
 void MainWindow::onBtnSetActiveProfile()
 {
-    Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
+    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     JSON      rootJson;
-    bpt::read_json(m_qszProfilesPath.toStdString(), rootJson);
-    rootJson.put("activeProfile", pProfile->getId());
-    bpt::write_jsonEx(m_qszProfilesPath.toStdString(), rootJson);
+    bpt::read_json(m_ProfilesPath.toStdString(), rootJson);
+    rootJson.put("activeProfile", profile->getId());
+    bpt::write_jsonEx(m_ProfilesPath.toStdString(), rootJson);
     reloadProfiles();
     ui->btnSetActive->setEnabled(false);
 }
 
 void MainWindow::onBtnDeleteProfile()
 {
-    const int iCurrIndex = ui->cbxProfile->currentIndex();
-    Profile * pProfile   = m_qProfiles[iCurrIndex];
-    ui->cbxProfile->removeItem(iCurrIndex);
-    if (isActiveProfile(pProfile) && m_qProfiles.count() > 0)
+    const int currIndex = ui->cbxProfile->currentIndex();
+    Profile * profile   = m_Profiles[currIndex];
+    ui->cbxProfile->removeItem(currIndex);
+    if (isActiveProfile(profile) && m_Profiles.count() > 0)
     {
-        m_qszActiveProfile = QString::fromStdString(m_qProfiles.first()->getId());
-        delete pProfile;
+        m_ActiveProfile = QString::fromStdString(m_Profiles.first()->getId());
+        delete profile;
         ui->cbxProfile->setCurrentIndex(0);
     }
 
-    m_qProfiles.removeAt(iCurrIndex);
+    m_Profiles.removeAt(currIndex);
 
     saveProfiles();
     reloadProfiles();
@@ -504,78 +504,79 @@ void MainWindow::onBtnDeleteProfile()
 
 void MainWindow::onBtnCreateProfile()
 {
-    bool    bOk;
-    QString szProfileName =
+    bool    ok;
+    QString profileName =
         QInputDialog::getText(this, tr("Create Profile"), tr("Profile Name:"),
-                              QLineEdit::Normal, QDir::home().dirName(), &bOk);
-    if (!bOk && szProfileName.isEmpty()) return;
+                              QLineEdit::Normal, QDir::home().dirName(), &ok);
+    if (!ok && profileName.isEmpty()) return;
 
-    const int iIndex = ui->cbxProfile->count() > 0 ? ui->cbxProfile->currentIndex() + 1 : 0;
+    const int index = ui->cbxProfile->count() > 0 ? ui->cbxProfile->currentIndex() + 1 : 0;
 
-    Profile * pProfile = new Profile(szProfileName.toStdString());
-    m_qProfiles.push_back(pProfile);
-    ui->cbxProfile->addItem(szProfileName);
-    ui->cbxProfile->setCurrentIndex(iIndex);
+    Profile * profile = new Profile();
+    profile->setName(profileName.toStdString());
+    m_Profiles.push_back(profile);
+    ui->cbxProfile->addItem(profileName);
+    ui->cbxProfile->setCurrentIndex(index);
     saveProfiles();
 }
 
-void MainWindow::onActionSelChange(int iIndex)
+void MainWindow::onActionSelChange(int index)
 {
-    const bool bEnabled = iIndex != -1;
-    ui->btnActionDelete->setEnabled(bEnabled);
-    ui->btnActionDuplicate->setEnabled(bEnabled);
+    const bool enabled = index != -1;
+    ui->btnActionDelete->setEnabled(enabled);
+    ui->btnActionDuplicate->setEnabled(enabled);
 }
 
 void MainWindow::onActionDoubleClicked(const QModelIndex & index)
 {
-    Profile * pProfile  = m_qProfiles[ui->cbxProfile->currentIndex()];
-    Action *  pAction   = pProfile->getActionByIndex(index.row());
-    m_pActionEditWindow = new ActionEditWindow(this, pAction);
-    connect(m_pActionEditWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
-    m_pActionEditWindow->exec();
+    Profile * profile  = m_Profiles[ui->cbxProfile->currentIndex()];
+    Action *  action   = profile->getActionByIndex(index.row());
+    m_ActionEditWindow = new ActionEditWindow(this, action);
+    connect(m_ActionEditWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
+    m_ActionEditWindow->exec();
 }
 
 void MainWindow::onBtnActionCreate()
 {
-    m_pActionEditWindow = new ActionEditWindow(this);
-    connect(m_pActionEditWindow, &ActionEditWindow::onCreated, this,
+    m_ActionEditWindow = new ActionEditWindow(this);
+    connect(m_ActionEditWindow, &ActionEditWindow::onCreated, this,
             &MainWindow::onActionCreated);
-    m_pActionEditWindow->exec();
+    m_ActionEditWindow->exec();
 }
 
 void MainWindow::onBtnActionDelete()
 {
-    const int iCurrIndex = ui->lbxActions->currentRow();
-    Profile * pProfile   = m_qProfiles[ui->cbxProfile->currentIndex()];
-    pProfile->deleteActionByIndex(iCurrIndex);
+    const int currIndex = ui->lbxActions->currentRow();
+    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    profile->deleteActionByIndex(currIndex);
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iCurrIndex - 1);
-    if ((iCurrIndex - 1) < 0) ui->btnActionCreate->setFocus();
+    ui->lbxActions->setCurrentRow(currIndex - 1);
+    if ((currIndex - 1) < 0) ui->btnActionCreate->setFocus();
 }
 
 void MainWindow::onBtnActionDuplicate()
 {
-    const int iCurrIndex = ui->lbxActions->currentRow();
-    Profile * pProfile   = m_qProfiles[ui->cbxProfile->currentIndex()];
-    Action *  pAction    = pProfile->getActionByIndex(iCurrIndex);
+    const int currIndex = ui->lbxActions->currentRow();
+    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    Action *  action    = profile->getActionByIndex(currIndex);
 
-    Action * pNewAction =
-        new Action(pAction->getName(), pAction->getType(), pAction->getSrcKey(),
-                   pAction->getDstKey(), pAction->getAppPath(), pAction->getAppArgs());
+    Action * newAction =
+        new Action(action->getName(), action->getType(), action->getSrcKey(),
+                   action->getDstKey(), action->getAppPath(), action->getAppArgs());
 
-    pProfile->insertAction(iCurrIndex, pNewAction);
+    profile->insertAction(currIndex, newAction);
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iCurrIndex + 1);
+    ui->lbxActions->setCurrentRow(currIndex + 1);
 }
 
 void MainWindow::onBtnActionMoveDown()
 {
-    Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
-    pProfile->moveActionDown(ui->lbxActions->currentRow());
+    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    profile->moveActionDown(ui->lbxActions->currentRow());
 
     listItemSwap(ui->lbxActions, false);
     saveProfiles();
@@ -583,54 +584,54 @@ void MainWindow::onBtnActionMoveDown()
 
 void MainWindow::onBtnActionMoveUp()
 {
-    Profile * pProfile = m_qProfiles[ui->cbxProfile->currentIndex()];
-    pProfile->moveActionUp(ui->lbxActions->currentRow());
+    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    profile->moveActionUp(ui->lbxActions->currentRow());
 
     listItemSwap(ui->lbxActions, true);
     saveProfiles();
 }
 
-void MainWindow::listItemSwap(QListWidget * pList, const bool bMoveUp)
+void MainWindow::listItemSwap(QListWidget * list, const bool moveUp)
 {
-    const int iCurrIndex = pList->currentRow();
-    if (iCurrIndex == -1) return;
+    const int currIndex = list->currentRow();
+    if (currIndex == -1) return;
 
-    if (bMoveUp)
+    if (moveUp)
     {
-        if (iCurrIndex > 0)
+        if (currIndex > 0)
         {
-            QListWidgetItem * pItem = pList->takeItem(iCurrIndex);
-            pList->insertItem(iCurrIndex - 1, pItem);
-            pList->setCurrentRow(iCurrIndex - 1);
+            QListWidgetItem * pItem = list->takeItem(currIndex);
+            list->insertItem(currIndex - 1, pItem);
+            list->setCurrentRow(currIndex - 1);
         }
     }
     else
     {
-        if (iCurrIndex < pList->count() - 1)
+        if (currIndex < list->count() - 1)
         {
-            QListWidgetItem * pItem = pList->takeItem(iCurrIndex);
-            pList->insertItem(iCurrIndex + 1, pItem);
-            pList->setCurrentRow(iCurrIndex + 1);
+            QListWidgetItem * pItem = list->takeItem(currIndex);
+            list->insertItem(currIndex + 1, pItem);
+            list->setCurrentRow(currIndex + 1);
         }
     }
 }
 
 void MainWindow::onActionSaved()
 {
-    const int iCurrIndex = ui->lbxActions->currentRow();
+    const int currIndex = ui->lbxActions->currentRow();
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iCurrIndex);
+    ui->lbxActions->setCurrentRow(currIndex);
 }
 
-void MainWindow::onActionCreated(Action * pAction)
+void MainWindow::onActionCreated(Action * action)
 {
-    const int iCurrIndex = ui->lbxActions->currentRow();
-    Profile * pProfile   = m_qProfiles[ui->cbxProfile->currentIndex()];
-    pProfile->addAction(pAction);
+    const int currIndex = ui->lbxActions->currentRow();
+    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    profile->addAction(action);
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(iCurrIndex == -1 ? 0 : iCurrIndex + 1);
+    ui->lbxActions->setCurrentRow(currIndex == -1 ? 0 : currIndex + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,11 +640,11 @@ void MainWindow::onActionCreated(Action * pAction)
 
 void MainWindow::onActionFileOpen()
 {
-    QString szDesktop =
+    QString desktopDir =
         QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first();
-    QString szFileName = QFileDialog::getOpenFileName(this, tr("Open Profiles File"),
-                                                      szDesktop, tr("Profiles File (*.json)"));
-    if (szFileName.isEmpty()) return;
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Profiles File"), desktopDir,
+                                                    tr("Profiles File (*.json)"));
+    if (fileName.isEmpty()) return;
 
     auto answer = QMessageBox::warning(
         this, "WARNING",
@@ -654,10 +655,10 @@ void MainWindow::onActionFileOpen()
 
     if (answer != QMessageBox::Yes) return;
 
-    if (!QFile::copy(szFileName, m_qszProfilesPath))
+    if (!QFile::copy(fileName, m_ProfilesPath))
     {
-        qDebug() << "[MainWindow::onActionFileOpen] - Failed to copy file from '" << szFileName
-                 << "' to '" << m_qszProfilesPath << "'";
+        qDebug() << "[MainWindow::onActionFileOpen] - Failed to copy file from '" << fileName
+                 << "' to '" << m_ProfilesPath << "'";
         return;
     }
 }
@@ -666,14 +667,14 @@ void MainWindow::onActionFileSave() {}
 
 void MainWindow::onActionFileSaveAs()
 {
-    QString szFileDstPath = QFileDialog::getSaveFileName(this, tr("Save As File"), "",
-                                                         tr("Profiles File (*.json)"));
-    if (szFileDstPath.isEmpty()) return;
+    QString fileDstPath = QFileDialog::getSaveFileName(this, tr("Save As File"), "",
+                                                       tr("Profiles File (*.json)"));
+    if (fileDstPath.isEmpty()) return;
 
-    if (!QFile::copy(m_qszProfilesPath, szFileDstPath))
+    if (!QFile::copy(m_ProfilesPath, fileDstPath))
     {
         qDebug() << "[MainWindow::onActionFileSaveAs] - Failed to copy file from '"
-                 << m_qszProfilesPath << "' to '" << szFileDstPath << "'";
+                 << m_ProfilesPath << "' to '" << fileDstPath << "'";
         return;
     }
 }
@@ -692,17 +693,17 @@ void MainWindow::onActionFileExit()
 
 void MainWindow::onActionViewToolBar()
 {
-    const bool bChecked = ui->actionViewToolBar->isChecked();
-    ui->toolBar->setVisible(bChecked);
-    m_Preferences.m_bViewToolBar = bChecked;
+    const bool checked = ui->actionViewToolBar->isChecked();
+    ui->toolBar->setVisible(checked);
+    m_Preferences.m_ViewToolBar = checked;
     savePreferences();
 }
 
 void MainWindow::onActionViewStatusBar()
 {
-    const bool bChecked = ui->actionViewStatusBar->isChecked();
-    ui->statusBar->setVisible(bChecked);
-    m_Preferences.m_bViewStatusBar = bChecked;
+    const bool checked = ui->actionViewStatusBar->isChecked();
+    ui->statusBar->setVisible(checked);
+    m_Preferences.m_ViewStatusBar = checked;
     savePreferences();
 }
 
@@ -716,33 +717,33 @@ void MainWindow::onActionViewRefresh()
 
 void MainWindow::onActionHelpAbout()
 {
-    m_pAboutWindow = new AboutWindow(this);
-    m_pAboutWindow->exec();
+    m_AboutWindow = new AboutWindow(this);
+    m_AboutWindow->exec();
 }
 
 void MainWindow::onActionHelpExamples()
 {
-    m_pExamplesWindow = new ExamplesWindow(this);
-    m_pExamplesWindow->exec();
+    m_ExamplesWindow = new ExamplesWindow(this);
+    m_ExamplesWindow->exec();
 }
 
 void MainWindow::onActionHelpCheckUpdates()
 {
-    m_pCheckUpdatesWindow = new CheckUpdatesWindow(this);
-    m_pCheckUpdatesWindow->exec();
+    m_CheckUpdatesWindow = new CheckUpdatesWindow(this);
+    m_CheckUpdatesWindow->exec();
 }
 
-void MainWindow::onActionLoadTheme(eThemeType eType, QAction * pAction /*= nullptr*/)
+void MainWindow::onActionLoadTheme(eThemeType eType, QAction * action /*= nullptr*/)
 {
-    onActionLoadTheme(Preferences::getThemeFilePath(eType), pAction);
+    onActionLoadTheme(Preferences::getThemeFilePath(eType), action);
     m_Preferences.setThemeType(eType);
     savePreferences();
 }
-void MainWindow::onActionLoadTheme(const QString & szQssPath, QAction * pAction /*= nullptr*/)
+void MainWindow::onActionLoadTheme(const QString & szQssPath, QAction * action /*= nullptr*/)
 {
-    for (auto && qAction : m_qThemeActions) qAction->setChecked(false);
+    for (auto && qAction : m_ThemeActions) qAction->setChecked(false);
 
-    if (pAction) pAction->setChecked(true);
+    if (action) action->setChecked(true);
 
     QFile file(szQssPath);
     if (!file.open(QFile::ReadOnly | QFile::Text))
@@ -757,9 +758,9 @@ void MainWindow::onActionLoadTheme(const QString & szQssPath, QAction * pAction 
 
 void MainWindow::onLoadCustomStylesheet()
 {
-    QString szFileName = QFileDialog::getOpenFileName(this, tr("Open Stylesheet File"), "",
-                                                      tr("Stylesheet File (*.qss)"));
-    if (szFileName.isEmpty()) return;
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Stylesheet File"), "",
+                                                    tr("Stylesheet File (*.qss)"));
+    if (fileName.isEmpty()) return;
 
-    onActionLoadTheme(szFileName);
+    onActionLoadTheme(fileName);
 }

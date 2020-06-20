@@ -1,8 +1,10 @@
 bin/
 .vs/
-*.aps
+.vscode/
 GeneratedFiles/
 Release/
 Debug/
 data*/
 build*/
+
+*.aps

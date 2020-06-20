@@ -9,7 +9,7 @@ project(QuickCut)
 add_definitions(
     -DUNICODE
     -D_UNICODE
-    -DBOOST_BIND_GLOBAL_PLACEHOLDERS 
+    -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 )
 
 include_directories(
@@ -24,34 +24,9 @@ set(RESOURCE_DIR Resources)
 # Project Files
 ##################################################################################################################
 set(SHARED_CXX_FILES
-    ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/Profile.h
-    ${QUICKCUT_SHARED_DIR}/Profile.cpp
-    ${QUICKCUT_SHARED_DIR}/Action.h
-    ${QUICKCUT_SHARED_DIR}/Action.cpp
-    ${QTSINGLEAPP_DIR}/QSingleInstance.h
-    ${QTSINGLEAPP_DIR}/QSingleInstance.cpp
+    ${QUICKCUT_SHARED_CXX_FILES}
+    ${QTSINGLEAPP_CXX_FILES}
 )
-set(QTSERVICE_CXX_FILES
-    ${QTSERVICE_DIR}/qtservice.h
-    ${QTSERVICE_DIR}/qtservice_p.h
-    ${QTSERVICE_DIR}/qtservice.cpp
-)
-if (WIN32)
-    set(QTSERVICE_CXX_FILES
-        ${QTSERVICE_CXX_FILES}
-        ${QTSERVICE_DIR}/qtservice_win.cpp
-    )
-elseif(UNIX)
-    set(QTSERVICE_CXX_FILES
-        ${QTSERVICE_CXX_FILES}
-        ${QTSERVICE_DIR}/qtservice_unix.cpp
-        ${QTSERVICE_DIR}/qtunixsocket.h
-        ${QTSERVICE_DIR}/qtunixsocket.cpp
-        ${QTSERVICE_DIR}/qtunixserversocket.h
-        ${QTSERVICE_DIR}/qtunixserversocket.cpp
-    )
-endif()
 set(WIDGETS_CXX_FILES
     QShortcutInput.h
     QShortcutInput.cpp
@@ -69,16 +44,18 @@ set(UI_CXX_FILES
     ExamplesWindow.cpp
 )
 set(MISC_CXX_FILES
-    Preferences.h
-    Preferences.cpp
+    ""
 )
 set(CXX_FILES
     main.cpp
     ${MISC_CXX_FILES}
     ${UI_CXX_FILES}
     ${WIDGETS_CXX_FILES}
-    ${QTSERVICE_CXX_FILES}
+    # Shared sources:
     ${SHARED_CXX_FILES}
+    ${QUICKCUT_MODELS_CXX_FILES}
+    ${QTSERVICE_CXX_FILES}
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 
 set(QRC_FILES
@@ -145,6 +122,9 @@ source_group("Source Files\\Misc" FILES
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Models" FILES
+    ${QUICKCUT_MODELS_CXX_FILES}
+)
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
@@ -153,6 +133,9 @@ source_group("Source Files\\Widgets" FILES
 )
 source_group("Source Files\\Windows" FILES
     ${UI_CXX_FILES}
+)
+source_group("Source Files\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("${RESOURCE_DIR}" FILES
     ${BIN_INFO_RC}
