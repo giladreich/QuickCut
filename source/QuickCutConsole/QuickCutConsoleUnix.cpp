@@ -12,7 +12,7 @@
 QuickCutConsoleUnix::QuickCutConsoleUnix(int argc, char * argv[])
     : QuickCutConsole(argc, argv)
 {
-    s_pInstance = this;
+    s_Instance = this;
 }
 
 QuickCutConsoleUnix::~QuickCutConsoleUnix() {}
