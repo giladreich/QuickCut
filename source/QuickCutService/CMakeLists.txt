@@ -22,6 +22,7 @@ include_directories(
 ##################################################################################################################
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/pch.h
+    ${QUICKCUT_SHARED_DIR}/pch.cpp
 )
 set(MISC_CXX_FILES
     main.cpp
@@ -104,6 +105,9 @@ else() # UNIX
         Qt5::Network
     )
 endif()
+
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/pch.h)
+# target_precompile_headers(${PROJECT_NAME} REUSE_FROM QuickCut) # slow and some warnings.
 
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")

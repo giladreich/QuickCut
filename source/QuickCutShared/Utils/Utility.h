@@ -3,13 +3,6 @@
 
 #include "Types.h"
 
-#include <QString>
-#include <QDateTime>
-#include <QUuid>
-
-#include <string>
-#include <regex>
-
 namespace boost
 {
 namespace property_tree
@@ -32,5 +25,8 @@ namespace Hook
 void sendReloadSignal();
 } // namespace Hook
 
+namespace QuickCut
+{
 std::string getDateTime();
 std::string createUuid();
+} // namespace QuickCut

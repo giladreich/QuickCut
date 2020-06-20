@@ -1,12 +1,7 @@
 
-
 #include "pch.h"
 #include "QuickCutConsoleWindows.h"
 #include "Models/Profile.h"
-
-#include <QDebug>
-#include <QDir>
-#include <QProcess>
 
 // The GUI will send this pattern of key codes to notify that profile changes has been made
 // so it knows when to reload the profile data.

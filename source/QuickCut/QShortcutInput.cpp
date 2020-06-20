@@ -1,7 +1,6 @@
 
+#include "pch.h"
 #include "QShortcutInput.h"
-
-#include <QDebug>
 
 QShortcutInput * QShortcutInput::s_Instance = nullptr;
 

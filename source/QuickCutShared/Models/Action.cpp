@@ -3,8 +3,6 @@
 #include "Action.h"
 #include "Utils/Utility.h"
 
-#include <utility>
-
 Action::Action() noexcept
     : BaseModel()
     , m_Type(eActionType::ActionUnknown)
@@ -12,7 +10,7 @@ Action::Action() noexcept
     , m_DstKey()
     , m_AppPath()
     , m_AppArgs()
-    , m_CreatedDate(getDateTime())
+    , m_CreatedDate(QuickCut::getDateTime())
 {
 }
 
@@ -22,13 +20,13 @@ Action::Action(const std::string & name,
                const std::string & dstKey,
                const std::string & appPath,
                const std::string & appArgs) noexcept
-    : BaseModel(createUuid(), name, getDateTime())
+    : BaseModel(QuickCut::createUuid(), name, QuickCut::getDateTime())
     , m_Type(type)
     , m_SrcKey(srcKey)
     , m_DstKey(dstKey)
     , m_AppPath(appPath)
     , m_AppArgs(appArgs)
-    , m_CreatedDate(getDateTime())
+    , m_CreatedDate(QuickCut::getDateTime())
 {
 }
 
@@ -38,13 +36,15 @@ Action::Action(std::string && name,
                std::string && dstKey,
                std::string && appPath,
                std::string && appArgs) noexcept
-    : BaseModel(std::move(createUuid()), std::move(name), std::move(getDateTime()))
+    : BaseModel(std::move(QuickCut::createUuid()),
+                std::move(name),
+                std::move(QuickCut::getDateTime()))
     , m_Type(std::move(type))
     , m_SrcKey(std::move(srcKey))
     , m_DstKey(std::move(dstKey))
     , m_AppPath(std::move(appPath))
     , m_AppArgs(std::move(appArgs))
-    , m_CreatedDate(std::move(getDateTime()))
+    , m_CreatedDate(std::move(QuickCut::getDateTime()))
 {
 }
 

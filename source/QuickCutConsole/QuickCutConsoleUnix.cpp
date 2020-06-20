@@ -1,13 +1,7 @@
 
-
 #include "pch.h"
 #include "QuickCutConsoleUnix.h"
 #include "Models/Profile.h"
-
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-#include <QProcess>
 
 QuickCutConsoleUnix::QuickCutConsoleUnix(int argc, char * argv[])
     : QuickCutConsole(argc, argv)

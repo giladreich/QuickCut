@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "AboutWindow.h"
 
 AboutWindow::AboutWindow(QWidget * parent)

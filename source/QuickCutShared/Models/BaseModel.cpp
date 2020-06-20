@@ -1,3 +1,4 @@
+
 #include "pch.h"
 #include "BaseModel.h"
 #include "Utils/Utility.h"
@@ -5,9 +6,9 @@
 // TODO(Gilad): Manage lastModified differently after finishing refactoring.
 
 BaseModel::BaseModel() noexcept
-    : m_Uuid(std::move(createUuid()))
+    : m_Uuid(std::move(QuickCut::createUuid()))
     , m_Name()
-    , m_LastModified(std::move(getDateTime()))
+    , m_LastModified(std::move(QuickCut::getDateTime()))
 {
 }
 

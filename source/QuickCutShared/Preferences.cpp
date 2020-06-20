@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "Preferences.h"
 
 Preferences::Preferences()

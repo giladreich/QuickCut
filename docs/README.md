@@ -1,7 +1,7 @@
 
 <p align="center"><img src="/media/logo.png" width=200 height=200></p>
 
-[![Windows Status](https://github.com/giladreich/QuickCut/workflows/Windows/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AWindows) [![Linux Status](https://github.com/giladreich/QuickCut/workflows/Linux/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3ALinux) [![MacOS Status](https://github.com/giladreich/QuickCut/workflows/MacOS/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AMacOS) [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Windows Status](https://github.com/giladreich/QuickCut/workflows/Windows/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AWindows) [![Linux Status](https://github.com/giladreich/QuickCut/workflows/Linux/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3ALinux) [![MacOS Status](https://github.com/giladreich/QuickCut/workflows/MacOS/badge.svg)](https://github.com/giladreich/QuickCut/actions?query=workflow%3AMacOS) [![Qt](https://img.shields.io/badge/CMake-Qt-brightgreen.svg?logo=cmake)](https://www.qt.io/) [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?logo=pre-commit)](http://makeapullrequest.com)
 
 ---
 

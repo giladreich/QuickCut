@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include <QtCore/QCoreApplication>
 #include <QSingleApplication/QSingleInstance.h>
 

@@ -4,15 +4,13 @@
 #include "Types.h"
 #include "Utils/Utility.h"
 
-#include <QDebug>
 #include <QThread>
 #include <QTimer>
-#include <QStandardPaths>
 #include <QInputDialog>
-#include <QMessageBox>
 #include <QFileDialog>
-#include <QProcess>
 #include <QSettings>
+#include <QMessageBox>
+
 #include <QtService/QtService>
 
 #include "ActionEditWindow.h"

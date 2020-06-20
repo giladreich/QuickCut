@@ -38,6 +38,7 @@
 **
 ****************************************************************************/
 
+#include "pch.h"
 #include "qtservice.h"
 #include "qtservice_p.h"
 #include <QCoreApplication>

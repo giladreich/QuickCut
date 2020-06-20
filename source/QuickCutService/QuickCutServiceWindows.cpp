@@ -4,10 +4,6 @@
 #include "pch.h"
 #include "QuickCutServiceWindows.h"
 
-#include <QDebug>
-#include <QDir>
-#include <QProcess>
-
 #include <TlHelp32.h>
 
 #undef UNICODE

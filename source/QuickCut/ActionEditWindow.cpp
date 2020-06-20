@@ -1,9 +1,9 @@
 
+#include "pch.h"
 #include "ActionEditWindow.h"
 #include "Models/Action.h"
 #include "QShortcutInput.h"
 
-#include <QStandardPaths>
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
