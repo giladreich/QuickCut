@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Utils/Utility.h"
+#include <QFileInfo>
 
 template <typename T>
 class BaseParser
@@ -70,6 +71,9 @@ template <typename T>
 inline bool BaseParser<T>::save(const T & data)
 {
     if (m_Path.empty()) return false;
+
+    QFileInfo fi(QString::fromStdString(m_Path));
+    if (!fi.dir().exists()) fi.dir().mkpath(".");
 
     m_Content.clear();
 
