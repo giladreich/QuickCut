@@ -84,7 +84,7 @@ void ActionEditWindow::onTypeSelChange(int index)
 {
     if (index < 0 || index > ActionAppStart) return;
 
-    eActionType type = static_cast<eActionType>(index);
+    ActionType type = static_cast<ActionType>(index);
     if (type == ActionKeyMap)
     {
         ui->lblDstKey->setVisible(true);
@@ -165,7 +165,7 @@ void ActionEditWindow::onBtnSave()
 
     m_Action->reset();
 
-    eActionType type = static_cast<eActionType>(ui->cbxType->currentIndex());
+    ActionType type = static_cast<ActionType>(ui->cbxType->currentIndex());
 
     m_Action->setName(ui->tbxName->text());
     m_Action->setType(type);

@@ -77,7 +77,7 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
             {
                 qDebug() << "Pressed Keys Match!: " << pressedKeys
                          << " | Actual Keys: " << action->getSrcKey();
-                eActionType actionType = action->getType();
+                ActionType actionType = action->getType();
                 if (actionType == ActionKeyMap)
                 {
                     qDebug() << "Mapping key -> " << pressedKeys << " To -> "

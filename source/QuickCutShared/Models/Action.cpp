@@ -5,7 +5,7 @@
 
 Action::Action() noexcept
     : BaseModel()
-    , m_Type(eActionType::ActionUnknown)
+    , m_Type(ActionType::ActionUnknown)
     , m_SrcKey()
     , m_DstKey()
     , m_AppPath()
@@ -14,12 +14,12 @@ Action::Action() noexcept
 {
 }
 
-Action::Action(const QString &     name,
-               const eActionType & type,
-               const QString &     srcKey,
-               const QString &     dstKey,
-               const QString &     appPath,
-               const QString &     appArgs) noexcept
+Action::Action(const QString &    name,
+               const ActionType & type,
+               const QString &    srcKey,
+               const QString &    dstKey,
+               const QString &    appPath,
+               const QString &    appArgs) noexcept
     : BaseModel(QuickCut::createUuid(), name, QuickCut::getDateTime())
     , m_Type(type)
     , m_SrcKey(srcKey)
@@ -30,12 +30,12 @@ Action::Action(const QString &     name,
 {
 }
 
-Action::Action(QString &&     name,
-               eActionType && type,
-               QString &&     srcKey,
-               QString &&     dstKey,
-               QString &&     appPath,
-               QString &&     appArgs) noexcept
+Action::Action(QString &&    name,
+               ActionType && type,
+               QString &&    srcKey,
+               QString &&    dstKey,
+               QString &&    appPath,
+               QString &&    appArgs) noexcept
     : BaseModel(std::move(QuickCut::createUuid()),
                 std::move(name),
                 std::move(QuickCut::getDateTime()))
@@ -48,15 +48,15 @@ Action::Action(QString &&     name,
 {
 }
 
-Action::Action(const QString &     id,
-               const QString &     name,
-               const QString &     lastModified,
-               const eActionType & type,
-               const QString &     srcKey,
-               const QString &     dstKey,
-               const QString &     appPath,
-               const QString &     appArgs,
-               const QString &     createdDate) noexcept
+Action::Action(const QString &    id,
+               const QString &    name,
+               const QString &    lastModified,
+               const ActionType & type,
+               const QString &    srcKey,
+               const QString &    dstKey,
+               const QString &    appPath,
+               const QString &    appArgs,
+               const QString &    createdDate) noexcept
     : BaseModel(id, name, lastModified)
     , m_Type(type)
     , m_SrcKey(srcKey)
@@ -67,15 +67,15 @@ Action::Action(const QString &     id,
 {
 }
 
-Action::Action(QString &&     id,
-               QString &&     name,
-               QString &&     lastModified,
-               eActionType && type,
-               QString &&     srcKey,
-               QString &&     dstKey,
-               QString &&     appPath,
-               QString &&     appArgs,
-               QString &&     createdDate) noexcept
+Action::Action(QString &&    id,
+               QString &&    name,
+               QString &&    lastModified,
+               ActionType && type,
+               QString &&    srcKey,
+               QString &&    dstKey,
+               QString &&    appPath,
+               QString &&    appArgs,
+               QString &&    createdDate) noexcept
     : BaseModel(std::move(id), std::move(name), std::move(lastModified))
     , m_Type(std::move(type))
     , m_SrcKey(std::move(srcKey))
@@ -86,26 +86,26 @@ Action::Action(QString &&     id,
 {
 }
 
-QString Action::getType(eActionType type)
+QString Action::getType(ActionType type)
 {
     switch (type)
     {
-        case eActionType::ActionKeyMap:
+        case ActionType::ActionKeyMap:
             return "KeyMap";
-        case eActionType::ActionAppStart:
+        case ActionType::ActionAppStart:
             return "AppStart";
 
-        case eActionType::ActionUnknown:
+        case ActionType::ActionUnknown:
         default:
             return "Unknown";
     }
 }
 
-eActionType Action::getType(const QString & type)
+ActionType Action::getType(const QString & type)
 {
-    if (type == "KeyMap") return eActionType::ActionKeyMap;
-    if (type == "AppStart") return eActionType::ActionAppStart;
-    return eActionType::ActionUnknown;
+    if (type == "KeyMap") return ActionType::ActionKeyMap;
+    if (type == "AppStart") return ActionType::ActionAppStart;
+    return ActionType::ActionUnknown;
 }
 
 QString Action::getKey(int key)
@@ -113,12 +113,12 @@ QString Action::getKey(int key)
     return QString::number(key);
 }
 
-eActionType Action::getType() const
+ActionType Action::getType() const
 {
     return m_Type;
 }
 
-void Action::setType(eActionType type)
+void Action::setType(ActionType type)
 {
     m_Type = type;
 }
