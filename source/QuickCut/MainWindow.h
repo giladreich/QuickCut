@@ -5,7 +5,7 @@
 #include "ui_MainWindow.h"
 
 #include "Models/Profile.h"
-#include "Models/Preference.h"
+#include "Managers/PreferenceManager.h"
 
 class ExamplesWindow;
 class CheckUpdatesWindow;
@@ -27,11 +27,6 @@ public:
     void initProfiles();
 
     // TODO: Implement parser and move all of these.
-    bool loadPreference(const std::string & path, Preference * outPreference);
-    bool savePreference(const std::string & path, const Preference & preference);
-    bool loadPreference();
-    bool savePreference();
-
     bool loadProfiles(const std::string & profilesPath, std::string * activeProfileOut);
     bool loadProfiles(const QString & profilesPath, QString * activeProfileOut);
     bool loadProfiles(const QString & profilesPath, std::string * activeProfileOut);
@@ -94,5 +89,5 @@ private:
     QList<Profile *>           m_Profiles;
     QString                    m_ProfilesPath;
     QString                    m_ActiveProfile;
-    Preference                 m_Preference;
+    PreferenceManager          m_Preference;
 };

@@ -33,3 +33,8 @@ const std::string & PreferenceManager::getConfigFilePath()
 {
     return m_Parser.getFilePath();
 }
+
+Preference & PreferenceManager::get()
+{
+    return m_Preference;
+}

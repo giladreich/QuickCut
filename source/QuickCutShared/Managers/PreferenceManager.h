@@ -16,6 +16,8 @@ public:
 
     const std::string & getConfigFilePath() override;
 
+    Preference & get();
+
 private:
     Preference       m_Preference;
     PreferenceParser m_Parser;
