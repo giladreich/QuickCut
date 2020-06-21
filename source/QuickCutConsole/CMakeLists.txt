@@ -20,6 +20,15 @@ include_directories(
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
+set(MANAGERS_CXX_FILES
+    ${QUICKCUT_MANAGERS_DIR}/IParserOperations.h
+    ${QUICKCUT_MANAGERS_DIR}/BaseManager.h
+    ${QUICKCUT_MANAGERS_DIR}/BaseManager.cpp
+    ${QUICKCUT_MANAGERS_DIR}/ProfileManager.h
+    ${QUICKCUT_MANAGERS_DIR}/ProfileManager.cpp
+    ${QUICKCUT_MANAGERS_DIR}/ActionManager.h
+    ${QUICKCUT_MANAGERS_DIR}/ActionManager.cpp
+)
 set(PARSER_CXX_FILES
     ${QUICKCUT_PARSER_DIR}/BaseParser.h
     ${QUICKCUT_PARSER_DIR}/ProfileParser.h
@@ -67,6 +76,7 @@ endif()
 set(CXX_FILES
     ${MISC_CXX_FILES}
     ${SHARED_CXX_FILES}
+    ${MANAGERS_CXX_FILES}
     ${MODELS_CXX_FILES}
     ${PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
@@ -80,6 +90,9 @@ source_group("Source Files" FILES
 )
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Managers" FILES
+    ${MANAGERS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Models" FILES
     ${MODELS_CXX_FILES}

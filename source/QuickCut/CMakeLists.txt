@@ -53,6 +53,7 @@ set(CXX_FILES
     ${WIDGETS_CXX_FILES}
     # Shared sources:
     ${SHARED_CXX_FILES}
+    ${QUICKCUT_MANAGERS_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
     ${QUICKCUT_PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
@@ -122,6 +123,9 @@ source_group("Source Files\\Misc" FILES
 )
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Managers" FILES
+    ${QUICKCUT_MANAGERS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Models" FILES
     ${QUICKCUT_MODELS_CXX_FILES}
