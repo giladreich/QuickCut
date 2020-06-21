@@ -12,21 +12,21 @@ PreferenceParser::PreferenceParser(std::string && path)
 {
 }
 
-bool PreferenceParser::parseImpl(Preferences * outData)
+bool PreferenceParser::parseImpl(Preference * outData)
 {
-    int iTheme = m_Content.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    outData->setThemeType(static_cast<ThemeType>(iTheme));
-    outData->m_ViewToolBar   = m_Content.get<bool>("viewToolBar", true);
-    outData->m_ViewStatusBar = m_Content.get<bool>("viewStatusBar", true);
+    int iTheme = m_Content.get<int>("currentTheme", static_cast<int>(ThemeUbuntu));
+    outData->setCurrentTheme(static_cast<ThemeType>(iTheme));
+    outData->setToolBarVisible(m_Content.get<bool>("toolBarVisible", true));
+    outData->setStatusBarVisible(m_Content.get<bool>("statusBarVisible", true));
 
     return true;
 }
 
-bool PreferenceParser::saveImpl(const Preferences & data)
+bool PreferenceParser::saveImpl(const Preference & data)
 {
-    m_Content.put("uiThemeType", data.getThemeType());
-    m_Content.put("viewToolBar", data.m_ViewToolBar);
-    m_Content.put("viewStatusBar", data.m_ViewStatusBar);
+    m_Content.put("currentTheme", data.getCurrentTheme());
+    m_Content.put("toolBarVisible", data.isToolBarVisible());
+    m_Content.put("statusBarVisible", data.isStatusBarVisible());
 
     return true;
 }

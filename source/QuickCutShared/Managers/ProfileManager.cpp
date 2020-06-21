@@ -5,18 +5,21 @@
 ProfileManager::ProfileManager() noexcept
     : BaseManager()
     , m_Parser("Config/profiles.json")
+    , m_LoadSucceed(false)
 {
 }
 
 ProfileManager::ProfileManager(const std::string & filePath) noexcept
     : BaseManager()
     , m_Parser(filePath)
+    , m_LoadSucceed(false)
 {
 }
 
 ProfileManager::ProfileManager(std::string && filePath) noexcept
     : BaseManager()
     , m_Parser(std::move(filePath))
+    , m_LoadSucceed(false)
 {
 }
 
@@ -24,12 +27,18 @@ ProfileManager::~ProfileManager() = default;
 
 bool ProfileManager::load()
 {
-    return m_Parser.parse(&m_vData);
+    m_LoadSucceed = m_Parser.parse(&m_vData);
+    return m_LoadSucceed;
 }
 
 bool ProfileManager::save()
 {
     return m_Parser.save(m_vData);
+}
+
+bool ProfileManager::isLoadSucceed()
+{
+    return m_LoadSucceed;
 }
 
 const std::string & ProfileManager::getConfigFilePath()

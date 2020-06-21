@@ -1,7 +1,7 @@
 
 #include "pch.h"
 #include "QuickCutConsoleUnix.h"
-#include "Models/Profile.h"
+#include "Managers/ProfileManager.h"
 
 QuickCutConsoleUnix::QuickCutConsoleUnix(int argc, char * argv[])
     : QuickCutConsole(argc, argv)

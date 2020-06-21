@@ -13,8 +13,9 @@
 #include <QtCore>
 #include <QDebug>
 #include <QString>
-#include <QFile>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QProcess>
 #include <QTextStream>
 #include <QStandardPaths>

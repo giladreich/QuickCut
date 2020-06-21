@@ -14,9 +14,13 @@ public:
     bool load() override;
     bool save() override;
 
+    bool                isLoadSucceed() override;
     const std::string & getConfigFilePath() override;
 
+    Preference & get();
+
 private:
-    Preferences      m_Preference;
+    Preference       m_Preference;
     PreferenceParser m_Parser;
+    bool             m_LoadSucceed;
 };

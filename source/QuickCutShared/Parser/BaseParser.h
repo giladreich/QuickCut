@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Utils/Utility.h"
+#include <QFileInfo>
 
 template <typename T>
 class BaseParser
@@ -49,7 +50,19 @@ inline bool BaseParser<T>::parse(T * outData)
 {
     if (m_Path.empty() || !outData) return false;
 
-    bpt::read_json(m_Path, m_Content);
+    try
+    {
+        bpt::read_json(m_Path, m_Content);
+    }
+    catch (const bpt::ptree_error & e)
+    {
+        // TODO(Gilad): Consider using some logging system to produce log file.
+        return false;
+    }
+    catch (...)
+    {
+        return false;
+    }
 
     return parseImpl(outData);
 }
@@ -59,11 +72,26 @@ inline bool BaseParser<T>::save(const T & data)
 {
     if (m_Path.empty()) return false;
 
+    QFileInfo fi(QString::fromStdString(m_Path));
+    if (!fi.dir().exists()) fi.dir().mkpath(".");
+
     m_Content.clear();
 
     if (!saveImpl(data)) return false;
 
-    bpt::write_jsonEx(m_Path, m_Content);
+    try
+    {
+        bpt::write_jsonEx(m_Path, m_Content);
+    }
+    catch (const bpt::ptree_error & e)
+    {
+        // TODO(Gilad): Consider using some logging system to produce log file.
+        return false;
+    }
+    catch (...)
+    {
+        return false;
+    }
 
     return true;
 }
