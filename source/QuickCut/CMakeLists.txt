@@ -54,8 +54,9 @@ set(CXX_FILES
     # Shared sources:
     ${SHARED_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
-    ${QTSERVICE_CXX_FILES}
+    ${QUICKCUT_PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
+    ${QTSERVICE_CXX_FILES}
 )
 
 set(QRC_FILES
@@ -124,6 +125,9 @@ source_group("Source Files\\Shared" FILES
 )
 source_group("Source Files\\Shared\\Models" FILES
     ${QUICKCUT_MODELS_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Parser" FILES
+    ${QUICKCUT_PARSER_CXX_FILES}
 )
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
