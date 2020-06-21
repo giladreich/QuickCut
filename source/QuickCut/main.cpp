@@ -2,7 +2,7 @@
 #include "pch.h"
 #include <QtWidgets/QApplication>
 #include "MainWindow.h"
-#include "QSingleApplication/QSingleInstance.h"
+#include "Utils/QSingleApplication/QSingleInstance.h"
 
 int main(int argc, char * argv[])
 {

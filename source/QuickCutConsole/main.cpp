@@ -1,7 +1,7 @@
 
 #include "pch.h"
 #include <QtCore/QCoreApplication>
-#include <QSingleApplication/QSingleInstance.h>
+#include "Utils/QSingleApplication/QSingleInstance.h"
 
 #if defined(Q_OS_WIN)
 #    include "QuickCutConsoleWindows.h"

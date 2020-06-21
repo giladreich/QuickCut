@@ -66,11 +66,11 @@ source_group("Source Files" FILES
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
+)
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
-)
-source_group("Source Files\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("Resources" FILES
     ${RESOURCE_FILES}

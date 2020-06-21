@@ -14,6 +14,5 @@ set(QUICKCUT_SHARED_CXX_FILES
 add_subdirectory(Managers)
 add_subdirectory(Models)
 add_subdirectory(Parser)
-add_subdirectory(QSingleApplication)
 add_subdirectory(QtService)
 add_subdirectory(Utils)

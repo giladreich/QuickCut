@@ -25,7 +25,6 @@ set(RESOURCE_DIR Resources)
 ##################################################################################################################
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_CXX_FILES}
-    ${QTSINGLEAPP_CXX_FILES}
 )
 set(WIDGETS_CXX_FILES
     QShortcutInput.h
@@ -56,6 +55,7 @@ set(CXX_FILES
     ${QUICKCUT_MANAGERS_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
     ${QUICKCUT_PARSER_CXX_FILES}
+    ${QTSINGLEAPP_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
     ${QTSERVICE_CXX_FILES}
 )
@@ -138,6 +138,9 @@ source_group("Source Files\\Shared\\QtService" FILES
 )
 source_group("Source Files\\Shared\\Utils" FILES
     ${QUICKCUT_UTILS_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Utils\\QSingleApp" FILES
+    ${QTSINGLEAPP_CXX_FILES}
 )
 source_group("Source Files\\Widgets" FILES
     ${WIDGETS_CXX_FILES}
