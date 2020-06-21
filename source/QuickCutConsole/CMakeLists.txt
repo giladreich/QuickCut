@@ -87,7 +87,7 @@ source_group("Source Files\\Shared\\Models" FILES
 source_group("Source Files\\Shared\\Parser" FILES
     ${PARSER_CXX_FILES}
 )
-source_group("Source Files\\Utils" FILES
+source_group("Source Files\\Shared\\Utils" FILES
     ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("Resources" FILES

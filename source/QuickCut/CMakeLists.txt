@@ -132,14 +132,14 @@ source_group("Source Files\\Shared\\Parser" FILES
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
+)
 source_group("Source Files\\Widgets" FILES
     ${WIDGETS_CXX_FILES}
 )
 source_group("Source Files\\Windows" FILES
     ${UI_CXX_FILES}
-)
-source_group("Source Files\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("${RESOURCE_DIR}" FILES
     ${BIN_INFO_RC}
