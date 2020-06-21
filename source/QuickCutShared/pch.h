@@ -20,6 +20,7 @@
 #include <QStandardPaths>
 
 // Project includes
+#include "Types.h"
 
 // Other includes
 #if defined(Q_OS_WIN)
