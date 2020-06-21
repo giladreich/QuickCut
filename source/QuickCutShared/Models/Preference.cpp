@@ -3,18 +3,48 @@
 #include "Preference.h"
 
 Preference::Preference()
-    : m_ViewToolBar(true)
-    , m_ViewStatusBar(true)
-    , m_ThemeType(ThemeUbuntu)
+    : m_ToolBarVisible(true)
+    , m_StatusBarVisible(true)
+    , m_CurrTheme(ThemeUbuntu)
 {
 }
 
-QString Preference::getThemeFilePath() const
+bool Preference::isToolBarVisible() const
 {
-    return getThemeFilePath(m_ThemeType);
+    return m_ToolBarVisible;
 }
 
-QString Preference::getThemeFilePath(ThemeType type)
+void Preference::setToolBarVisible(bool visible)
+{
+    m_ToolBarVisible = visible;
+}
+
+bool Preference::isStatusBarVisible() const
+{
+    return m_StatusBarVisible;
+}
+
+void Preference::setStatusBarVisible(bool visible)
+{
+    m_StatusBarVisible = visible;
+}
+
+ThemeType Preference::getCurrentTheme() const
+{
+    return m_CurrTheme;
+}
+
+void Preference::setCurrentTheme(ThemeType type)
+{
+    m_CurrTheme = type;
+}
+
+QString Preference::getCurrentThemeResourcePath() const
+{
+    return getThemeResourcePath(m_CurrTheme);
+}
+
+QString Preference::getThemeResourcePath(ThemeType type)
 {
     switch (type)
     {
@@ -34,34 +64,4 @@ QString Preference::getThemeFilePath(ThemeType type)
         default:
             return ":stylesheet/theme_ubuntu.qss";
     }
-}
-
-bool Preference::isToolBarVisible() const
-{
-    return m_ViewToolBar;
-}
-
-void Preference::setToolBarVisible(bool visible)
-{
-    m_ViewToolBar = visible;
-}
-
-bool Preference::isStatusBarVisible() const
-{
-    return m_ViewStatusBar;
-}
-
-void Preference::setStatusBarVisible(bool visible)
-{
-    m_ViewStatusBar = visible;
-}
-
-ThemeType Preference::getThemeType() const
-{
-    return m_ThemeType;
-}
-
-void Preference::setThemeType(ThemeType type)
-{
-    m_ThemeType = type;
 }

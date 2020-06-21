@@ -25,24 +25,24 @@ public:
     Preference(const Preference & profile) = default;
     Preference(Preference && profile)      = default;
 
-    QString        getThemeFilePath() const;
-    static QString getThemeFilePath(ThemeType type);
-
     bool isToolBarVisible() const;
     void setToolBarVisible(bool visible);
 
     bool isStatusBarVisible() const;
     void setStatusBarVisible(bool visible);
 
-    ThemeType getThemeType() const;         // TODO(Gilad): Rename to getCurrentTheme
-    void      setThemeType(ThemeType type); // TODO(Gilad): Rename to getCurrentTheme
+    ThemeType getCurrentTheme() const;
+    void      setCurrentTheme(ThemeType type);
+
+    QString        getCurrentThemeResourcePath() const;
+    static QString getThemeResourcePath(ThemeType type);
 
     Preference & operator=(const Preference & profile) = default;
     Preference & operator=(Preference && profile) = default;
 
-public:                   // TODO(Gilad): Make it private.
-    bool m_ViewToolBar;   // TODO(Gilad): Rename to m_ToolBarVisible
-    bool m_ViewStatusBar; // TODO(Gilad): Rename to m_StatusBarVisible
+private:
+    bool m_ToolBarVisible;
+    bool m_StatusBarVisible;
 
-    ThemeType m_ThemeType; // TODO(Gilad): Rename to m_CurrTheme
+    ThemeType m_CurrTheme;
 };

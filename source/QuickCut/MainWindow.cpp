@@ -189,7 +189,7 @@ void MainWindow::initPreference()
     }
 
     QAction * action = nullptr;
-    switch (m_Preference.getThemeType())
+    switch (m_Preference.getCurrentTheme())
     {
         case ThemeDefault:
             action = ui->actionThemeDefault;
@@ -216,12 +216,12 @@ void MainWindow::initPreference()
             break;
     }
 
-    onActionLoadTheme(m_Preference.getThemeFilePath(), action);
+    onActionLoadTheme(m_Preference.getCurrentThemeResourcePath(), action);
 
-    ui->actionViewToolBar->setChecked(m_Preference.m_ViewToolBar);
-    ui->actionViewStatusBar->setChecked(m_Preference.m_ViewStatusBar);
-    ui->toolBar->setVisible(m_Preference.m_ViewToolBar);
-    ui->statusBar->setVisible(m_Preference.m_ViewStatusBar);
+    ui->actionViewToolBar->setChecked(m_Preference.isToolBarVisible());
+    ui->actionViewStatusBar->setChecked(m_Preference.isStatusBarVisible());
+    ui->toolBar->setVisible(m_Preference.isToolBarVisible());
+    ui->statusBar->setVisible(m_Preference.isStatusBarVisible());
 }
 
 void MainWindow::initProfiles()
@@ -274,10 +274,10 @@ bool MainWindow::loadPreference(const std::string & path, Preference * outPrefer
     JSON rootJson;
     bpt::read_json(path, rootJson);
 
-    int themeType = rootJson.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    outPreference->setThemeType(static_cast<ThemeType>(themeType));
-    outPreference->m_ViewToolBar   = rootJson.get<bool>("viewToolBar", true);
-    outPreference->m_ViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
+    int themeType = rootJson.get<int>("currentTheme", static_cast<int>(ThemeUbuntu));
+    outPreference->setCurrentTheme(static_cast<ThemeType>(themeType));
+    outPreference->setToolBarVisible(rootJson.get<bool>("toolBarVisible", true));
+    outPreference->setStatusBarVisible(rootJson.get<bool>("statusBarVisible", true));
 
     return true;
 }
@@ -287,9 +287,9 @@ bool MainWindow::savePreference(const std::string & path, const Preference & pre
     if (path.empty()) return false;
 
     JSON rootJson;
-    rootJson.put("uiThemeType", preference.getThemeType());
-    rootJson.put("viewToolBar", preference.m_ViewToolBar);
-    rootJson.put("viewStatusBar", preference.m_ViewStatusBar);
+    rootJson.put("currentTheme", preference.getCurrentTheme());
+    rootJson.put("toolBarVisible", preference.isToolBarVisible());
+    rootJson.put("statusBarVisible", preference.isStatusBarVisible());
     bpt::write_jsonEx(path, rootJson);
 
     return true;
@@ -693,7 +693,7 @@ void MainWindow::onActionViewToolBar()
 {
     const bool checked = ui->actionViewToolBar->isChecked();
     ui->toolBar->setVisible(checked);
-    m_Preference.m_ViewToolBar = checked;
+    m_Preference.setStatusBarVisible(checked);
     savePreference();
 }
 
@@ -701,7 +701,7 @@ void MainWindow::onActionViewStatusBar()
 {
     const bool checked = ui->actionViewStatusBar->isChecked();
     ui->statusBar->setVisible(checked);
-    m_Preference.m_ViewStatusBar = checked;
+    m_Preference.setStatusBarVisible(checked);
     savePreference();
 }
 
@@ -733,8 +733,8 @@ void MainWindow::onActionHelpCheckUpdates()
 
 void MainWindow::onActionLoadTheme(ThemeType eType, QAction * action /*= nullptr*/)
 {
-    onActionLoadTheme(Preference::getThemeFilePath(eType), action);
-    m_Preference.setThemeType(eType);
+    onActionLoadTheme(Preference::getThemeResourcePath(eType), action);
+    m_Preference.setCurrentTheme(eType);
     savePreference();
 }
 void MainWindow::onActionLoadTheme(const QString & szQssPath, QAction * action /*= nullptr*/)
