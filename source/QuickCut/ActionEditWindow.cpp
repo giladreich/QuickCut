@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "ActionEditWindow.h"
 #include "Models/Action.h"
-#include "QShortcutInput.h"
+#include "Widgets/QShortcutInput.h"
 
 #include <QFileDialog>
 //#include <QKeySequenceEdit>

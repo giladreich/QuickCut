@@ -248,7 +248,7 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
   <customwidget>
    <class>QShortcutInput</class>
    <extends>QLineEdit</extends>
-   <header>QShortcutInput.h</header>
+   <header>Widgets/QShortcutInput.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

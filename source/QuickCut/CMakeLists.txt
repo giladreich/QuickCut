@@ -26,9 +26,9 @@ set(RESOURCE_DIR Resources)
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_CXX_FILES}
 )
-set(WIDGETS_CXX_FILES
-    QShortcutInput.h
-    QShortcutInput.cpp
+file(GLOB WIDGETS_CXX_FILES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/Widgets/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Widgets/*.cpp
 )
 set(UI_CXX_FILES
     MainWindow.h

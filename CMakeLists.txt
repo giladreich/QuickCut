@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-include(cmake/utility.cmake)
+include(cmake/Utility.cmake)
 
 
 ##################################################################################################################
@@ -16,7 +16,7 @@ project(QuickCut
 include(CMakeOptions.cmake)
 
 if (USE_CONAN_PM)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/conan.cmake)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Conan.cmake)
     conan_cmake_run(REQUIRES boost/1.73.0
         BASIC_SETUP
         BUILD missing
