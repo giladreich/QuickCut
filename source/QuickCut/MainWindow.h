@@ -74,10 +74,10 @@ public slots:
 private:
     Ui::MainWindowClass * ui;
 
-    ActionEditWindow *   m_ActionEditWindow;
-    AboutWindow *        m_AboutWindow;
-    CheckUpdatesWindow * m_CheckUpdatesWindow;
-    ExamplesWindow *     m_ExamplesWindow;
+    QPointer<ActionEditWindow>   m_ActionEditWindow;
+    QPointer<AboutWindow>        m_AboutWindow;
+    QPointer<CheckUpdatesWindow> m_CheckUpdatesWindow;
+    QPointer<ExamplesWindow>     m_ExamplesWindow;
 
     QMap<ThemeType, QAction *> m_ThemeActions;
 
