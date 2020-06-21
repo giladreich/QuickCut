@@ -16,6 +16,7 @@ public:
     bool load() override;
     bool save() override;
 
+    bool                isLoadSucceed() override;
     const std::string & getConfigFilePath() override;
 
     Profile * getActiveProfile();
@@ -24,4 +25,5 @@ public:
 
 private:
     ProfileParser m_Parser;
+    bool          m_LoadSucceed;
 };
