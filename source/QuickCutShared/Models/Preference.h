@@ -16,15 +16,14 @@ enum ThemeType
     THEME_COUNT
 };
 
-// TODO(Gilad): Rename to singular.
-class Preferences
+class Preference
 {
 public:
-    Preferences();
+    Preference();
 
     // Constructs copy
-    Preferences(const Preferences & profile) = default;
-    Preferences(Preferences && profile)      = default;
+    Preference(const Preference & profile) = default;
+    Preference(Preference && profile)      = default;
 
     QString        getThemeFilePath() const;
     static QString getThemeFilePath(ThemeType type);
@@ -38,10 +37,10 @@ public:
     ThemeType getThemeType() const;         // TODO(Gilad): Rename to getCurrentTheme
     void      setThemeType(ThemeType type); // TODO(Gilad): Rename to getCurrentTheme
 
-    Preferences & operator=(const Preferences & profile) = default;
-    Preferences & operator=(Preferences && profile) = default;
+    Preference & operator=(const Preference & profile) = default;
+    Preference & operator=(Preference && profile) = default;
 
-public: // TODO(Gilad): Make it private.
+public:                   // TODO(Gilad): Make it private.
     bool m_ViewToolBar;   // TODO(Gilad): Rename to m_ToolBarVisible
     bool m_ViewStatusBar; // TODO(Gilad): Rename to m_StatusBarVisible
 

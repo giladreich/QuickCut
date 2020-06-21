@@ -2,9 +2,9 @@
 #pragma once
 
 #include "BaseParser.h"
-#include "Models/Preferences.h"
+#include "Models/Preference.h"
 
-class PreferenceParser : public BaseParser<Preferences>
+class PreferenceParser : public BaseParser<Preference>
 {
 public:
     PreferenceParser(const std::string & path);
@@ -12,6 +12,6 @@ public:
     virtual ~PreferenceParser() = default;
 
 private:
-    bool parseImpl(Preferences * outData) override;
-    bool saveImpl(const Preferences & data) override;
+    bool parseImpl(Preference * outData) override;
+    bool saveImpl(const Preference & data) override;
 };

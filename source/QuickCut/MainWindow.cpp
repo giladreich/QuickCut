@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget * parent)
 
     connectSlots();
 
-    initPreferences();
+    initPreference();
     initProfiles();
     activateHook();
 
@@ -61,7 +61,7 @@ void MainWindow::connectSlots()
     connect(ui->actionViewRefresh, &QAction::triggered, this,
             &MainWindow::onActionViewRefresh);
 
-    // Preferences Menu
+    // Preference Menu
     connect(ui->actionThemeDefault, &QAction::triggered, this,
             [this] { onActionLoadTheme(ThemeDefault, ui->actionThemeDefault); });
     connect(ui->actionThemeDark, &QAction::triggered, this,
@@ -174,22 +174,22 @@ void MainWindow::showEvent(QShowEvent * event)
     QMainWindow::showEvent(event);
 }
 
-void MainWindow::initPreferences()
+void MainWindow::initPreference()
 {
-    QFileInfo fi("Config/preferences.json");
+    QFileInfo fi("Config/preference.json");
     if (!fi.exists())
     {
         if (!fi.dir().exists()) fi.dir().mkdir(".");
 
-        savePreferences(fi.filePath().toStdString(), m_Preferences);
+        savePreference(fi.filePath().toStdString(), m_Preference);
     }
     else
     {
-        loadPreferences(fi.filePath().toStdString(), &m_Preferences);
+        loadPreference(fi.filePath().toStdString(), &m_Preference);
     }
 
     QAction * action = nullptr;
-    switch (m_Preferences.getThemeType())
+    switch (m_Preference.getThemeType())
     {
         case ThemeDefault:
             action = ui->actionThemeDefault;
@@ -216,12 +216,12 @@ void MainWindow::initPreferences()
             break;
     }
 
-    onActionLoadTheme(m_Preferences.getThemeFilePath(), action);
+    onActionLoadTheme(m_Preference.getThemeFilePath(), action);
 
-    ui->actionViewToolBar->setChecked(m_Preferences.m_ViewToolBar);
-    ui->actionViewStatusBar->setChecked(m_Preferences.m_ViewStatusBar);
-    ui->toolBar->setVisible(m_Preferences.m_ViewToolBar);
-    ui->statusBar->setVisible(m_Preferences.m_ViewStatusBar);
+    ui->actionViewToolBar->setChecked(m_Preference.m_ViewToolBar);
+    ui->actionViewStatusBar->setChecked(m_Preference.m_ViewStatusBar);
+    ui->toolBar->setVisible(m_Preference.m_ViewToolBar);
+    ui->statusBar->setVisible(m_Preference.m_ViewStatusBar);
 }
 
 void MainWindow::initProfiles()
@@ -267,42 +267,42 @@ void MainWindow::initProfiles()
 }
 
 #pragma region-- - Parser-- -
-bool MainWindow::loadPreferences(const std::string & path, Preferences * outPreferences)
+bool MainWindow::loadPreference(const std::string & path, Preference * outPreference)
 {
-    if (path.empty() || !outPreferences) return false;
+    if (path.empty() || !outPreference) return false;
 
     JSON rootJson;
     bpt::read_json(path, rootJson);
 
     int themeType = rootJson.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    outPreferences->setThemeType(static_cast<ThemeType>(themeType));
-    outPreferences->m_ViewToolBar   = rootJson.get<bool>("viewToolBar", true);
-    outPreferences->m_ViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
+    outPreference->setThemeType(static_cast<ThemeType>(themeType));
+    outPreference->m_ViewToolBar   = rootJson.get<bool>("viewToolBar", true);
+    outPreference->m_ViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
 
     return true;
 }
 
-bool MainWindow::savePreferences(const std::string & path, const Preferences & preferences)
+bool MainWindow::savePreference(const std::string & path, const Preference & preference)
 {
     if (path.empty()) return false;
 
     JSON rootJson;
-    rootJson.put("uiThemeType", preferences.getThemeType());
-    rootJson.put("viewToolBar", preferences.m_ViewToolBar);
-    rootJson.put("viewStatusBar", preferences.m_ViewStatusBar);
+    rootJson.put("uiThemeType", preference.getThemeType());
+    rootJson.put("viewToolBar", preference.m_ViewToolBar);
+    rootJson.put("viewStatusBar", preference.m_ViewStatusBar);
     bpt::write_jsonEx(path, rootJson);
 
     return true;
 }
 
-bool MainWindow::loadPreferences()
+bool MainWindow::loadPreference()
 {
-    return loadPreferences("Config/preferences.json", &m_Preferences);
+    return loadPreference("Config/preference.json", &m_Preference);
 }
 
-bool MainWindow::savePreferences()
+bool MainWindow::savePreference()
 {
-    return savePreferences("Config/preferences.json", m_Preferences);
+    return savePreference("Config/preference.json", m_Preference);
 }
 
 bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * activeProfileOut)
@@ -693,16 +693,16 @@ void MainWindow::onActionViewToolBar()
 {
     const bool checked = ui->actionViewToolBar->isChecked();
     ui->toolBar->setVisible(checked);
-    m_Preferences.m_ViewToolBar = checked;
-    savePreferences();
+    m_Preference.m_ViewToolBar = checked;
+    savePreference();
 }
 
 void MainWindow::onActionViewStatusBar()
 {
     const bool checked = ui->actionViewStatusBar->isChecked();
     ui->statusBar->setVisible(checked);
-    m_Preferences.m_ViewStatusBar = checked;
-    savePreferences();
+    m_Preference.m_ViewStatusBar = checked;
+    savePreference();
 }
 
 void MainWindow::onActionViewRefresh()
@@ -733,9 +733,9 @@ void MainWindow::onActionHelpCheckUpdates()
 
 void MainWindow::onActionLoadTheme(ThemeType eType, QAction * action /*= nullptr*/)
 {
-    onActionLoadTheme(Preferences::getThemeFilePath(eType), action);
-    m_Preferences.setThemeType(eType);
-    savePreferences();
+    onActionLoadTheme(Preference::getThemeFilePath(eType), action);
+    m_Preference.setThemeType(eType);
+    savePreference();
 }
 void MainWindow::onActionLoadTheme(const QString & szQssPath, QAction * action /*= nullptr*/)
 {

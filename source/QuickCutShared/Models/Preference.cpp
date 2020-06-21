@@ -1,20 +1,20 @@
 
 #include "pch.h"
-#include "Preferences.h"
+#include "Preference.h"
 
-Preferences::Preferences()
+Preference::Preference()
     : m_ViewToolBar(true)
     , m_ViewStatusBar(true)
     , m_ThemeType(ThemeUbuntu)
 {
 }
 
-QString Preferences::getThemeFilePath() const
+QString Preference::getThemeFilePath() const
 {
     return getThemeFilePath(m_ThemeType);
 }
 
-QString Preferences::getThemeFilePath(ThemeType type)
+QString Preference::getThemeFilePath(ThemeType type)
 {
     switch (type)
     {
@@ -36,32 +36,32 @@ QString Preferences::getThemeFilePath(ThemeType type)
     }
 }
 
-bool Preferences::isToolBarVisible() const
+bool Preference::isToolBarVisible() const
 {
     return m_ViewToolBar;
 }
 
-void Preferences::setToolBarVisible(bool visible)
+void Preference::setToolBarVisible(bool visible)
 {
     m_ViewToolBar = visible;
 }
 
-bool Preferences::isStatusBarVisible() const
+bool Preference::isStatusBarVisible() const
 {
     return m_ViewStatusBar;
 }
 
-void Preferences::setStatusBarVisible(bool visible)
+void Preference::setStatusBarVisible(bool visible)
 {
     m_ViewStatusBar = visible;
 }
 
-ThemeType Preferences::getThemeType() const
+ThemeType Preference::getThemeType() const
 {
     return m_ThemeType;
 }
 
-void Preferences::setThemeType(ThemeType type)
+void Preference::setThemeType(ThemeType type)
 {
     m_ThemeType = type;
 }
