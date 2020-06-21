@@ -12,6 +12,9 @@ namespace boost
          * this function will parse the input and make the json file look as it should be.
          */
         void write_jsonEx(const std::string & path, const JSON & ptree);
+
+        QString get(JSON & ptree, const QString & path, const QString & defaultValue);
+        JSON &  put(JSON & ptree, const QString & path, const QString & value);
     } // namespace property_tree
 } // namespace boost
 
@@ -27,6 +30,6 @@ namespace Hook
 
 namespace QuickCut
 {
-    std::string getDateTime();
-    std::string createUuid();
+    QString getDateTime();
+    QString createUuid();
 } // namespace QuickCut

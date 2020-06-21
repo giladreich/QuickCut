@@ -2,12 +2,12 @@
 #include "pch.h"
 #include "PreferenceParser.h"
 
-PreferenceParser::PreferenceParser(const std::string & path)
+PreferenceParser::PreferenceParser(const QString & path)
     : BaseParser(path)
 {
 }
 
-PreferenceParser::PreferenceParser(std::string && path)
+PreferenceParser::PreferenceParser(QString && path)
     : BaseParser(std::move(path))
 {
 }

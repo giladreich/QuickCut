@@ -18,7 +18,7 @@ public:
     virtual bool stop();
 
     static bool loadProfiles();
-    static void executeProcess(const std::string & process, const std::string & arguments);
+    static void executeProcess(const QString & process, const QString & arguments);
     static void log(const QString & filePath, const QString & text);
 
 public:

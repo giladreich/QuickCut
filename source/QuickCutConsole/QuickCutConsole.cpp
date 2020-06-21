@@ -39,7 +39,7 @@ bool QuickCutConsole::loadProfiles()
     if (!s_ProfileManager.load())
     {
         qDebug() << "[QuickCutConsole::loadProfiles] - Failed to load "
-                 << QString::fromStdString(s_ProfileManager.getConfigFilePath()) << " file.";
+                 << s_ProfileManager.getConfigFilePath() << " file.";
         return false;
     }
 
@@ -48,20 +48,19 @@ bool QuickCutConsole::loadProfiles()
     return true;
 }
 
-void QuickCutConsole::executeProcess(const std::string & process,
-                                     const std::string & arguments)
+void QuickCutConsole::executeProcess(const QString & process, const QString & arguments)
 {
     // QProc won't expand environment variable strings.
     // Invoking using the user console will allow for expanded string to work as expected.
 #if defined(Q_OS_WIN)
-    QString command   = "cmd /c start \"\" \"" + QString::fromStdString(process) + "\"";
+    QString command   = "cmd /c start \"\" \"" + process + "\"";
     QString extension = ".cmd";
 #elif defined(Q_OS_UNIX)
-    QString command   = "sh -c '" + QString::fromStdString(process) + "'";
+    QString command   = "sh -c '" + process + "'";
     QString extension = ".sh";
 #endif
 
-    QStringList argsTmp = QString::fromStdString(arguments).trimmed().split(",");
+    QStringList argsTmp = arguments.trimmed().split(",");
     for (auto && arg : argsTmp)
     {
         QString argTrimmed = arg.trimmed();

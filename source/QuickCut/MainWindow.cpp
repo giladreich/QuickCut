@@ -233,17 +233,16 @@ void MainWindow::initProfiles()
     }
     else
     {
-        for (auto && profile : m_Profiles)
-            ui->cbxProfile->addItem(QString::fromStdString(profile->getName()));
+        for (auto && profile : m_Profiles) ui->cbxProfile->addItem(profile->getName());
 
         Profile * profile = m_Profiles.getActiveProfile();
         if (profile)
         {
-            ui->cbxProfile->setCurrentText(QString::fromStdString(profile->getName()));
+            ui->cbxProfile->setCurrentText(profile->getName());
             if (!profile->getActionManager().empty())
             {
                 for (auto && action : profile->getActionManager())
-                    ui->lbxActions->addItem(QString::fromStdString(action->getName()));
+                    ui->lbxActions->addItem(action->getName());
                 onActionSelChange(0);
             }
             else
@@ -296,7 +295,7 @@ void MainWindow::onProfileSelChange(int index)
     disconnect(ui->lbxActions, &QListWidget::currentRowChanged, this,
                &MainWindow::onActionSelChange);
     for (auto && action : profile->getActionManager())
-        ui->lbxActions->addItem(QString::fromStdString(action->getName()));
+        ui->lbxActions->addItem(action->getName());
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
             &MainWindow::onActionSelChange);
 
@@ -343,7 +342,7 @@ Profile * MainWindow::onBtnCreateProfile()
 
     if (!ok && profileName.isEmpty()) return nullptr;
 
-    Profile * profile = m_Profiles.getByName(profileName.toStdString());
+    Profile * profile = m_Profiles.getByName(profileName);
     if (profile)
     {
         QMessageBox::information(this, "Already Exists",
@@ -353,7 +352,7 @@ Profile * MainWindow::onBtnCreateProfile()
     }
 
     profile = new Profile();
-    profile->setName(profileName.toStdString());
+    profile->setName(profileName);
     if (m_Profiles.empty()) profile->setActive(true);
     m_Profiles.add(profile);
     saveProfiles();
@@ -502,7 +501,7 @@ void MainWindow::onActionFileOpen()
 
     if (answer != QMessageBox::Yes) return;
 
-    QString dstFilePath = QString::fromStdString(m_Profiles.getConfigFilePath());
+    QString dstFilePath = m_Profiles.getConfigFilePath();
     if (!QFile::copy(srcFilePath, dstFilePath))
     {
         qDebug() << "[MainWindow::onActionFileOpen] - Failed to copy file from '"
@@ -523,7 +522,7 @@ void MainWindow::onActionFileSaveAs()
                                                        tr("Profiles File (*.json)"));
     if (dstFilePath.isEmpty()) return;
 
-    QString srcFilePath = QString::fromStdString(m_Profiles.getConfigFilePath());
+    QString srcFilePath = m_Profiles.getConfigFilePath();
     if (!QFile::copy(srcFilePath, dstFilePath))
     {
         qDebug() << "[MainWindow::onActionFileSaveAs] - Failed to copy file from '"

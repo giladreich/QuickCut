@@ -12,40 +12,38 @@ BaseModel::BaseModel() noexcept
 {
 }
 
-BaseModel::BaseModel(std::string && id,
-                     std::string && name,
-                     std::string && lastModified) noexcept
+BaseModel::BaseModel(QString && id, QString && name, QString && lastModified) noexcept
     : m_Uuid(std::move(id))
     , m_Name(std::move(name))
     , m_LastModified(std::move(lastModified))
 {
 }
 
-BaseModel::BaseModel(const std::string & id,
-                     const std::string & name,
-                     const std::string & lastModified) noexcept
+BaseModel::BaseModel(const QString & id,
+                     const QString & name,
+                     const QString & lastModified) noexcept
     : m_Uuid(id)
     , m_Name(name)
     , m_LastModified(lastModified)
 {
 }
 
-const std::string & BaseModel::getId() const
+const QString & BaseModel::getId() const
 {
     return m_Uuid;
 }
 
-const std::string & BaseModel::getName() const
+const QString & BaseModel::getName() const
 {
     return m_Name;
 }
 
-void BaseModel::setName(const std::string & name)
+void BaseModel::setName(const QString & name)
 {
     m_Name = name;
 }
 
-const std::string & BaseModel::getLastModified() const
+const QString & BaseModel::getLastModified() const
 {
     return m_LastModified;
 }

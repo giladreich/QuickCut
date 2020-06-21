@@ -48,9 +48,9 @@ void BaseManager<T>::setCapacity(int capacity)
 }
 
 template <typename T>
-T * BaseManager<T>::getById(const std::string & uuid) const
+T * BaseManager<T>::getById(const QString & uuid) const
 {
-    if (uuid.empty()) return nullptr;
+    if (uuid.isEmpty()) return nullptr;
 
     auto itr = std::find_if(m_vData.begin(), m_vData.end(),
                             [&uuid](auto item) { return item->getId() == uuid; });
@@ -60,9 +60,9 @@ T * BaseManager<T>::getById(const std::string & uuid) const
 }
 
 template <typename T>
-T * BaseManager<T>::getByName(const std::string & name) const
+T * BaseManager<T>::getByName(const QString & name) const
 {
-    if (name.empty()) return nullptr;
+    if (name.isEmpty()) return nullptr;
 
     auto itr = std::find_if(m_vData.begin(), m_vData.end(),
                             [&name](auto item) { return item->getName() == name; });

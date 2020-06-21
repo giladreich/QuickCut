@@ -13,15 +13,15 @@ public:
     Profile() noexcept;
 
     // Constructs existing profile
-    Profile(const std::string & id,
-            const std::string & name,
-            const std::string & lastModified,
-            bool                active = false) noexcept;
+    Profile(const QString & id,
+            const QString & name,
+            const QString & lastModified,
+            bool            active = false) noexcept;
 
-    Profile(std::string && id,
-            std::string && name,
-            std::string && lastModified,
-            bool           active = false) noexcept;
+    Profile(QString && id,
+            QString && name,
+            QString && lastModified,
+            bool       active = false) noexcept;
 
     // Constructs copy
     Profile(const Profile & profile) = default;

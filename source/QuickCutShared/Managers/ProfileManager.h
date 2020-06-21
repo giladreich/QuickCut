@@ -9,15 +9,15 @@ class ProfileManager : public BaseManager<Profile>, IParserOperations
 {
 public:
     ProfileManager() noexcept;
-    ProfileManager(const std::string & filePath) noexcept;
-    ProfileManager(std::string && filePath) noexcept;
+    ProfileManager(const QString & filePath) noexcept;
+    ProfileManager(QString && filePath) noexcept;
     ~ProfileManager();
 
     bool load() override;
     bool save() override;
 
-    bool                isLoadSucceed() override;
-    const std::string & getConfigFilePath() override;
+    bool            isLoadSucceed() override;
+    const QString & getConfigFilePath() override;
 
     Profile * getActiveProfile();
     void      setActiveProfile(int index);

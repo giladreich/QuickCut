@@ -9,14 +9,14 @@ ProfileManager::ProfileManager() noexcept
 {
 }
 
-ProfileManager::ProfileManager(const std::string & filePath) noexcept
+ProfileManager::ProfileManager(const QString & filePath) noexcept
     : BaseManager()
     , m_Parser(filePath)
     , m_LoadSucceed(false)
 {
 }
 
-ProfileManager::ProfileManager(std::string && filePath) noexcept
+ProfileManager::ProfileManager(QString && filePath) noexcept
     : BaseManager()
     , m_Parser(std::move(filePath))
     , m_LoadSucceed(false)
@@ -41,7 +41,7 @@ bool ProfileManager::isLoadSucceed()
     return m_LoadSucceed;
 }
 
-const std::string & ProfileManager::getConfigFilePath()
+const QString & ProfileManager::getConfigFilePath()
 {
     return m_Parser.getFilePath();
 }

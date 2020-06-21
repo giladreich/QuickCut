@@ -73,18 +73,18 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
         for (auto && action : s_Profile->getActionManager())
         {
-            if (pressedKeys.toStdString() == action->getSrcKey())
+            if (pressedKeys == action->getSrcKey())
             {
                 qDebug() << "Pressed Keys Match!: " << pressedKeys
-                         << " | Actual Keys: " << QString::fromStdString(action->getSrcKey());
+                         << " | Actual Keys: " << action->getSrcKey();
                 eActionType actionType = action->getType();
                 if (actionType == ActionKeyMap)
                 {
                     qDebug() << "Mapping key -> " << pressedKeys << " To -> "
-                             << QString::fromStdString(action->getDstKey());
+                             << action->getDstKey();
                     pressedKeys.clear(); // Make sure to clear keys before sending another key.
                     static int vkDstCode = 0;
-                    vkDstCode = std::strtol(action->getDstKey().c_str(), nullptr, 16);
+                    vkDstCode = std::strtol(qPrintable(action->getDstKey()), nullptr, 16);
 
                     INPUT in  = {0};
                     in.type   = INPUT_KEYBOARD;
@@ -95,9 +95,8 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
                 }
                 else if (actionType == ActionAppStart)
                 {
-                    qDebug() << "Running process -> "
-                             << QString::fromStdString(action->getAppPath()) << " With key -> "
-                             << pressedKeys;
+                    qDebug() << "Running process -> " << action->getAppPath()
+                             << " With key -> " << pressedKeys;
                     executeProcess(action->getAppPath(), action->getAppArgs());
                 }
             }
@@ -133,8 +132,8 @@ void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * kbd, const QString &
     GetKeyNameText(kbdMsg, reinterpret_cast<LPTSTR>(keyName), sizeof(keyName));
     sprintf_s(keyName, "ScanCode: %d | VirtualKey: 0x%02X | KeyName: %s | Current Keys: %s",
               kbd->scanCode, kbd->vkCode,
-              QString::fromUtf16(reinterpret_cast<ushort *>(keyName)).toStdString().c_str(),
-              pressedKeys.toStdString().c_str());
+              qPrintable(QString::fromUtf16(reinterpret_cast<ushort *>(keyName))),
+              qPrintable(pressedKeys));
     qDebug() << keyName;
 }
 
