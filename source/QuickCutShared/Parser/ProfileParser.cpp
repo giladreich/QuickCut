@@ -23,7 +23,7 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
     }
 
     std::string activeProfileId = m_Content.get<std::string>("activeProfile", "");
-    int         profileCount      = m_Content.get<int>("profileCount", 0);
+    int         profileCount    = m_Content.get<int>("profileCount", 0);
     outData->reserve(profileCount);
 
     JSON profilesJson = m_Content.get_child("profiles");
@@ -34,9 +34,8 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
         std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
         int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
-        Profile * profile =
-            new Profile(std::move(profileId), std::move(profileName), std::move(lastModified),
-                        activeProfileId == profileId);
+        Profile * profile = new Profile(std::move(profileId), std::move(profileName),
+                                        std::move(lastModified), activeProfileId == profileId);
         profile->setActionsCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
@@ -53,8 +52,8 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
 
             profile->addAction(new Action(actionId, actionName, lastModified,
-                                           Action::getType(actionType), srcKey, dstKey,
-                                           appPath, appArgs, createdDate));
+                                          Action::getType(actionType), srcKey, dstKey, appPath,
+                                          appArgs, createdDate));
         }
 
         outData->emplace_back(profile);

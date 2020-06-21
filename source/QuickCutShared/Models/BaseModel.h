@@ -5,7 +5,7 @@
 
 class BaseModel
 {
-public:
+protected:
     BaseModel() noexcept;
 
     BaseModel(std::string && id, std::string && name, std::string && lastModified) noexcept;
@@ -16,6 +16,7 @@ public:
 
     virtual ~BaseModel() = default;
 
+public:
     const std::string & getId() const;
 
     const std::string & getName() const;

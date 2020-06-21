@@ -5,3 +5,9 @@
 
 namespace bpt = boost::property_tree;
 typedef bpt::ptree JSON;
+
+#if defined(_MSC_VER)
+#    define QCInterface struct __declspec(novtable)
+#else
+#    define QCInterface struct
+#endif

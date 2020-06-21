@@ -275,7 +275,7 @@ bool MainWindow::loadPreferences(const std::string & path, Preferences * outPref
     bpt::read_json(path, rootJson);
 
     int themeType = rootJson.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    outPreferences->setThemeType(static_cast<eThemeType>(themeType));
+    outPreferences->setThemeType(static_cast<ThemeType>(themeType));
     outPreferences->m_ViewToolBar   = rootJson.get<bool>("viewToolBar", true);
     outPreferences->m_ViewStatusBar = rootJson.get<bool>("viewStatusBar", true);
 
@@ -731,7 +731,7 @@ void MainWindow::onActionHelpCheckUpdates()
     m_CheckUpdatesWindow->exec();
 }
 
-void MainWindow::onActionLoadTheme(eThemeType eType, QAction * action /*= nullptr*/)
+void MainWindow::onActionLoadTheme(ThemeType eType, QAction * action /*= nullptr*/)
 {
     onActionLoadTheme(Preferences::getThemeFilePath(eType), action);
     m_Preferences.setThemeType(eType);

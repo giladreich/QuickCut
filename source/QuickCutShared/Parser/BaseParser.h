@@ -6,19 +6,19 @@
 template <typename T>
 class BaseParser
 {
-public:
+protected:
     BaseParser(const std::string & path);
     BaseParser(std::string && path);
     virtual ~BaseParser();
 
+    virtual bool parseImpl(T * outData)   = 0;
+    virtual bool saveImpl(const T & data) = 0;
+
+public:
     bool parse(T * outData);
     bool save(const T & data);
 
     const std::string & getFilePath();
-
-protected:
-    virtual bool parseImpl(T * outData)   = 0;
-    virtual bool saveImpl(const T & data) = 0;
 
 protected:
     JSON        m_Content;

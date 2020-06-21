@@ -15,7 +15,7 @@ PreferenceParser::PreferenceParser(std::string && path)
 bool PreferenceParser::parseImpl(Preferences * outData)
 {
     int iTheme = m_Content.get<int>("uiThemeType", static_cast<int>(ThemeUbuntu));
-    outData->setThemeType(static_cast<eThemeType>(iTheme));
+    outData->setThemeType(static_cast<ThemeType>(iTheme));
     outData->m_ViewToolBar   = m_Content.get<bool>("viewToolBar", true);
     outData->m_ViewStatusBar = m_Content.get<bool>("viewStatusBar", true);
 

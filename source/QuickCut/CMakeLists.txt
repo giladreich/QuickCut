@@ -53,6 +53,7 @@ set(CXX_FILES
     ${WIDGETS_CXX_FILES}
     # Shared sources:
     ${SHARED_CXX_FILES}
+    ${QUICKCUT_MANAGERS_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
     ${QUICKCUT_PARSER_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
@@ -123,6 +124,9 @@ source_group("Source Files\\Misc" FILES
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Managers" FILES
+    ${QUICKCUT_MANAGERS_CXX_FILES}
+)
 source_group("Source Files\\Shared\\Models" FILES
     ${QUICKCUT_MODELS_CXX_FILES}
 )
@@ -132,14 +136,14 @@ source_group("Source Files\\Shared\\Parser" FILES
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
+)
 source_group("Source Files\\Widgets" FILES
     ${WIDGETS_CXX_FILES}
 )
 source_group("Source Files\\Windows" FILES
     ${UI_CXX_FILES}
-)
-source_group("Source Files\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("${RESOURCE_DIR}" FILES
     ${BIN_INFO_RC}

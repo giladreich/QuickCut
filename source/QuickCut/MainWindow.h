@@ -5,7 +5,7 @@
 #include "ui_MainWindow.h"
 
 #include "Models/Profile.h"
-#include "Preferences.h"
+#include "Models/Preferences.h"
 
 class ExamplesWindow;
 class CheckUpdatesWindow;
@@ -78,7 +78,7 @@ public slots:
     void onActionHelpExamples();
     void onActionHelpCheckUpdates();
 
-    void onActionLoadTheme(eThemeType type, QAction * action = nullptr);
+    void onActionLoadTheme(ThemeType type, QAction * action = nullptr);
     void onActionLoadTheme(const QString & qssPath, QAction * action = nullptr);
     void onLoadCustomStylesheet();
 
@@ -90,9 +90,9 @@ private:
     CheckUpdatesWindow * m_CheckUpdatesWindow;
     ExamplesWindow *     m_ExamplesWindow;
 
-    QMap<eThemeType, QAction *> m_ThemeActions;
-    QList<Profile *>            m_Profiles;
-    QString                     m_ProfilesPath;
-    QString                     m_ActiveProfile;
-    Preferences                 m_Preferences;
+    QMap<ThemeType, QAction *> m_ThemeActions;
+    QList<Profile *>           m_Profiles;
+    QString                    m_ProfilesPath;
+    QString                    m_ActiveProfile;
+    Preferences                m_Preferences;
 };
