@@ -17,65 +17,65 @@ public:
     Action() noexcept;
 
     // Constructs new Action
-    Action(const std::string & name,
+    Action(const QString &     name,
            const eActionType & type,
-           const std::string & srcKey,
-           const std::string & dstKey,
-           const std::string & appPath,
-           const std::string & appArgs) noexcept;
+           const QString &     srcKey,
+           const QString &     dstKey,
+           const QString &     appPath,
+           const QString &     appArgs) noexcept;
 
-    Action(std::string && name,
+    Action(QString &&     name,
            eActionType && type,
-           std::string && srcKey,
-           std::string && dstKey,
-           std::string && appPath,
-           std::string && appArgs) noexcept;
+           QString &&     srcKey,
+           QString &&     dstKey,
+           QString &&     appPath,
+           QString &&     appArgs) noexcept;
 
     // Constructs existing Action
-    Action(const std::string & id,
-           const std::string & name,
-           const std::string & lastModified,
+    Action(const QString &     id,
+           const QString &     name,
+           const QString &     lastModified,
            const eActionType & type,
-           const std::string & srcKey,
-           const std::string & dstKey,
-           const std::string & appPath,
-           const std::string & appArgs,
-           const std::string & createdDate) noexcept;
+           const QString &     srcKey,
+           const QString &     dstKey,
+           const QString &     appPath,
+           const QString &     appArgs,
+           const QString &     createdDate) noexcept;
 
-    Action(std::string && id,
-           std::string && name,
-           std::string && lastModified,
+    Action(QString &&     id,
+           QString &&     name,
+           QString &&     lastModified,
            eActionType && type,
-           std::string && srcKey,
-           std::string && dstKey,
-           std::string && appPath,
-           std::string && appArgs,
-           std::string && createdDate) noexcept;
+           QString &&     srcKey,
+           QString &&     dstKey,
+           QString &&     appPath,
+           QString &&     appArgs,
+           QString &&     createdDate) noexcept;
 
     // Constructs copy
     Action(const Action & action) = default;
     Action(Action && action)      = default;
 
-    static std::string getType(eActionType type);
-    static eActionType getType(const std::string & type);
-    static std::string getKey(int key);
+    static QString     getType(eActionType type);
+    static eActionType getType(const QString & type);
+    static QString     getKey(int key);
 
     eActionType getType() const;
     void        setType(eActionType type);
 
-    std::string getSrcKey() const;
-    void        setSrcKey(const std::string & key);
+    QString getSrcKey() const;
+    void    setSrcKey(const QString & key);
 
-    std::string getDstKey() const;
-    void        setDstKey(const std::string & key);
+    QString getDstKey() const;
+    void    setDstKey(const QString & key);
 
-    const std::string & getAppPath() const;
-    void                setAppPath(const std::string & path);
+    const QString & getAppPath() const;
+    void            setAppPath(const QString & path);
 
-    const std::string & getAppArgs() const;
-    void                setAppArgs(const std::string & path);
+    const QString & getAppArgs() const;
+    void            setAppArgs(const QString & path);
 
-    const std::string & getCreatedDate() const;
+    const QString & getCreatedDate() const;
 
     void reset();
 
@@ -84,9 +84,9 @@ public:
 
 private:
     eActionType m_Type;
-    std::string m_SrcKey; // string with delimited ',' char. Could have multiple keys.
-    std::string m_DstKey;
-    std::string m_AppPath;
-    std::string m_AppArgs;
-    std::string m_CreatedDate;
+    QString     m_SrcKey; // string with delimited ',' char. Could have multiple keys.
+    QString     m_DstKey;
+    QString     m_AppPath;
+    QString     m_AppArgs;
+    QString     m_CreatedDate;
 };

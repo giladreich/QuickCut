@@ -16,8 +16,8 @@ public:
     void clear();
     void setCapacity(int capacity);
 
-    T * getById(const std::string & uuid) const;
-    T * getByName(const std::string & name) const;
+    T * getById(const QString & uuid) const;
+    T * getByName(const QString & name) const;
     T * getByIndex(int index) const;
 
     T *  create();

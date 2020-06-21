@@ -7,8 +7,8 @@
 class ProfileParser : public BaseParser<std::vector<Profile *>>
 {
 public:
-    ProfileParser(std::string && path);
-    ProfileParser(const std::string & path);
+    ProfileParser(QString && path);
+    ProfileParser(const QString & path);
     virtual ~ProfileParser();
 
 private:

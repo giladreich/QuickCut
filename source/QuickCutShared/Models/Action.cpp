@@ -14,12 +14,12 @@ Action::Action() noexcept
 {
 }
 
-Action::Action(const std::string & name,
+Action::Action(const QString &     name,
                const eActionType & type,
-               const std::string & srcKey,
-               const std::string & dstKey,
-               const std::string & appPath,
-               const std::string & appArgs) noexcept
+               const QString &     srcKey,
+               const QString &     dstKey,
+               const QString &     appPath,
+               const QString &     appArgs) noexcept
     : BaseModel(QuickCut::createUuid(), name, QuickCut::getDateTime())
     , m_Type(type)
     , m_SrcKey(srcKey)
@@ -30,12 +30,12 @@ Action::Action(const std::string & name,
 {
 }
 
-Action::Action(std::string && name,
+Action::Action(QString &&     name,
                eActionType && type,
-               std::string && srcKey,
-               std::string && dstKey,
-               std::string && appPath,
-               std::string && appArgs) noexcept
+               QString &&     srcKey,
+               QString &&     dstKey,
+               QString &&     appPath,
+               QString &&     appArgs) noexcept
     : BaseModel(std::move(QuickCut::createUuid()),
                 std::move(name),
                 std::move(QuickCut::getDateTime()))
@@ -48,15 +48,15 @@ Action::Action(std::string && name,
 {
 }
 
-Action::Action(const std::string & id,
-               const std::string & name,
-               const std::string & lastModified,
+Action::Action(const QString &     id,
+               const QString &     name,
+               const QString &     lastModified,
                const eActionType & type,
-               const std::string & srcKey,
-               const std::string & dstKey,
-               const std::string & appPath,
-               const std::string & appArgs,
-               const std::string & createdDate) noexcept
+               const QString &     srcKey,
+               const QString &     dstKey,
+               const QString &     appPath,
+               const QString &     appArgs,
+               const QString &     createdDate) noexcept
     : BaseModel(id, name, lastModified)
     , m_Type(type)
     , m_SrcKey(srcKey)
@@ -67,15 +67,15 @@ Action::Action(const std::string & id,
 {
 }
 
-Action::Action(std::string && id,
-               std::string && name,
-               std::string && lastModified,
+Action::Action(QString &&     id,
+               QString &&     name,
+               QString &&     lastModified,
                eActionType && type,
-               std::string && srcKey,
-               std::string && dstKey,
-               std::string && appPath,
-               std::string && appArgs,
-               std::string && createdDate) noexcept
+               QString &&     srcKey,
+               QString &&     dstKey,
+               QString &&     appPath,
+               QString &&     appArgs,
+               QString &&     createdDate) noexcept
     : BaseModel(std::move(id), std::move(name), std::move(lastModified))
     , m_Type(std::move(type))
     , m_SrcKey(std::move(srcKey))
@@ -86,7 +86,7 @@ Action::Action(std::string && id,
 {
 }
 
-std::string Action::getType(eActionType type)
+QString Action::getType(eActionType type)
 {
     switch (type)
     {
@@ -101,16 +101,16 @@ std::string Action::getType(eActionType type)
     }
 }
 
-eActionType Action::getType(const std::string & type)
+eActionType Action::getType(const QString & type)
 {
     if (type == "KeyMap") return eActionType::ActionKeyMap;
     if (type == "AppStart") return eActionType::ActionAppStart;
     return eActionType::ActionUnknown;
 }
 
-std::string Action::getKey(int key)
+QString Action::getKey(int key)
 {
-    return std::to_string(key);
+    return QString::number(key);
 }
 
 eActionType Action::getType() const
@@ -123,47 +123,47 @@ void Action::setType(eActionType type)
     m_Type = type;
 }
 
-std::string Action::getSrcKey() const
+QString Action::getSrcKey() const
 {
     return m_SrcKey;
 }
 
-void Action::setSrcKey(const std::string & key)
+void Action::setSrcKey(const QString & key)
 {
     m_SrcKey = key;
 }
 
-std::string Action::getDstKey() const
+QString Action::getDstKey() const
 {
     return m_DstKey;
 }
 
-void Action::setDstKey(const std::string & key)
+void Action::setDstKey(const QString & key)
 {
     m_DstKey = key;
 }
 
-const std::string & Action::getAppPath() const
+const QString & Action::getAppPath() const
 {
     return m_AppPath;
 }
 
-void Action::setAppPath(const std::string & path)
+void Action::setAppPath(const QString & path)
 {
     m_AppPath = path;
 }
 
-const std::string & Action::getAppArgs() const
+const QString & Action::getAppArgs() const
 {
     return m_AppArgs;
 }
 
-void Action::setAppArgs(const std::string & args)
+void Action::setAppArgs(const QString & args)
 {
     m_AppArgs = args;
 }
 
-const std::string & Action::getCreatedDate() const
+const QString & Action::getCreatedDate() const
 {
     return m_CreatedDate;
 }

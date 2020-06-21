@@ -7,8 +7,8 @@
 class PreferenceParser : public BaseParser<Preference>
 {
 public:
-    PreferenceParser(const std::string & path);
-    PreferenceParser(std::string && path);
+    PreferenceParser(const QString & path);
+    PreferenceParser(QString && path);
     virtual ~PreferenceParser() = default;
 
 private:

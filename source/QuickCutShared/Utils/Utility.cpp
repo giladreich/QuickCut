@@ -23,6 +23,18 @@ namespace boost
             file << result;
             file.close();
         }
+
+        QString get(JSON & ptree, const QString & path, const QString & defaultValue)
+        {
+            std::string result = ptree.get<std::string>(std::string(qPrintable(path)),
+                                                        std::string(qPrintable(defaultValue)));
+            return QString::fromStdString(result);
+        }
+
+        JSON & put(JSON & ptree, const QString & path, const QString & value)
+        {
+            return ptree.put(std::string(qPrintable(path)), std::string(qPrintable(value)));
+        }
     } // namespace property_tree
 } // namespace boost
 
@@ -61,10 +73,10 @@ namespace Hook
 
 namespace QuickCut
 {
-    std::string getDateTime()
+    QString getDateTime()
     {
-        return QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate).toStdString();
+        return QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate);
     }
 
-    std::string createUuid() { return QUuid::createUuid().toString().toStdString(); }
+    QString createUuid() { return QUuid::createUuid().toString(); }
 } // namespace QuickCut

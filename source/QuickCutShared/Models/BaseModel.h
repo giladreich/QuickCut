@@ -8,24 +8,22 @@ class BaseModel
 protected:
     BaseModel() noexcept;
 
-    BaseModel(std::string && id, std::string && name, std::string && lastModified) noexcept;
+    BaseModel(QString && id, QString && name, QString && lastModified) noexcept;
 
-    BaseModel(const std::string & id,
-              const std::string & name,
-              const std::string & lastModified) noexcept;
+    BaseModel(const QString & id, const QString & name, const QString & lastModified) noexcept;
 
     virtual ~BaseModel() = default;
 
 public:
-    const std::string & getId() const;
+    const QString & getId() const;
 
-    const std::string & getName() const;
-    void                setName(const std::string & name);
+    const QString & getName() const;
+    void            setName(const QString & name);
 
-    const std::string & getLastModified() const;
+    const QString & getLastModified() const;
 
 protected:
-    std::string m_Uuid;
-    std::string m_Name;
-    std::string m_LastModified;
+    QString m_Uuid;
+    QString m_Name;
+    QString m_LastModified;
 };

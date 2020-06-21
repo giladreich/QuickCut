@@ -47,18 +47,18 @@ void ActionEditWindow::fillActionTypes()
 
 void ActionEditWindow::fillEntries()
 {
-    ui->tbxName->setText(QString::fromStdString(m_Action->getName()));
+    ui->tbxName->setText(m_Action->getName());
 
     int typeIndex = static_cast<int>(m_Action->getType());
     ui->cbxType->setCurrentIndex(typeIndex);
     onTypeSelChange(typeIndex);
 
-    // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_Action->getSrcKey())));
-    // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(QString::fromStdString(m_Action->getDstKey())));
-    ui->tbxSrcKey->setText(QString::fromStdString(m_Action->getSrcKey()));
-    ui->tbxDstKey->setText(QString::fromStdString(m_Action->getDstKey()));
-    ui->tbxAppPath->setText(QString::fromStdString(m_Action->getAppPath()));
-    ui->tbxAppArgs->setText(QString::fromStdString(m_Action->getAppArgs()));
+    // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(m_Action->getSrcKey()));
+    // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKey()));
+    ui->tbxSrcKey->setText(m_Action->getSrcKey());
+    ui->tbxDstKey->setText(m_Action->getDstKey());
+    ui->tbxAppPath->setText(m_Action->getAppPath());
+    ui->tbxAppArgs->setText(m_Action->getAppArgs());
 }
 
 void ActionEditWindow::connectSlots()
@@ -167,17 +167,17 @@ void ActionEditWindow::onBtnSave()
 
     eActionType type = static_cast<eActionType>(ui->cbxType->currentIndex());
 
-    m_Action->setName(ui->tbxName->text().toStdString());
+    m_Action->setName(ui->tbxName->text());
     m_Action->setType(type);
-    m_Action->setSrcKey(ui->tbxSrcKey->text().toStdString());
-    // m_Action->setSrcKey(ui->tbxSrcKey->keySequence().toString().toStdString());
+    m_Action->setSrcKey(ui->tbxSrcKey->text());
+    // m_Action->setSrcKey(ui->tbxSrcKey->keySequence().toString());
     // if (type == ActionKeyMap) {
-    // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString().toStdString()); }
-    if (type == ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text().toStdString()); }
+    // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString()); }
+    if (type == ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text()); }
     else if (type == ActionAppStart)
     {
-        m_Action->setAppPath(ui->tbxAppPath->text().toStdString());
-        m_Action->setAppArgs(ui->tbxAppArgs->text().toStdString());
+        m_Action->setAppPath(ui->tbxAppPath->text());
+        m_Action->setAppArgs(ui->tbxAppArgs->text());
     }
 
     if (m_EditMode == ActionCreate)

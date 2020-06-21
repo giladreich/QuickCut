@@ -2,12 +2,12 @@
 #include "pch.h"
 #include "ProfileParser.h"
 
-ProfileParser::ProfileParser(std::string && path)
+ProfileParser::ProfileParser(QString && path)
     : BaseParser(std::move(path))
 {
 }
 
-ProfileParser::ProfileParser(const std::string & path)
+ProfileParser::ProfileParser(const QString & path)
     : BaseParser(path)
 {
 }
@@ -22,17 +22,17 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
         outData->clear();
     }
 
-    std::string activeProfileId = m_Content.get<std::string>("activeProfile", "");
-    int         profileCount    = m_Content.get<int>("profileCount", 0);
+    QString activeProfileId = bpt::get(m_Content, "activeProfile", "");
+    int     profileCount    = m_Content.get<int>("profileCount", 0);
     outData->reserve(profileCount);
 
     JSON profilesJson = m_Content.get_child("profiles");
     for (auto && profileJson : profilesJson)
     {
-        std::string profileId    = profileJson.second.get<std::string>("id", "");
-        std::string profileName  = profileJson.second.get<std::string>("name", "");
-        std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
-        int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
+        QString profileId    = bpt::get(profileJson.second, "id", "");
+        QString profileName  = bpt::get(profileJson.second, "name", "");
+        QString lastModified = bpt::get(profileJson.second, "lastModified", "");
+        int     actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         Profile * profile = new Profile(std::move(profileId), std::move(profileName),
                                         std::move(lastModified), activeProfileId == profileId);
@@ -41,15 +41,15 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            std::string actionId     = actionJson.second.get<std::string>("id", "");
-            std::string actionName   = actionJson.second.get<std::string>("actionName", "");
-            std::string actionType   = actionJson.second.get<std::string>("type", "");
-            std::string srcKey       = actionJson.second.get<std::string>("srcKey", "");
-            std::string dstKey       = actionJson.second.get<std::string>("dstKey", "");
-            std::string appPath      = actionJson.second.get<std::string>("appPath", "");
-            std::string appArgs      = actionJson.second.get<std::string>("appArgs", "");
-            std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
-            std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
+            QString actionId     = bpt::get(actionJson.second, "id", "");
+            QString actionName   = bpt::get(actionJson.second, "actionName", "");
+            QString actionType   = bpt::get(actionJson.second, "type", "");
+            QString srcKey       = bpt::get(actionJson.second, "srcKey", "");
+            QString dstKey       = bpt::get(actionJson.second, "dstKey", "");
+            QString appPath      = bpt::get(actionJson.second, "appPath", "");
+            QString appArgs      = bpt::get(actionJson.second, "appArgs", "");
+            QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
+            QString lastModified = bpt::get(actionJson.second, "lastModified", "");
 
             profile->getActionManager().add(new Action(actionId, actionName, lastModified,
                                                        Action::getType(actionType), srcKey,
@@ -64,37 +64,37 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
 
 bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
 {
-    std::string activeProfileId = "";
-    auto profileItr = std::find_if(data.begin(), data.end(), [&](const Profile * profile) {
+    QString activeProfileId = "";
+    auto    profileItr = std::find_if(data.begin(), data.end(), [&](const Profile * profile) {
         return profile->isActive();
     });
     if (profileItr != data.end()) activeProfileId = (*profileItr)->getId();
 
-    m_Content.put("activeProfile", activeProfileId);
+    bpt::put(m_Content, "activeProfile", activeProfileId);
     m_Content.put("profileCount", data.size());
 
     JSON profilesJson;
     for (auto && profile : data)
     {
         JSON profileJson;
-        profileJson.put("id", profile->getId());
-        profileJson.put("name", profile->getName());
-        profileJson.put("lastModified", profile->getLastModified());
+        bpt::put(profileJson, "id", profile->getId());
+        bpt::put(profileJson, "name", profile->getName());
+        bpt::put(profileJson, "lastModified", profile->getLastModified());
         profileJson.put("actionsCount", profile->getActionManager().count());
 
         JSON actionsJson;
         for (auto && action : profile->getActionManager())
         {
             JSON actionJson;
-            actionJson.put("id", action->getId());
-            actionJson.put("actionName", action->getName());
-            actionJson.put("type", Action::getType(action->getType()));
-            actionJson.put("srcKey", action->getSrcKey());
-            actionJson.put("dstKey", action->getDstKey());
-            actionJson.put("appPath", action->getAppPath());
-            actionJson.put("appArgs", action->getAppArgs());
-            actionJson.put("createdDate", action->getCreatedDate());
-            actionJson.put("lastModified", action->getLastModified());
+            bpt::put(actionJson, "id", action->getId());
+            bpt::put(actionJson, "actionName", action->getName());
+            bpt::put(actionJson, "type", Action::getType(action->getType()));
+            bpt::put(actionJson, "srcKey", action->getSrcKey());
+            bpt::put(actionJson, "dstKey", action->getDstKey());
+            bpt::put(actionJson, "appPath", action->getAppPath());
+            bpt::put(actionJson, "appArgs", action->getAppArgs());
+            bpt::put(actionJson, "createdDate", action->getCreatedDate());
+            bpt::put(actionJson, "lastModified", action->getLastModified());
 
             actionsJson.push_back(std::make_pair("", actionJson));
         }

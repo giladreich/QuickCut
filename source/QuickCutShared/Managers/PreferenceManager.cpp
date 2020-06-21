@@ -8,13 +8,13 @@ PreferenceManager::PreferenceManager() noexcept
 {
 }
 
-PreferenceManager::PreferenceManager(const std::string & filePath) noexcept
+PreferenceManager::PreferenceManager(const QString & filePath) noexcept
     : m_Parser(filePath)
     , m_LoadSucceed(false)
 {
 }
 
-PreferenceManager::PreferenceManager(std::string && filePath) noexcept
+PreferenceManager::PreferenceManager(QString && filePath) noexcept
     : m_Parser(std::move(filePath))
     , m_LoadSucceed(false)
 {
@@ -38,7 +38,7 @@ bool PreferenceManager::isLoadSucceed()
     return m_LoadSucceed;
 }
 
-const std::string & PreferenceManager::getConfigFilePath()
+const QString & PreferenceManager::getConfigFilePath()
 {
     return m_Parser.getFilePath();
 }
