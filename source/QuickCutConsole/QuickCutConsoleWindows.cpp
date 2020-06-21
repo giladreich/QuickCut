@@ -69,7 +69,7 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
         if (!s_Profile) { return CallNextHookEx(s_Hook, nCode, wParam, lParam); }
 
-        for (auto && action : s_Profile->getActions())
+        for (auto && action : s_Profile->getActionManager())
         {
             if (pressedKeys.toStdString() == action->getSrcKey())
             {

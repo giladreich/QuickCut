@@ -256,7 +256,7 @@ void MainWindow::initProfiles()
             if (activeProfile != profile->getId()) continue; // Not active profile
 
             ui->lbxActions->clear();
-            for (auto && action : profile->getActions())
+            for (auto && action : profile->getActionManager())
                 ui->lbxActions->addItem(QString::fromStdString(action->getName()));
 
             ui->cbxProfile->setCurrentText(profileName);
@@ -326,7 +326,7 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
         int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         Profile * profile = new Profile(profileId, profileName, lastModified);
-        profile->setActionsCapacity(actionsCount);
+        profile->getActionManager().setCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
@@ -341,9 +341,9 @@ bool MainWindow::loadProfiles(const std::string & profilesPath, std::string * ac
             std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
             std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
 
-            profile->addAction(new Action(actionId, actionName, lastModified,
-                                          Action::getType(actionType), srcKey, dstKey, appPath,
-                                          appArgs, createdDate));
+            profile->getActionManager().add(new Action(actionId, actionName, lastModified,
+                                                       Action::getType(actionType), srcKey,
+                                                       dstKey, appPath, appArgs, createdDate));
         }
 
         m_Profiles.push_back(profile);
@@ -392,10 +392,10 @@ bool MainWindow::saveProfiles(const std::string & profilesPath,
         profileJson.put("id", profile->getId());
         profileJson.put("name", profile->getName());
         profileJson.put("lastModified", profile->getLastModified());
-        profileJson.put("actionsCount", profile->getActionsCount());
+        profileJson.put("actionsCount", profile->getActionManager().count());
 
         JSON actionsJson;
-        for (auto && action : profile->getActions())
+        for (auto && action : profile->getActionManager())
         {
             JSON actionJson;
             actionJson.put("id", action->getId());
@@ -460,12 +460,12 @@ void MainWindow::onProfileSelChange(int index)
     disconnect(ui->lbxActions, &QListWidget::currentRowChanged, this,
                &MainWindow::onActionSelChange);
     ui->lbxActions->clear();
-    for (auto && action : profile->getActions())
+    for (auto && action : profile->getActionManager())
         ui->lbxActions->addItem(QString::fromStdString(action->getName()));
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
             &MainWindow::onActionSelChange);
 
-    if (!profile->getActionsCount())
+    if (!profile->getActionManager().count())
         onActionSelChange(-1);
     else
         ui->lbxActions->setCurrentRow(0);
@@ -528,7 +528,7 @@ void MainWindow::onActionSelChange(int index)
 void MainWindow::onActionDoubleClicked(const QModelIndex & index)
 {
     Profile * profile  = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action   = profile->getActionByIndex(index.row());
+    Action *  action   = profile->getActionManager().getByIndex(index.row());
     m_ActionEditWindow = new ActionEditWindow(this, action);
     connect(m_ActionEditWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
     m_ActionEditWindow->exec();
@@ -546,7 +546,7 @@ void MainWindow::onBtnActionDelete()
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->deleteActionByIndex(currIndex);
+    profile->getActionManager().remove(currIndex);
 
     saveProfiles();
     reloadProfiles();
@@ -558,13 +558,13 @@ void MainWindow::onBtnActionDuplicate()
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action    = profile->getActionByIndex(currIndex);
+    Action *  action    = profile->getActionManager().getByIndex(currIndex);
 
     Action * newAction =
         new Action(action->getName(), action->getType(), action->getSrcKey(),
                    action->getDstKey(), action->getAppPath(), action->getAppArgs());
 
-    profile->insertAction(currIndex, newAction);
+    profile->getActionManager().insert(currIndex, newAction);
 
     saveProfiles();
     reloadProfiles();
@@ -574,7 +574,7 @@ void MainWindow::onBtnActionDuplicate()
 void MainWindow::onBtnActionMoveDown()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->moveActionDown(ui->lbxActions->currentRow());
+    profile->getActionManager().moveDown(ui->lbxActions->currentRow());
 
     listItemSwap(ui->lbxActions, false);
     saveProfiles();
@@ -583,7 +583,7 @@ void MainWindow::onBtnActionMoveDown()
 void MainWindow::onBtnActionMoveUp()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->moveActionUp(ui->lbxActions->currentRow());
+    profile->getActionManager().moveUp(ui->lbxActions->currentRow());
 
     listItemSwap(ui->lbxActions, true);
     saveProfiles();
@@ -626,7 +626,7 @@ void MainWindow::onActionCreated(Action * action)
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->addAction(action);
+    profile->getActionManager().add(action);
     saveProfiles();
     reloadProfiles();
     ui->lbxActions->setCurrentRow(currIndex == -1 ? 0 : currIndex + 1);

@@ -58,7 +58,7 @@ bool QuickCutConsole::loadProfiles()
         int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
         s_Profile = std::make_unique<Profile>(profileId, profileName, lastModified);
-        s_Profile->setActionsCapacity(actionsCount);
+        s_Profile->getActionManager().setCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
@@ -73,9 +73,9 @@ bool QuickCutConsole::loadProfiles()
             std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
             std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
 
-            s_Profile->addAction(new Action(actionId, actionName, lastModified,
-                                            Action::getType(actionType), srcKey, dstKey,
-                                            appPath, appArgs, createdDate));
+            s_Profile->getActionManager().add(
+                new Action(actionId, actionName, lastModified, Action::getType(actionType),
+                           srcKey, dstKey, appPath, appArgs, createdDate));
         }
 
         break;
