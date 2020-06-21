@@ -4,7 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MainWindow.h"
 
-#include "Models/Profile.h"
+#include "Managers/ProfileManager.h"
 #include "Managers/PreferenceManager.h"
 
 class ExamplesWindow;
@@ -22,28 +22,22 @@ public:
 
     void connectSlots();
 
-    void activateHook();
     void initPreference();
     void initProfiles();
+    void activateHook();
 
-    // TODO: Implement parser and move all of these.
-    bool loadProfiles(const std::string & profilesPath, std::string * activeProfileOut);
-    bool loadProfiles(const QString & profilesPath, QString * activeProfileOut);
-    bool loadProfiles(const QString & profilesPath, std::string * activeProfileOut);
+    bool loadProfiles();
     bool reloadProfiles();
-    bool saveProfiles(const std::string & profilesPath, const std::string & activeProfileId);
-    bool saveProfiles(const QString & profilesPath, const QString & activeProfileId);
     bool saveProfiles();
 
-    bool isActiveProfile(Profile * profile);
     void showEvent(QShowEvent * event) override;
 
 public slots:
 
-    void onProfileSelChange(int index);
-    void onBtnSetActiveProfile();
-    void onBtnDeleteProfile();
-    void onBtnCreateProfile();
+    void      onProfileSelChange(int index);
+    void      onBtnSetActiveProfile();
+    void      onBtnDeleteProfile();
+    Profile * onBtnCreateProfile();
 
     void onActionSelChange(int index);
     void onActionDoubleClicked(const QModelIndex & index);
@@ -86,8 +80,7 @@ private:
     ExamplesWindow *     m_ExamplesWindow;
 
     QMap<ThemeType, QAction *> m_ThemeActions;
-    QList<Profile *>           m_Profiles;
-    QString                    m_ProfilesPath;
-    QString                    m_ActiveProfile;
-    PreferenceManager          m_Preference;
+
+    ProfileManager    m_Profiles;
+    PreferenceManager m_Preference;
 };

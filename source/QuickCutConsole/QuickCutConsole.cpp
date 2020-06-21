@@ -1,13 +1,12 @@
 
 #include "pch.h"
 #include "QuickCutConsole.h"
-#include "Types.h"
-#include "Models/Profile.h"
+#include "Managers/ProfileManager.h"
 
 QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
 
-std::unique_ptr<Profile> QuickCutConsole::s_Profile = nullptr;
-std::string              QuickCutConsole::s_ProfilesPath;
+Profile *      QuickCutConsole::s_Profile = nullptr;
+ProfileManager QuickCutConsole::s_ProfileManager;
 
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
@@ -15,7 +14,11 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     if (!s_Instance) s_Instance = this;
 }
 
-QuickCutConsole::~QuickCutConsole() {}
+QuickCutConsole::~QuickCutConsole()
+{
+    s_Profile = nullptr;
+    s_ProfileManager.clear();
+}
 
 bool QuickCutConsole::start()
 {
@@ -33,53 +36,14 @@ bool QuickCutConsole::stop()
 
 bool QuickCutConsole::loadProfiles()
 {
-    QFileInfo fi(applicationDirPath() + "/Config/profiles.json");
-    if (!fi.exists())
+    if (!s_ProfileManager.load())
     {
-        qDebug() << "[QuickCutConsole::loadProfiles] - Profiles file not found: "
-                 << fi.filePath();
+        qDebug() << "[QuickCutConsole::loadProfiles] - Failed to load "
+                 << QString::fromStdString(s_ProfileManager.getConfigFilePath()) << " file.";
         return false;
     }
 
-    s_ProfilesPath = fi.filePath().toStdString();
-
-    JSON rootJson;
-    bpt::read_json(s_ProfilesPath, rootJson);
-    std::string szActiveProfile = rootJson.get<std::string>("activeProfile", "");
-
-    JSON profilesJson = rootJson.get_child("profiles");
-    for (auto && profileJson : profilesJson)
-    {
-        std::string profileId = profileJson.second.get<std::string>("id", "");
-        if (profileId != szActiveProfile) continue;
-
-        std::string profileName  = profileJson.second.get<std::string>("name", "");
-        std::string lastModified = profileJson.second.get<std::string>("lastModified", "");
-        int         actionsCount = profileJson.second.get<int>("actionsCount", 0);
-
-        s_Profile = std::make_unique<Profile>(profileId, profileName, lastModified);
-        s_Profile->getActionManager().setCapacity(actionsCount);
-
-        JSON actionsJson = profileJson.second.get_child("actions");
-        for (auto && actionJson : actionsJson)
-        {
-            std::string actionId     = actionJson.second.get<std::string>("id", "");
-            std::string actionName   = actionJson.second.get<std::string>("actionName", "");
-            std::string actionType   = actionJson.second.get<std::string>("type", "");
-            std::string srcKey       = actionJson.second.get<std::string>("srcKey", "");
-            std::string dstKey       = actionJson.second.get<std::string>("dstKey", "");
-            std::string appPath      = actionJson.second.get<std::string>("appPath", "");
-            std::string appArgs      = actionJson.second.get<std::string>("appArgs", "");
-            std::string createdDate  = actionJson.second.get<std::string>("createdDate", "");
-            std::string lastModified = actionJson.second.get<std::string>("lastModified", "");
-
-            s_Profile->getActionManager().add(
-                new Action(actionId, actionName, lastModified, Action::getType(actionType),
-                           srcKey, dstKey, appPath, appArgs, createdDate));
-        }
-
-        break;
-    }
+    s_Profile = s_ProfileManager.getActiveProfile();
 
     return true;
 }
@@ -110,13 +74,13 @@ void QuickCutConsole::executeProcess(const std::string & process,
     // Writing as script temporary to disk to avoid any white spaces issues
     // that QProcess doesn't handle very well...
     QString filePath = applicationDirPath() + "/tempCmd" + extension;
-    QFile   file(filePath);
-    file.open(QIODevice::ReadWrite);
-    QTextStream ts(&file);
+    QFile   scriptFile(filePath);
+    scriptFile.open(QIODevice::ReadWrite);
+    QTextStream ts(&scriptFile);
     ts << command;
-    file.close();
+    scriptFile.close();
     QProcess::execute(filePath, QStringList());
-    file.remove();
+    scriptFile.remove();
 }
 
 void QuickCutConsole::log(const QString & filePath, const QString & text)

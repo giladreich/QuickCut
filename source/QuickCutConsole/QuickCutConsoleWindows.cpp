@@ -1,7 +1,7 @@
 
 #include "pch.h"
 #include "QuickCutConsoleWindows.h"
-#include "Models/Profile.h"
+#include "Managers/ProfileManager.h"
 
 // The GUI will send this pattern of key codes to notify that profile changes has been made
 // so it knows when to reload the profile data.
@@ -54,16 +54,18 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
             keysAlreadyProcessed = false;
         }
 
-        pressedKeys += QString::number(kbd->vkCode, 16);
-        qDebug() << "Current Pressed Keys: " << pressedKeys;
-
         keys[kbd->vkCode] = KEY_WAS_DOWN_MASK | KEY_IS_DOWN_MASK;
-        printKeyName(kbd);
+
+        pressedKeys += QString::number(kbd->vkCode, 16);
+        printKeyName(kbd, pressedKeys);
 
         if (pressedKeys == RESERVED_RELOAD_KEY)
         {
             loadProfiles();
             qDebug() << "Refresh signal requested. Reloading profiles.";
+            pressedKeys.clear();
+            keysAlreadyProcessed = false;
+            prevVkCode           = 0;
             return CallNextHookEx(s_Hook, nCode, wParam, lParam);
         }
 
@@ -121,18 +123,19 @@ bool QuickCutConsoleWindows::isKeyDown(BYTE key)
     return ((key & KEY_IS_DOWN_MASK) == KEY_IS_DOWN_MASK);
 }
 
-void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * kbd)
+void QuickCutConsoleWindows::printKeyName(KBDLLHOOKSTRUCT * kbd, const QString & pressedKeys)
 {
-    char  keyName[256] = {0};
-    DWORD kbdMsg       = 1;
-    kbdMsg += kbd->scanCode << 16;
-    kbdMsg += kbd->flags << 24;
-    GetKeyNameText(kbdMsg, reinterpret_cast<LPTSTR>(keyName), sizeof(keyName));
+    DWORD kbdMsg = 1;
+    kbdMsg += kbd->scanCode << 16; // Scan code.
+    kbdMsg += kbd->flags << 24;    // Extended-key flag.
 
-    QString str;
-    str.asprintf("ScanCode: %d | VirtualKey: 0x%02X | KeyName: ", kbd->scanCode, kbd->vkCode);
-    str += QString::fromUtf16(reinterpret_cast<ushort *>(keyName));
-    qDebug() << str;
+    char keyName[256]{};
+    GetKeyNameText(kbdMsg, reinterpret_cast<LPTSTR>(keyName), sizeof(keyName));
+    sprintf_s(keyName, "ScanCode: %d | VirtualKey: 0x%02X | KeyName: %s | Current Keys: %s",
+              kbd->scanCode, kbd->vkCode,
+              QString::fromUtf16(reinterpret_cast<ushort *>(keyName)).toStdString().c_str(),
+              pressedKeys.toStdString().c_str());
+    qDebug() << keyName;
 }
 
 bool QuickCutConsoleWindows::start()
