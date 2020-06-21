@@ -36,6 +36,26 @@ QString Preferences::getThemeFilePath(ThemeType type)
     }
 }
 
+bool Preferences::isToolBarVisible() const
+{
+    return m_ViewToolBar;
+}
+
+void Preferences::setToolBarVisible(bool visible)
+{
+    m_ViewToolBar = visible;
+}
+
+bool Preferences::isStatusBarVisible() const
+{
+    return m_ViewStatusBar;
+}
+
+void Preferences::setStatusBarVisible(bool visible)
+{
+    m_ViewStatusBar = visible;
+}
+
 ThemeType Preferences::getThemeType() const
 {
     return m_ThemeType;
