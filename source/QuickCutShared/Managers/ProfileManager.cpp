@@ -27,13 +27,13 @@ ProfileManager::~ProfileManager() = default;
 
 bool ProfileManager::load()
 {
-    m_LoadSucceed = m_Parser.parse(&m_vData);
+    m_LoadSucceed = m_Parser.parse(&m_Data);
     return m_LoadSucceed;
 }
 
 bool ProfileManager::save()
 {
-    return m_Parser.save(m_vData);
+    return m_Parser.save(m_Data);
 }
 
 bool ProfileManager::isLoadSucceed()
@@ -48,9 +48,9 @@ const QString & ProfileManager::getConfigFilePath()
 
 Profile * ProfileManager::getActiveProfile()
 {
-    auto activeProfile = std::find_if(m_vData.begin(), m_vData.end(),
+    auto activeProfile = std::find_if(m_Data.begin(), m_Data.end(),
                                       [](auto profile) { return profile->isActive(); });
-    if (activeProfile == m_vData.end()) return nullptr;
+    if (activeProfile == m_Data.end()) return nullptr;
 
     return *activeProfile;
 }
@@ -59,10 +59,10 @@ void ProfileManager::setActiveProfile(int index)
 {
     if (index < 0 || index >= count()) return;
 
-    auto profile = m_vData[index];
+    auto profile = m_Data[index];
     if (!profile) return;
 
-    for (auto && profile : m_vData) profile->setActive(false);
+    for (auto && profile : m_Data) profile->setActive(false);
     profile->setActive(true);
 }
 
@@ -70,9 +70,9 @@ void ProfileManager::setActiveProfile(Profile * profile)
 {
     if (!profile) return;
 
-    auto itr = std::find(m_vData.begin(), m_vData.end(), profile);
-    if (itr == m_vData.end()) return;
+    auto itr = std::find(m_Data.begin(), m_Data.end(), profile);
+    if (itr == m_Data.end()) return;
 
-    for (auto && profile : m_vData) profile->setActive(false);
+    for (auto && profile : m_Data) profile->setActive(false);
     (*itr)->setActive(true);
 }

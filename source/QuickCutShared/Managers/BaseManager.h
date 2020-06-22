@@ -30,11 +30,11 @@ public:
     bool moveDown(int index);
 
     T *                                       operator[](int index);
-    typename std::vector<T *>::iterator       begin() { return m_vData.begin(); }
-    typename std::vector<T *>::const_iterator begin() const { return m_vData.cbegin(); }
-    typename std::vector<T *>::iterator       end() { return m_vData.end(); }
-    typename std::vector<T *>::const_iterator end() const { return m_vData.cend(); }
+    typename std::vector<T *>::iterator       begin() { return m_Data.begin(); }
+    typename std::vector<T *>::const_iterator begin() const { return m_Data.cbegin(); }
+    typename std::vector<T *>::iterator       end() { return m_Data.end(); }
+    typename std::vector<T *>::const_iterator end() const { return m_Data.cend(); }
 
 protected:
-    std::vector<T *> m_vData;
+    std::vector<T *> m_Data;
 };

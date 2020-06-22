@@ -7,7 +7,7 @@
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
-ActionEditWindow::ActionEditWindow(QWidget * parent, eEditMode editMode)
+ActionEditWindow::ActionEditWindow(QWidget * parent, EditMode editMode)
     : QDialog(parent)
     , ui(new Ui::ActionEditWindow())
     , m_EditMode(editMode)
@@ -75,7 +75,7 @@ void ActionEditWindow::connectSlots()
     connect(ui->btnSave, &QPushButton::clicked, this, &ActionEditWindow::onBtnSave);
 }
 
-eEditMode ActionEditWindow::getEditMode()
+EditMode ActionEditWindow::getEditMode()
 {
     return m_EditMode;
 }

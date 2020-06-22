@@ -7,7 +7,7 @@
 class Action;
 class QShortcutInput;
 
-enum eEditMode
+enum EditMode
 {
     ActionEdit   = 1,
     ActionCreate = 2
@@ -18,7 +18,7 @@ class ActionEditWindow : public QDialog
     Q_OBJECT
 
 private:
-    ActionEditWindow(QWidget * parent, eEditMode eEditMode);
+    ActionEditWindow(QWidget * parent, EditMode EditMode);
 
 public:
     ActionEditWindow(QWidget * parent);
@@ -29,7 +29,7 @@ public:
     void fillEntries();
     void connectSlots();
 
-    eEditMode getEditMode();
+    EditMode getEditMode();
 
 signals:
     void onSaved();
@@ -51,5 +51,5 @@ private:
 
     Action * m_Action;
 
-    eEditMode m_EditMode;
+    EditMode m_EditMode;
 };
