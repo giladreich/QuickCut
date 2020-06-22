@@ -17,11 +17,14 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QtNetwork>
+#include <QLocalSocket>
 #include <QTextStream>
 #include <QStandardPaths>
 
 // Project includes
 #include "Types.h"
+#include "Utils/Utility.h"
 
 // Other includes
 #if defined(Q_OS_WIN)

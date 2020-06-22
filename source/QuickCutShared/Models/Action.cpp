@@ -1,7 +1,6 @@
 
 #include "pch.h"
 #include "Action.h"
-#include "Utils/Utility.h"
 
 Action::Action() noexcept
     : BaseModel()

@@ -1,8 +1,6 @@
 ﻿
 #include "pch.h"
 #include "MainWindow.h"
-#include "Types.h"
-#include "Utils/Utility.h"
 
 #include <QThread>
 #include <QTimer>
@@ -27,8 +25,13 @@ MainWindow::MainWindow(QWidget * parent)
     , m_ExamplesWindow(nullptr)
     , m_Profiles("Config/profiles.json")
     , m_Preference("Config/preference.json")
+    , m_LocalSocket(new QLocalSocket(this))
+    , m_SocketBlockSize(0)
 {
     ui->setupUi(this);
+
+    m_SocketStreamIn.setDevice(m_LocalSocket);
+    m_SocketStreamIn.setVersion(QDataStream::Qt_5_15);
 
     initPreference();
     initProfiles();
@@ -45,6 +48,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectSlots()
 {
+    connect(m_LocalSocket, &QLocalSocket::readyRead, this,
+            &MainWindow::onReloadProfilesResponse);
+
     // File Menu
     connect(ui->actionFileOpen, &QAction::triggered, this, &MainWindow::onActionFileOpen);
     connect(ui->actionFileSave, &QAction::triggered, this, &MainWindow::onActionFileSave);
@@ -270,8 +276,32 @@ bool MainWindow::loadProfiles()
 bool MainWindow::saveProfiles()
 {
     bool result = m_Profiles.save();
-    if (result) Hook::sendReloadSignal();
+    if (result) sendReloadProfiles();
     return result;
+}
+
+bool MainWindow::sendReloadProfiles()
+{
+    m_SocketBlockSize = 0;
+    m_LocalSocket->abort();
+    m_LocalSocket->connectToServer(QUICKCUT_IPC);
+    return true;
+}
+
+void MainWindow::onReloadProfilesResponse()
+{
+    if (m_SocketBlockSize == 0)
+    {
+        if ((int)m_LocalSocket->bytesAvailable() < sizeof(int)) return;
+        m_SocketStreamIn >> m_SocketBlockSize;
+    }
+
+    if (m_LocalSocket->bytesAvailable() < m_SocketBlockSize || m_SocketStreamIn.atEnd())
+        return;
+
+    QString responseMessage;
+    m_SocketStreamIn >> responseMessage;
+    qDebug() << responseMessage;
 }
 
 void MainWindow::onProfileSelChange(int index)
@@ -561,7 +591,7 @@ void MainWindow::onActionViewStatusBar()
 
 void MainWindow::onActionViewRefresh()
 {
-    Hook::sendReloadSignal();
+    sendReloadProfiles();
     initProfiles();
 }
 

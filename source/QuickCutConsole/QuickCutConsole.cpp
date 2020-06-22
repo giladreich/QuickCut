@@ -3,7 +3,8 @@
 #include "QuickCutConsole.h"
 #include "Managers/ProfileManager.h"
 
-QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
+QuickCutConsole * QuickCutConsole::s_Instance    = nullptr;
+QLocalServer *    QuickCutConsole::s_LocalSocket = nullptr;
 
 Profile *      QuickCutConsole::s_Profile = nullptr;
 ProfileManager QuickCutConsole::s_ProfileManager;
@@ -11,14 +12,17 @@ ProfileManager QuickCutConsole::s_ProfileManager;
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
 {
-    if (!s_Instance) s_Instance = this;
+    s_Instance = this;
+
+    // Intercept changes coming from GUI locally
+    s_LocalSocket = new QLocalServer(this);
+    if (!s_LocalSocket->listen(QUICKCUT_IPC))
+    { qDebug() << "Failed to start IPC local server -> " << s_LocalSocket->errorString(); }
+
+    connect(s_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
 }
 
-QuickCutConsole::~QuickCutConsole()
-{
-    s_Profile = nullptr;
-    s_ProfileManager.clear();
-}
+QuickCutConsole::~QuickCutConsole() = default;
 
 bool QuickCutConsole::start()
 {
@@ -38,14 +42,42 @@ bool QuickCutConsole::loadProfiles()
 {
     if (!s_ProfileManager.load())
     {
-        qDebug() << "[QuickCutConsole::loadProfiles] - Failed to load "
-                 << s_ProfileManager.getConfigFilePath() << " file.";
+        QString message = QString("[QuickCutConsole::loadProfiles]: Failed to load %1 file.")
+                              .arg(s_ProfileManager.getConfigFilePath());
+        notifyStatusToClient(message);
+        qDebug() << message;
         return false;
     }
 
-    s_Profile = s_ProfileManager.getActiveProfile();
-
+    s_Profile       = s_ProfileManager.getActiveProfile();
+    QString message = "[QuickCutConsole::loadProfiles]: Successfully reloaded profiles.";
+    notifyStatusToClient(message);
+    qDebug() << message;
     return true;
+}
+
+bool QuickCutConsole::notifyStatusToClient(const QString & message)
+{
+    if (!s_LocalSocket->hasPendingConnections()) return false;
+
+    QByteArray  block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_15);
+    out << message.size();
+    out << message;
+
+    QLocalSocket * clientConnection = s_LocalSocket->nextPendingConnection();
+    connect(clientConnection, &QLocalSocket::disconnected, clientConnection,
+            &QLocalSocket::deleteLater);
+
+    clientConnection->write(block);
+    bool succeed = clientConnection->flush();
+    clientConnection->disconnectFromServer();
+    if (!succeed)
+        qDebug()
+            << "[QuickCutConsole::notifyStatusToClient]: Failed to send message to client.";
+
+    return succeed;
 }
 
 void QuickCutConsole::executeProcess(const QString & process, const QString & arguments)
