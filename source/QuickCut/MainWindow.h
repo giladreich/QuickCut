@@ -11,6 +11,7 @@ class ExamplesWindow;
 class CheckUpdatesWindow;
 class AboutWindow;
 class ActionEditWindow;
+class QLocalSocket;
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +30,8 @@ public:
     bool loadProfiles();
     bool reloadProfiles();
     bool saveProfiles();
+
+    bool sendReloadProfiles();
 
     void showEvent(QShowEvent * event) override;
 
@@ -51,6 +54,8 @@ public slots:
 
     void onActionSaved();
     void onActionCreated(Action * action);
+
+    void onReloadProfilesResponse();
 
     // File Menu
     void onActionFileOpen();
@@ -83,4 +88,8 @@ private:
 
     ProfileManager    m_Profiles;
     PreferenceManager m_Preference;
+
+    QLocalSocket * m_LocalSocket;
+    QDataStream    m_SocketStreamIn;
+    int            m_SocketBlockSize;
 };

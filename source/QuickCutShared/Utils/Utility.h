@@ -18,16 +18,6 @@ namespace boost
     } // namespace property_tree
 } // namespace boost
 
-namespace Hook
-{
-    /*
-     * The keyboard hook will check if this key pattern matched, if it matched,
-     * it will reload the profiles file so changes will take affect on the
-     * system without having to restart the application nor the service.
-     */
-    void sendReloadSignal();
-} // namespace Hook
-
 namespace QuickCut
 {
     QString getDateTime();

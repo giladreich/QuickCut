@@ -1,6 +1,6 @@
 
 #include "pch.h"
-#include "Utils/Utility.h"
+#include "Utility.h"
 
 #include <QDateTime>
 #include <QUuid>
@@ -37,39 +37,6 @@ namespace boost
         }
     } // namespace property_tree
 } // namespace boost
-
-namespace Hook
-{
-#if defined(Q_OS_WIN)
-    void sendReloadSignal()
-    {
-        const int INPUT_COUNT     = 4;
-        int       vkKey1          = std::strtol("86", nullptr, 16);
-        int       vkKey2          = std::strtol("87", nullptr, 16);
-        INPUT     in[INPUT_COUNT] = {0};
-        for (int i = 0; i < INPUT_COUNT; i++)
-        {
-            in[i].type       = INPUT_KEYBOARD;
-            in[i].ki.dwFlags = KEYEVENTF_UNICODE;
-            in[i].ki.wVk     = (i % 2 == 0) ? vkKey1 : vkKey2;
-        }
-        SendInput(INPUT_COUNT, in, sizeof(INPUT));
-
-        // Sending key up, which should reset the key codes pattern and profiles has been
-        // reloaded.
-        INPUT inUp      = {0};
-        inUp.type       = INPUT_KEYBOARD;
-        inUp.ki.dwFlags = KEYEVENTF_KEYUP;
-        inUp.ki.wVk     = vkKey1;
-        SendInput(1, &inUp, sizeof(INPUT));
-    }
-#elif defined(Q_OS_UNIX)
-    void sendReloadSignal()
-    {
-        // TODO(Gilad): Implement.
-    }
-#endif
-} // namespace Hook
 
 namespace QuickCut
 {

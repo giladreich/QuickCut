@@ -3,10 +3,6 @@
 #include "QuickCutConsoleWindows.h"
 #include "Managers/ProfileManager.h"
 
-// The GUI will send this pattern of key codes to notify that profile changes has been made
-// so it knows when to reload the profile data.
-#define RESERVED_RELOAD_KEY "86878687"
-
 #define KEY_WAS_DOWN_MASK 0x80
 #define KEY_IS_DOWN_MASK  0x01
 
@@ -58,16 +54,6 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
         pressedKeys += QString::number(kbd->vkCode, 16);
         printKeyName(kbd, pressedKeys);
-
-        if (pressedKeys == RESERVED_RELOAD_KEY)
-        {
-            loadProfiles();
-            qDebug() << "Refresh signal requested. Reloading profiles.";
-            pressedKeys.clear();
-            keysAlreadyProcessed = false;
-            prevVkCode           = 0;
-            return CallNextHookEx(s_Hook, nCode, wParam, lParam);
-        }
 
         if (!s_Profile) { return CallNextHookEx(s_Hook, nCode, wParam, lParam); }
 
