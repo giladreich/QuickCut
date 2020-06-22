@@ -76,6 +76,20 @@ source_group("Resources" FILES
     ${RESOURCE_FILES}
 )
 
+file(GLOB_RECURSE CMAKE_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
+list(FILTER CMAKE_GENERATED_FILES INCLUDE REGEX "^.*\.(hxx|cxx)$")
+source_group("_GeneratedFiles\\CMake" FILES
+    ${CMAKE_GENERATED_FILES}
+)
+
+file(GLOB_RECURSE QT_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
+list(FILTER QT_GENERATED_FILES INCLUDE REGEX "^.*(mocs_.*|ui_.*|qrc_.*)\.(h|cpp)$")
+source_group("_GeneratedFiles\\Qt" FILES
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_autogen/mocs_compilation.cpp
+    ${QT_GENERATED_FILES}
+)
+
+
 ##################################################################################################################
 # Qt Framework
 ##################################################################################################################

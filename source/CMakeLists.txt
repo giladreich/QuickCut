@@ -39,7 +39,7 @@ endif()
 
 find_package(Boost REQUIRED)
 if (Boost_FOUND)
-    message(STATUS "[INFO] Boost Found.")
+    message(STATUS "[INFO] Boost Found -> ${FIND_PACKAGE_MESSAGE_DETAILS_Boost}")
 else()
     message(FATAL_ERROR "[ERROR] Failed to find Boost.")
 endif()

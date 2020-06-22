@@ -160,10 +160,22 @@ source_group("${RESOURCE_DIR}\\QtRC" FILES
 source_group("${RESOURCE_DIR}\\QtRC\\Themes" FILES
     ${QSS_FILES}
 )
-source_group("Qt_GeneratedFiles" FILES
+
+file(GLOB_RECURSE CMAKE_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
+list(FILTER CMAKE_GENERATED_FILES INCLUDE REGEX "^.*\.(hxx|cxx)$")
+source_group("_GeneratedFiles\\CMake" FILES
+    ${CMAKE_GENERATED_FILES}
+)
+
+# These files only gets generated at compile time, but adding this anyway in case someone
+# doing config->build->config->OpenIDE which should filter them all right.
+file(GLOB_RECURSE QT_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
+list(FILTER QT_GENERATED_FILES INCLUDE REGEX "^.*(mocs_.*|ui_.*|qrc_.*)\.(h|cpp)$")
+source_group("_GeneratedFiles\\Qt" FILES
     ${QRCC_FILES}
     ${QUIC_FILES}
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_autogen/mocs_compilation.cpp
+    ${QT_GENERATED_FILES}
 )
 
 
