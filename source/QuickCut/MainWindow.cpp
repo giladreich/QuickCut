@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget * parent)
     m_SocketStreamIn.setDevice(m_LocalSocket);
     m_SocketStreamIn.setVersion(QDataStream::Qt_5_15);
 
+    initThemes();
     initPreference();
     initProfiles();
     activateHook();
@@ -82,14 +83,6 @@ void MainWindow::connectSlots()
             [this] { onActionLoadTheme(ThemeUbuntu, ui->actionThemeUbuntu); });
     connect(ui->actionThemeDarkOrange, &QAction::triggered, this,
             [this] { onActionLoadTheme(ThemeDarkOrange, ui->actionThemeDarkOrange); });
-    m_ThemeActions.insert(ThemeDefault, ui->actionThemeDefault);
-    m_ThemeActions.insert(ThemeDark, ui->actionThemeDark);
-    m_ThemeActions.insert(ThemeBreezeDark, ui->actionThemeBreezeDark);
-    m_ThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
-    m_ThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
-    m_ThemeActions.insert(ThemeUbuntu, ui->actionThemeUbuntu);
-    m_ThemeActions.insert(ThemeDarkOrange, ui->actionThemeDarkOrange);
-
     connect(ui->actionThemeLoadQss, &QAction::triggered, this,
             &MainWindow::onLoadCustomStylesheet);
 
@@ -206,9 +199,19 @@ void MainWindow::showEvent(QShowEvent * event)
     QMainWindow::showEvent(event);
 }
 
+void MainWindow::initThemes()
+{
+    m_ThemeActions.insert(ThemeDefault, ui->actionThemeDefault);
+    m_ThemeActions.insert(ThemeDark, ui->actionThemeDark);
+    m_ThemeActions.insert(ThemeBreezeDark, ui->actionThemeBreezeDark);
+    m_ThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
+    m_ThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
+    m_ThemeActions.insert(ThemeUbuntu, ui->actionThemeUbuntu);
+    m_ThemeActions.insert(ThemeDarkOrange, ui->actionThemeDarkOrange);
+}
+
 void MainWindow::initPreference()
 {
-
     if (!m_Preference.load()) m_Preference.save();
 
     QAction * action = nullptr;

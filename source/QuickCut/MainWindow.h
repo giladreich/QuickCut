@@ -23,6 +23,7 @@ public:
 
     void connectSlots();
 
+    void initThemes();
     void initPreference();
     void initProfiles();
     void activateHook();
