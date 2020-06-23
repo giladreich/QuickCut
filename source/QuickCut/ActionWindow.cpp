@@ -122,6 +122,7 @@ EditMode ActionWindow::getEditMode()
 void ActionWindow::onTypeSelChange(int index)
 {
     Action::ActionType type = static_cast<Action::ActionType>(index);
+    m_Action->setType(type);
     updateVisibility(type);
     switch (type)
     {
@@ -181,8 +182,13 @@ void ActionWindow::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 void ActionWindow::onBtnFilePicker()
 {
     QString homeDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
-    QString filePath =
-        QFileDialog::getOpenFileName(this, tr("Open File"), homeDir, tr("All files (*.*)"));
+
+    QString filePath;
+    if (m_Action->getType() == Action::ActionAppLaunch)
+        filePath = QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
+    else if (m_Action->getType() == Action::ActionDirLaunch)
+        filePath = QFileDialog::getExistingDirectory(this, "Get Target Directory", homeDir);
+
     if (filePath.isEmpty()) return;
 
     ui->tbxTargetPath->setText(filePath);
