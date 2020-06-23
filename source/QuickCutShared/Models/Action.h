@@ -3,16 +3,20 @@
 
 #include "BaseModel.h"
 
-enum ActionType
-{
-    ActionKeyMap = 0,
-    ActionAppStart,
-    ActionUnknown = 0xFF
-};
-
 class Action : public BaseModel
 {
+    Q_GADGET
 public:
+    enum ActionType
+    {
+        ActionInvalid = -1,
+        ActionKeyMap  = 0,
+        ActionAppStart,
+
+        ActionCount,
+    };
+    Q_ENUM(ActionType)
+
     // Constructs new Action
     Action() noexcept;
 
@@ -56,12 +60,8 @@ public:
     Action(const Action & action) = default;
     Action(Action && action)      = default;
 
-    static QString    getType(ActionType type);
-    static ActionType getType(const QString & type);
-    static QString    getKey(int key);
-
     ActionType getType() const;
-    void       setType(ActionType type);
+    void       setType(const ActionType type);
 
     QString getSrcKey() const;
     void    setSrcKey(const QString & key);

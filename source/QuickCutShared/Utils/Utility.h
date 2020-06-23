@@ -29,6 +29,7 @@ namespace QuickCut
         return QString(QMetaEnum::fromType<QEnum>().valueToKey(key));
     }
 
+    // Returns -1 if could not find.
     template <typename QEnum>
     QEnum fromValue(const QString & value)
     {

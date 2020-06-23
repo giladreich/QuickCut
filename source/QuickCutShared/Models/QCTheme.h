@@ -18,7 +18,7 @@ public:
         ThemeUbuntu,
         ThemeDarkOrange,
 
-        THEME_COUNT
+        ThemeCount
     };
     Q_ENUM(ThemeType)
 

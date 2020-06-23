@@ -82,10 +82,10 @@ EditMode ActionEditWindow::getEditMode()
 
 void ActionEditWindow::onTypeSelChange(int index)
 {
-    if (index < 0 || index > ActionAppStart) return;
+    if (index < 0 || index > Action::ActionAppStart) return;
 
-    ActionType type = static_cast<ActionType>(index);
-    if (type == ActionKeyMap)
+    Action::ActionType type = static_cast<Action::ActionType>(index);
+    if (type == Action::ActionKeyMap)
     {
         ui->lblDstKey->setVisible(true);
         ui->tbxDstKey->setVisible(true);
@@ -97,7 +97,7 @@ void ActionEditWindow::onTypeSelChange(int index)
         ui->lblAppArgs->setVisible(false);
         ui->tbxAppArgs->setVisible(false);
     }
-    else if (type == ActionAppStart)
+    else if (type == Action::ActionAppStart)
     {
         ui->lblDstKey->setVisible(false);
         ui->tbxDstKey->setVisible(false);
@@ -165,7 +165,7 @@ void ActionEditWindow::onBtnSave()
 
     m_Action->reset();
 
-    ActionType type = static_cast<ActionType>(ui->cbxType->currentIndex());
+    Action::ActionType type = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
 
     m_Action->setName(ui->tbxName->text());
     m_Action->setType(type);
@@ -173,8 +173,8 @@ void ActionEditWindow::onBtnSave()
     // m_Action->setSrcKey(ui->tbxSrcKey->keySequence().toString());
     // if (type == ActionKeyMap) {
     // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString()); }
-    if (type == ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text()); }
-    else if (type == ActionAppStart)
+    if (type == Action::ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text()); }
+    else if (type == Action::ActionAppStart)
     {
         m_Action->setAppPath(ui->tbxAppPath->text());
         m_Action->setAppArgs(ui->tbxAppArgs->text());

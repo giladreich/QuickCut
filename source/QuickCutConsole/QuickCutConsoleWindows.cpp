@@ -63,8 +63,8 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
             {
                 qDebug() << "Pressed Keys Match!: " << pressedKeys
                          << " | Actual Keys: " << action->getSrcKey();
-                ActionType actionType = action->getType();
-                if (actionType == ActionKeyMap)
+                Action::ActionType actionType = action->getType();
+                if (actionType == Action::ActionKeyMap)
                 {
                     qDebug() << "Mapping key -> " << pressedKeys << " To -> "
                              << action->getDstKey();
@@ -79,7 +79,7 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
                     return -1; // Don't process the source input.
                 }
-                else if (actionType == ActionAppStart)
+                else if (actionType == Action::ActionAppStart)
                 {
                     qDebug() << "Running process -> " << action->getAppPath()
                              << " With key -> " << pressedKeys;

@@ -4,7 +4,7 @@
 
 Action::Action() noexcept
     : BaseModel()
-    , m_Type(ActionType::ActionUnknown)
+    , m_Type(Action::ActionKeyMap)
     , m_SrcKey()
     , m_DstKey()
     , m_AppPath()
@@ -85,41 +85,14 @@ Action::Action(QString &&    id,
 {
 }
 
-QString Action::getType(ActionType type)
-{
-    switch (type)
-    {
-        case ActionType::ActionKeyMap:
-            return "KeyMap";
-        case ActionType::ActionAppStart:
-            return "AppStart";
-
-        case ActionType::ActionUnknown:
-        default:
-            return "Unknown";
-    }
-}
-
-ActionType Action::getType(const QString & type)
-{
-    if (type == "KeyMap") return ActionType::ActionKeyMap;
-    if (type == "AppStart") return ActionType::ActionAppStart;
-    return ActionType::ActionUnknown;
-}
-
-QString Action::getKey(int key)
-{
-    return QString::number(key);
-}
-
-ActionType Action::getType() const
+Action::ActionType Action::getType() const
 {
     return m_Type;
 }
 
 void Action::setType(ActionType type)
 {
-    m_Type = type;
+    if (type != Action::ActionInvalid) m_Type = type;
 }
 
 QString Action::getSrcKey() const
@@ -170,7 +143,7 @@ const QString & Action::getCreatedDate() const
 void Action::reset()
 {
     m_Name.clear();
-    m_Type = ActionUnknown;
+    m_Type = Action::ActionKeyMap;
     m_SrcKey.clear();
     m_DstKey.clear();
     m_AppPath.clear();
