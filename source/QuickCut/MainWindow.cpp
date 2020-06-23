@@ -70,19 +70,19 @@ void MainWindow::connectSlots()
 
     // Preference Menu
     connect(ui->actionThemeDefault, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeDefault, ui->actionThemeDefault); });
+            [&] { onActionLoadTheme(QCTheme::ThemeDefault); });
     connect(ui->actionThemeDark, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeDark, ui->actionThemeDark); });
+            [&] { onActionLoadTheme(QCTheme::ThemeDark); });
     connect(ui->actionThemeBreezeDark, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeBreezeDark, ui->actionThemeBreezeDark); });
+            [&] { onActionLoadTheme(QCTheme::ThemeBreezeDark); });
     connect(ui->actionThemeBreezeLight, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeBreezeLight, ui->actionThemeBreezeLight); });
+            [&] { onActionLoadTheme(QCTheme::ThemeBreezeLight); });
     connect(ui->actionThemeConsoleDark, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeConsoleDark, ui->actionThemeConsoleDark); });
+            [&] { onActionLoadTheme(QCTheme::ThemeConsoleDark); });
     connect(ui->actionThemeUbuntu, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeUbuntu, ui->actionThemeUbuntu); });
+            [&] { onActionLoadTheme(QCTheme::ThemeUbuntu); });
     connect(ui->actionThemeDarkOrange, &QAction::triggered, this,
-            [this] { onActionLoadTheme(ThemeDarkOrange, ui->actionThemeDarkOrange); });
+            [&] { onActionLoadTheme(QCTheme::ThemeDarkOrange); });
     connect(ui->actionThemeLoadQss, &QAction::triggered, this,
             &MainWindow::onLoadCustomStylesheet);
 
@@ -201,48 +201,21 @@ void MainWindow::showEvent(QShowEvent * event)
 
 void MainWindow::initThemes()
 {
-    m_ThemeActions.insert(ThemeDefault, ui->actionThemeDefault);
-    m_ThemeActions.insert(ThemeDark, ui->actionThemeDark);
-    m_ThemeActions.insert(ThemeBreezeDark, ui->actionThemeBreezeDark);
-    m_ThemeActions.insert(ThemeBreezeLight, ui->actionThemeBreezeLight);
-    m_ThemeActions.insert(ThemeConsoleDark, ui->actionThemeConsoleDark);
-    m_ThemeActions.insert(ThemeUbuntu, ui->actionThemeUbuntu);
-    m_ThemeActions.insert(ThemeDarkOrange, ui->actionThemeDarkOrange);
+    m_ThemeActions.insert(QCTheme::ThemeDefault, ui->actionThemeDefault);
+    m_ThemeActions.insert(QCTheme::ThemeDark, ui->actionThemeDark);
+    m_ThemeActions.insert(QCTheme::ThemeBreezeDark, ui->actionThemeBreezeDark);
+    m_ThemeActions.insert(QCTheme::ThemeBreezeLight, ui->actionThemeBreezeLight);
+    m_ThemeActions.insert(QCTheme::ThemeConsoleDark, ui->actionThemeConsoleDark);
+    m_ThemeActions.insert(QCTheme::ThemeUbuntu, ui->actionThemeUbuntu);
+    m_ThemeActions.insert(QCTheme::ThemeDarkOrange, ui->actionThemeDarkOrange);
 }
 
 void MainWindow::initPreference()
 {
     if (!m_Preference.load()) m_Preference.save();
 
-    QAction * action = nullptr;
-    switch (m_Preference.get().getCurrentTheme())
-    {
-        case ThemeDefault:
-            action = ui->actionThemeDefault;
-            break;
-        case ThemeDark:
-            action = ui->actionThemeDark;
-            break;
-        case ThemeBreezeDark:
-            action = ui->actionThemeBreezeDark;
-            break;
-        case ThemeBreezeLight:
-            action = ui->actionThemeBreezeLight;
-            break;
-        case ThemeConsoleDark:
-            action = ui->actionThemeConsoleDark;
-            break;
-        case ThemeUbuntu:
-            action = ui->actionThemeUbuntu;
-            break;
-        case ThemeDarkOrange:
-            action = ui->actionThemeDarkOrange;
-            break;
-        default:
-            break;
-    }
-
-    onActionLoadTheme(m_Preference.get().getCurrentThemeResourcePath(), action);
+    auto currTheme = m_Preference.get().theme().get();
+    onActionLoadTheme(currTheme);
 
     ui->actionViewToolBar->setChecked(m_Preference.get().isToolBarVisible());
     ui->actionViewStatusBar->setChecked(m_Preference.get().isStatusBarVisible());
@@ -643,10 +616,10 @@ void MainWindow::onActionHelpCheckUpdates()
     m_CheckUpdatesWindow->exec();
 }
 
-void MainWindow::onActionLoadTheme(ThemeType type, QAction * action /*= nullptr*/)
+void MainWindow::onActionLoadTheme(QCTheme::ThemeType type)
 {
-    onActionLoadTheme(Preference::getThemeResourcePath(type), action);
-    m_Preference.get().setCurrentTheme(type);
+    onActionLoadTheme(QCTheme::getResourcePath(type), m_ThemeActions[type]);
+    m_Preference.get().getTheme().set(type);
     m_Preference.save();
 }
 void MainWindow::onActionLoadTheme(const QString & qssPath, QAction * action /*= nullptr*/)

@@ -14,8 +14,8 @@ PreferenceParser::PreferenceParser(QString && path)
 
 bool PreferenceParser::parseImpl(Preference * outData)
 {
-    int iTheme = m_Content.get<int>("currentTheme", static_cast<int>(ThemeUbuntu));
-    outData->setCurrentTheme(static_cast<ThemeType>(iTheme));
+    QString themeName = bpt::get(m_Content, "currentTheme", "");
+    outData->getTheme().set(QuickCut::fromValue<QCTheme::ThemeType>(themeName));
     outData->setToolBarVisible(m_Content.get<bool>("toolBarVisible", true));
     outData->setStatusBarVisible(m_Content.get<bool>("statusBarVisible", true));
 
@@ -24,7 +24,8 @@ bool PreferenceParser::parseImpl(Preference * outData)
 
 bool PreferenceParser::saveImpl(const Preference & data)
 {
-    m_Content.put("currentTheme", data.getCurrentTheme());
+    QString themeName = QuickCut::fromKey<QCTheme::ThemeType>(data.theme().get());
+    bpt::put(m_Content, "currentTheme", themeName);
     m_Content.put("toolBarVisible", data.isToolBarVisible());
     m_Content.put("statusBarVisible", data.isStatusBarVisible());
 

@@ -5,7 +5,7 @@
 Preference::Preference()
     : m_ToolBarVisible(true)
     , m_StatusBarVisible(true)
-    , m_CurrTheme(ThemeUbuntu)
+    , m_Theme()
 {
 }
 
@@ -29,39 +29,12 @@ void Preference::setStatusBarVisible(bool visible)
     m_StatusBarVisible = visible;
 }
 
-ThemeType Preference::getCurrentTheme() const
+QCTheme & Preference::getTheme()
 {
-    return m_CurrTheme;
+    return m_Theme;
 }
 
-void Preference::setCurrentTheme(ThemeType type)
+const QCTheme & Preference::theme() const
 {
-    m_CurrTheme = type;
-}
-
-QString Preference::getCurrentThemeResourcePath() const
-{
-    return getThemeResourcePath(m_CurrTheme);
-}
-
-QString Preference::getThemeResourcePath(ThemeType type)
-{
-    switch (type)
-    {
-        case ThemeDefault:
-            return "";
-        case ThemeDark:
-            return ":stylesheet/theme_dark.qss";
-        case ThemeBreezeDark:
-            return ":stylesheet/theme_breezeDark.qss";
-        case ThemeBreezeLight:
-            return ":stylesheet/theme_breezeLight.qss";
-        case ThemeConsoleDark:
-            return ":stylesheet/theme_console.qss";
-        case ThemeDarkOrange:
-            return ":stylesheet/theme_darkorange.qss";
-        case ThemeUbuntu:
-        default:
-            return ":stylesheet/theme_ubuntu.qss";
-    }
+    return m_Theme;
 }

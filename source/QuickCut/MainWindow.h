@@ -73,7 +73,7 @@ public slots:
     void onActionHelpExamples();
     void onActionHelpCheckUpdates();
 
-    void onActionLoadTheme(ThemeType type, QAction * action = nullptr);
+    void onActionLoadTheme(QCTheme::ThemeType type);
     void onActionLoadTheme(const QString & qssPath, QAction * action = nullptr);
     void onLoadCustomStylesheet();
 
@@ -85,7 +85,7 @@ private:
     QPointer<CheckUpdatesWindow> m_CheckUpdatesWindow;
     QPointer<ExamplesWindow>     m_ExamplesWindow;
 
-    QMap<ThemeType, QAction *> m_ThemeActions;
+    QMap<QCTheme::ThemeType, QAction *> m_ThemeActions;
 
     ProfileManager    m_Profiles;
     PreferenceManager m_Preference;

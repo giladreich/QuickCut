@@ -22,4 +22,16 @@ namespace QuickCut
 {
     QString getDateTime();
     QString createUuid();
+
+    template <typename QEnum>
+    QString fromKey(const QEnum key)
+    {
+        return QString(QMetaEnum::fromType<QEnum>().valueToKey(key));
+    }
+
+    template <typename QEnum>
+    QEnum fromValue(const QString & value)
+    {
+        return static_cast<QEnum>(QMetaEnum::fromType<QEnum>().keyToValue(qPrintable(value)));
+    }
 } // namespace QuickCut
