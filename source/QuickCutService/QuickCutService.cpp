@@ -3,13 +3,13 @@
 #include "QuickCutService.h"
 
 QuickCutService::QuickCutService(int argc, char * argv[])
-    : QtService<QCoreApplication>(argc, argv, "QuickCut Service")
+    : QtService<QCoreApplication>(argc, argv, QUICKCUTSERVICE_NAME)
 {
-    setServiceDescription("QuickCut Service is responsible for activating the shortcut-keys "
-                          "defined by the user using the QuickCut GUI. It starts "
-                          "QuickCutConsole background process "
-                          "as the currently signed-in user in order allow key messages "
-                          "communication between processes.");
+    setServiceDescription(
+        "QuickCutService is responsible for making sure QuickCutConsole background process is "
+        "running. The user-defined shortcut keys will only be activated, if QuickCutConsole "
+        "background process is running. User defined shortcut keys are specified using the "
+        "QuickCut - GUI.");
 
     setServiceFlags(QtServiceBase::CanBeSuspended);
     setStartupType(QtServiceController::StartupType::AutoStartup);
@@ -39,9 +39,9 @@ bool QuickCutService::isProcessRunning(const QString & process)
 void QuickCutService::log(const QString & filePath, const QString & text)
 {
     QFile file(filePath);
-    file.open(QFile::WriteOnly);
+    file.open(QFile::WriteOnly | QFile::Append);
     QTextStream ts(&file);
-    ts << text;
+    ts << '\n' << text;
     file.flush();
     file.close();
 }

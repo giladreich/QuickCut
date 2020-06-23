@@ -45,14 +45,14 @@ bool QuickCutConsole::loadProfiles()
         QString message = QString("[QuickCutConsole::loadProfiles]: Failed to load %1 file.")
                               .arg(s_ProfileManager.getConfigFilePath());
         notifyStatusToClient(message);
-        qDebug() << message;
+        qDebug() << qPrintable(message);
         return false;
     }
 
     s_Profile       = s_ProfileManager.getActiveProfile();
     QString message = "[QuickCutConsole::loadProfiles]: Successfully reloaded profiles.";
     notifyStatusToClient(message);
-    qDebug() << message;
+    qDebug() << qPrintable(message);
     return true;
 }
 
@@ -82,14 +82,10 @@ bool QuickCutConsole::notifyStatusToClient(const QString & message)
 
 void QuickCutConsole::executeProcess(const QString & process, const QString & arguments)
 {
-    // QProc won't expand environment variable strings.
-    // Invoking using the user console will allow for expanded string to work as expected.
 #if defined(Q_OS_WIN)
-    QString command   = "cmd /c start \"\" \"" + process + "\"";
-    QString extension = ".cmd";
+    QString command = QString(R"(cmd /c start "" "%1")").arg(process);
 #elif defined(Q_OS_UNIX)
-    QString command   = "sh -c '" + process + "'";
-    QString extension = ".sh";
+    QString command = QString(R"(sh -c '%1')").arg(process);
 #endif
 
     QStringList argsTmp = arguments.trimmed().split(",");
@@ -100,11 +96,15 @@ void QuickCutConsole::executeProcess(const QString & process, const QString & ar
 
         command += " " + argTrimmed;
     }
-    qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: " << command;
+    qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: "
+             << "[" << qPrintable(command) << "]";
 
+#if defined(Q_OS_WIN)
+    WinExec(qPrintable(command), SW_HIDE);
+#elif defined(Q_OS_UNIX)
     // Writing as script temporary to disk to avoid any white spaces issues
     // that QProcess doesn't handle very well...
-    QString filePath = applicationDirPath() + "/tempCmd" + extension;
+    QString filePath = applicationDirPath() + "/tempCmd.sh" + extension;
     QFile   scriptFile(filePath);
     scriptFile.open(QIODevice::ReadWrite);
     QTextStream ts(&scriptFile);
@@ -112,6 +112,7 @@ void QuickCutConsole::executeProcess(const QString & process, const QString & ar
     scriptFile.close();
     QProcess::execute(filePath, QStringList());
     scriptFile.remove();
+#endif
 }
 
 void QuickCutConsole::log(const QString & filePath, const QString & text)

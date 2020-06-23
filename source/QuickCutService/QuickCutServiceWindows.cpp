@@ -8,8 +8,6 @@
 
 #undef UNICODE
 
-#define QUICKCUT_CONSOLE "QuickCutConsole.exe"
-
 QuickCutServiceWindows * QuickCutServiceWindows::s_Instance = nullptr;
 
 QuickCutServiceWindows::QuickCutServiceWindows(int argc, char * argv[])
@@ -28,7 +26,11 @@ void QuickCutServiceWindows::start()
     QuickCutService::start();
 
     std::wstring process =
-        (QCoreApplication::applicationDirPath() + "/" + QUICKCUT_CONSOLE).toStdWString();
+        (QCoreApplication::applicationDirPath() + "/" + QUICKCUTCONSOLE_BIN).toStdWString();
+
+    WinExec(qPrintable(
+                QString((QCoreApplication::applicationDirPath() + "/" + QUICKCUTCONSOLE_BIN))),
+            SW_SHOW);
     RunProcessAsUserW(process);
 }
 
@@ -55,9 +57,9 @@ void QuickCutServiceWindows::stop()
 
 bool QuickCutServiceWindows::killHookIfRunning()
 {
-    if (isProcessRunning(QUICKCUT_CONSOLE))
+    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
     {
-        QProcess::execute("taskkill /im " QUICKCUT_CONSOLE " /f", QStringList());
+        WinExec("taskkill /f /t /im " QUICKCUTCONSOLE_BIN, SW_HIDE);
         return true;
     }
 

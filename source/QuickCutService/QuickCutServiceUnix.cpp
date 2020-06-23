@@ -9,15 +9,15 @@ QuickCutServiceUnix::QuickCutServiceUnix(int argc, char * argv[])
 
 QuickCutServiceUnix::~QuickCutServiceUnix()
 {
-    if (isProcessRunning("QuickCutConsole"))
-        QProcess::execute("killall -9 QuickCutConsole", QStringList());
+    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
+        QProcess::execute("killall", QStringList("-9 " QUICKCUTCONSOLE_BIN));
 }
 
 void QuickCutServiceUnix::start()
 {
     QuickCutService::start();
 
-    QString process = QCoreApplication::applicationDirPath() + "/QuickCutConsole";
+    QString process = QCoreApplication::applicationDirPath() + QUICKCUTCONSOLE_BIN;
     QProcess::execute(process, QStringList());
 }
 
@@ -38,8 +38,8 @@ void QuickCutServiceUnix::resume()
 void QuickCutServiceUnix::stop()
 {
     QuickCutService::stop();
-    if (isProcessRunning("QuickCutConsole"))
-        QProcess::execute("killall -9 QuickCutConsole", QStringList());
+    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
+        QProcess::execute("killall", QStringList("-9 " QUICKCUTCONSOLE_BIN));
 }
 
 bool QuickCutServiceUnix::isProcessRunning(const QString & process)
