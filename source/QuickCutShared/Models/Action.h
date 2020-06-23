@@ -11,7 +11,7 @@ public:
     {
         ActionInvalid = -1,
         ActionKeyMap  = 0,
-        ActionAppStart,
+        ActionAppLaunch,
 
         ActionCount,
     };

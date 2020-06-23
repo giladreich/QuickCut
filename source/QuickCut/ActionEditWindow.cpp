@@ -42,7 +42,7 @@ ActionEditWindow::~ActionEditWindow() {}
 void ActionEditWindow::fillActionTypes()
 {
     ui->cbxType->addItem("Key Mapping");
-    ui->cbxType->addItem("Start Application");
+    ui->cbxType->addItem("Application Launch");
 }
 
 void ActionEditWindow::fillEntries()
@@ -82,7 +82,7 @@ EditMode ActionEditWindow::getEditMode()
 
 void ActionEditWindow::onTypeSelChange(int index)
 {
-    if (index < 0 || index > Action::ActionAppStart) return;
+    if (index < 0 || index > Action::ActionAppLaunch) return;
 
     Action::ActionType type = static_cast<Action::ActionType>(index);
     if (type == Action::ActionKeyMap)
@@ -97,7 +97,7 @@ void ActionEditWindow::onTypeSelChange(int index)
         ui->lblAppArgs->setVisible(false);
         ui->tbxAppArgs->setVisible(false);
     }
-    else if (type == Action::ActionAppStart)
+    else if (type == Action::ActionAppLaunch)
     {
         ui->lblDstKey->setVisible(false);
         ui->tbxDstKey->setVisible(false);
@@ -174,7 +174,7 @@ void ActionEditWindow::onBtnSave()
     // if (type == ActionKeyMap) {
     // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString()); }
     if (type == Action::ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text()); }
-    else if (type == Action::ActionAppStart)
+    else if (type == Action::ActionAppLaunch)
     {
         m_Action->setAppPath(ui->tbxAppPath->text());
         m_Action->setAppArgs(ui->tbxAppArgs->text());
