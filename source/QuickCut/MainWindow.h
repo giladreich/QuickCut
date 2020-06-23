@@ -8,9 +8,9 @@
 #include "Managers/PreferenceManager.h"
 
 class ExamplesWindow;
-class CheckUpdatesWindow;
+class UpdatesWindow;
 class AboutWindow;
-class ActionEditWindow;
+class ActionWindow;
 class QLocalSocket;
 
 class MainWindow : public QMainWindow
@@ -80,10 +80,10 @@ public slots:
 private:
     Ui::MainWindowClass * ui;
 
-    QPointer<ActionEditWindow>   m_ActionWindow;
-    QPointer<AboutWindow>        m_AboutWindow;
-    QPointer<CheckUpdatesWindow> m_UpdatesWindow;
-    QPointer<ExamplesWindow>     m_ExamplesWindow;
+    QPointer<ActionWindow>   m_ActionWindow;
+    QPointer<AboutWindow>    m_AboutWindow;
+    QPointer<UpdatesWindow>  m_UpdatesWindow;
+    QPointer<ExamplesWindow> m_ExamplesWindow;
 
     QMap<QCTheme::ThemeType, QAction *> m_ThemeActions;
 

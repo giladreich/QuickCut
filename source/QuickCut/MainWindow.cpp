@@ -11,9 +11,9 @@
 
 #include <QtService/QtService>
 
-#include "ActionEditWindow.h"
+#include "ActionWindow.h"
 #include "AboutWindow.h"
-#include "CheckUpdatesWindow.h"
+#include "UpdatesWindow.h"
 #include "ExamplesWindow.h"
 
 MainWindow::MainWindow(QWidget * parent)
@@ -412,16 +412,15 @@ void MainWindow::onActionDoubleClicked(const QModelIndex & index)
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     Action *  action  = profile->getActionManager()[index.row()];
 
-    m_ActionWindow = new ActionEditWindow(this, action);
-    connect(m_ActionWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
+    m_ActionWindow = new ActionWindow(this, action);
+    connect(m_ActionWindow, &ActionWindow::onSaved, this, &MainWindow::onActionSaved);
     m_ActionWindow->exec();
 }
 
 void MainWindow::onBtnActionCreate()
 {
-    m_ActionWindow = new ActionEditWindow(this);
-    connect(m_ActionWindow, &ActionEditWindow::onCreated, this,
-            &MainWindow::onActionCreated);
+    m_ActionWindow = new ActionWindow(this);
+    connect(m_ActionWindow, &ActionWindow::onCreated, this, &MainWindow::onActionCreated);
     m_ActionWindow->exec();
 }
 
@@ -612,7 +611,7 @@ void MainWindow::onActionHelpExamples()
 
 void MainWindow::onActionHelpCheckUpdates()
 {
-    m_UpdatesWindow = new CheckUpdatesWindow(this);
+    m_UpdatesWindow = new UpdatesWindow(this);
     m_UpdatesWindow->exec();
 }
 

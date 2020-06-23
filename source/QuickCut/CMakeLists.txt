@@ -35,10 +35,10 @@ set(UI_CXX_FILES
     MainWindow.cpp
     AboutWindow.h
     AboutWindow.cpp
-    ActionEditWindow.h
-    ActionEditWindow.cpp
-    CheckUpdatesWindow.h
-    CheckUpdatesWindow.cpp
+    ActionWindow.h
+    ActionWindow.cpp
+    UpdatesWindow.h
+    UpdatesWindow.cpp
     ExamplesWindow.h
     ExamplesWindow.cpp
 )
