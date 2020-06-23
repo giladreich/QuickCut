@@ -43,22 +43,18 @@ void ActionEditWindow::fillActionTypes()
 {
     ui->cbxType->addItem("Key Mapping");
     ui->cbxType->addItem("Application Launch");
+    ui->cbxType->addItem("Directory Launch");
 }
 
 void ActionEditWindow::fillEntries()
 {
-    ui->tbxName->setText(m_Action->getName());
-
     int typeIndex = static_cast<int>(m_Action->getType());
-    ui->cbxType->setCurrentIndex(typeIndex);
-    onTypeSelChange(typeIndex);
 
+    ui->tbxName->setText(m_Action->getName());
+    ui->cbxType->setCurrentIndex(typeIndex);
     // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(m_Action->getSrcKey()));
-    // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKey()));
     ui->tbxSrcKey->setText(m_Action->getSrcKey());
-    ui->tbxDstKey->setText(m_Action->getDstKey());
-    ui->tbxAppPath->setText(m_Action->getAppPath());
-    ui->tbxAppArgs->setText(m_Action->getAppArgs());
+    onTypeSelChange(typeIndex);
 }
 
 void ActionEditWindow::connectSlots()
@@ -69,10 +65,53 @@ void ActionEditWindow::connectSlots()
             [this] { onBtnKeyPlay(ui->tbxSrcKey, ui->btnSrcKeyPlay); });
     connect(ui->btnDstKeyPlay, &QPushButton::clicked, this,
             [this] { onBtnKeyPlay(ui->tbxDstKey, ui->btnDstKeyPlay); });
-    connect(ui->btnFilePicker, &QPushButton::clicked, this,
-            &ActionEditWindow::onBtnFilePicker);
+    connect(ui->btnPicker, &QPushButton::clicked, this, &ActionEditWindow::onBtnFilePicker);
     connect(ui->btnCancel, &QPushButton::clicked, this, &ActionEditWindow::onBtnCancel);
     connect(ui->btnSave, &QPushButton::clicked, this, &ActionEditWindow::onBtnSave);
+}
+
+void ActionEditWindow::updateVisibility(Action::ActionType type)
+{
+    switch (type)
+    {
+        case Action::ActionKeyMap:
+        default:
+        {
+            ui->lblDstKey->setVisible(true);
+            ui->tbxDstKey->setVisible(true);
+            ui->btnDstKeyPlay->setVisible(true);
+            ui->lblAppStart->setVisible(false);
+            ui->tbxTargetPath->setVisible(false);
+            ui->btnPicker->setVisible(false);
+            ui->lblAppArgs->setVisible(false);
+            ui->tbxAppArgs->setVisible(false);
+            break;
+        }
+        case Action::ActionAppLaunch:
+        {
+            ui->lblDstKey->setVisible(false);
+            ui->tbxDstKey->setVisible(false);
+            ui->btnDstKeyPlay->setVisible(false);
+            ui->lblAppStart->setVisible(true);
+            ui->tbxTargetPath->setVisible(true);
+            ui->btnPicker->setVisible(true);
+            ui->lblAppArgs->setVisible(true);
+            ui->tbxAppArgs->setVisible(true);
+            break;
+        }
+        case Action::ActionDirLaunch:
+        {
+            ui->lblDstKey->setVisible(false);
+            ui->tbxDstKey->setVisible(false);
+            ui->btnDstKeyPlay->setVisible(false);
+            ui->lblAppStart->setVisible(true);
+            ui->tbxTargetPath->setVisible(true);
+            ui->btnPicker->setVisible(true);
+            ui->lblAppArgs->setVisible(false);
+            ui->tbxAppArgs->setVisible(false);
+            break;
+        }
+    }
 }
 
 EditMode ActionEditWindow::getEditMode()
@@ -82,32 +121,33 @@ EditMode ActionEditWindow::getEditMode()
 
 void ActionEditWindow::onTypeSelChange(int index)
 {
-    if (index < 0 || index > Action::ActionAppLaunch) return;
-
     Action::ActionType type = static_cast<Action::ActionType>(index);
-    if (type == Action::ActionKeyMap)
+    updateVisibility(type);
+    switch (type)
     {
-        ui->lblDstKey->setVisible(true);
-        ui->tbxDstKey->setVisible(true);
-        ui->btnDstKeyPlay->setVisible(true);
-
-        ui->lblAppStart->setVisible(false);
-        ui->tbxAppPath->setVisible(false);
-        ui->btnFilePicker->setVisible(false);
-        ui->lblAppArgs->setVisible(false);
-        ui->tbxAppArgs->setVisible(false);
-    }
-    else if (type == Action::ActionAppLaunch)
-    {
-        ui->lblDstKey->setVisible(false);
-        ui->tbxDstKey->setVisible(false);
-        ui->btnDstKeyPlay->setVisible(false);
-
-        ui->lblAppStart->setVisible(true);
-        ui->tbxAppPath->setVisible(true);
-        ui->btnFilePicker->setVisible(true);
-        ui->lblAppArgs->setVisible(true);
-        ui->tbxAppArgs->setVisible(true);
+        case Action::ActionKeyMap:
+        default:
+        {
+            // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKey()));
+            ui->tbxDstKey->setText(m_Action->getDstKey());
+            ui->tbxTargetPath->clear();
+            ui->tbxAppArgs->clear();
+            break;
+        }
+        case Action::ActionAppLaunch:
+        {
+            ui->tbxDstKey->clear();
+            ui->tbxTargetPath->setText(m_Action->getTargetPath());
+            ui->tbxAppArgs->setText(m_Action->getAppArgs());
+            break;
+        }
+        case Action::ActionDirLaunch:
+        {
+            ui->tbxDstKey->clear();
+            ui->tbxTargetPath->setText(m_Action->getTargetPath());
+            ui->tbxAppArgs->clear();
+            break;
+        }
     }
 }
 
@@ -145,12 +185,16 @@ void ActionEditWindow::onBtnFilePicker()
         QFileDialog::getOpenFileName(this, tr("Open File"), homeDir, tr("All files (*.*)"));
     if (filePath.isEmpty()) return;
 
-    ui->tbxAppPath->setText(filePath);
+    ui->tbxTargetPath->setText(filePath);
 }
 
 void ActionEditWindow::onBtnCancel()
 {
-    if (m_EditMode == ActionCreate) delete m_Action;
+    if (m_EditMode == ActionCreate)
+    {
+        delete m_Action;
+        m_Action = nullptr;
+    }
 
     close();
 }
@@ -173,12 +217,9 @@ void ActionEditWindow::onBtnSave()
     // m_Action->setSrcKey(ui->tbxSrcKey->keySequence().toString());
     // if (type == ActionKeyMap) {
     // m_Action->setDstKey(ui->tbxDstKey->keySequence().toString()); }
-    if (type == Action::ActionKeyMap) { m_Action->setDstKey(ui->tbxDstKey->text()); }
-    else if (type == Action::ActionAppLaunch)
-    {
-        m_Action->setAppPath(ui->tbxAppPath->text());
-        m_Action->setAppArgs(ui->tbxAppArgs->text());
-    }
+    m_Action->setDstKey(ui->tbxDstKey->text());
+    m_Action->setTargetPath(ui->tbxTargetPath->text());
+    m_Action->setAppArgs(ui->tbxAppArgs->text());
 
     if (m_EditMode == ActionCreate)
         emit onCreated(m_Action);

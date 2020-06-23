@@ -79,11 +79,17 @@ LRESULT CALLBACK QuickCutConsoleWindows::WndProc(int nCode, WPARAM wParam, LPARA
 
                     return -1; // Don't process the source input.
                 }
-                else if (actionType == Action::ActionAppStart)
+                else if (actionType == Action::ActionAppLaunch)
                 {
-                    qDebug() << "Running process -> " << action->getAppPath()
+                    qDebug() << "Running process -> " << action->getTargetPath()
                              << " With key -> " << pressedKeys;
-                    executeProcess(action->getAppPath(), action->getAppArgs());
+                    executeProcess(action->getTargetPath(), action->getAppArgs());
+                }
+                else if (actionType == Action::ActionDirLaunch)
+                {
+                    qDebug() << "Launching directory -> " << action->getTargetPath()
+                             << " With key -> " << pressedKeys;
+                    executeProcess(action->getTargetPath(), "");
                 }
             }
         } // end for

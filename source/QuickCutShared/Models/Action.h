@@ -12,6 +12,7 @@ public:
         ActionInvalid = -1,
         ActionKeyMap  = 0,
         ActionAppLaunch,
+        ActionDirLaunch,
 
         ActionCount,
     };
@@ -25,14 +26,14 @@ public:
            const ActionType & type,
            const QString &    srcKey,
            const QString &    dstKey,
-           const QString &    appPath,
+           const QString &    targetPath,
            const QString &    appArgs) noexcept;
 
     Action(QString &&    name,
            ActionType && type,
            QString &&    srcKey,
            QString &&    dstKey,
-           QString &&    appPath,
+           QString &&    targetPath,
            QString &&    appArgs) noexcept;
 
     // Constructs existing Action
@@ -42,7 +43,7 @@ public:
            const ActionType & type,
            const QString &    srcKey,
            const QString &    dstKey,
-           const QString &    appPath,
+           const QString &    targetPath,
            const QString &    appArgs,
            const QString &    createdDate) noexcept;
 
@@ -52,7 +53,7 @@ public:
            ActionType && type,
            QString &&    srcKey,
            QString &&    dstKey,
-           QString &&    appPath,
+           QString &&    targetPath,
            QString &&    appArgs,
            QString &&    createdDate) noexcept;
 
@@ -69,8 +70,8 @@ public:
     QString getDstKey() const;
     void    setDstKey(const QString & key);
 
-    const QString & getAppPath() const;
-    void            setAppPath(const QString & path);
+    const QString & getTargetPath() const;
+    void            setTargetPath(const QString & path);
 
     const QString & getAppArgs() const;
     void            setAppArgs(const QString & path);
@@ -86,7 +87,7 @@ private:
     ActionType m_Type;
     QString    m_SrcKey; // string with delimited ',' char. Could have multiple keys.
     QString    m_DstKey;
-    QString    m_AppPath;
+    QString    m_TargetPath;
     QString    m_AppArgs;
     QString    m_CreatedDate;
 };

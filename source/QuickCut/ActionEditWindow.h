@@ -2,9 +2,9 @@
 #pragma once
 
 #include <QDialog>
+#include "Models/Action.h"
 #include "ui_ActionEditWindow.h"
 
-class Action;
 class QShortcutInput;
 
 enum EditMode
@@ -25,11 +25,13 @@ public:
     ActionEditWindow(QWidget * parent, Action * action);
     ~ActionEditWindow();
 
+    EditMode getEditMode();
+
+private:
     void fillActionTypes();
     void fillEntries();
     void connectSlots();
-
-    EditMode getEditMode();
+    void updateVisibility(Action::ActionType type);
 
 signals:
     void onSaved();

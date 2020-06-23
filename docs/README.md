@@ -105,22 +105,24 @@ This creates a configuration file under `Config/profiles.json` that can be easil
                 {
                     "id": "{9c6f3bba-fc58-4ebd-98ba-cc70fa503ba7}",
                     "actionName": "F13 Map to Screenshot",
-                    "type": "KeyMap",
+                    "type": "ActionKeyMap",
                     "srcKey": "7c",
                     "dstKey": "2c",
-                    "appPath": "",
+                    "targetPath": "",
                     "appArgs": "",
                     "createdDate": "2019-06-06T07:52:24"
+                    "lastModified": "2019-06-06T07:52:24",
                 },
                 {
                     "id": "{e75e41f5-de4f-422d-952f-a0a91bcaf62b}",
                     "actionName": "CTRL+SHIFT+F14 Start SnippingTool",
-                    "type": "AppStart",
+                    "type": "ActionAppStart",
                     "srcKey": "a2a07d",
                     "dstKey": "",
-                    "appPath": "C:\/WINDOWS\/system32\/SnippingTool.exe",
+                    "targetPath": "C:\/WINDOWS\/system32\/SnippingTool.exe",
                     "appArgs": "",
-                    "createdDate": "2019-06-06T08:04:59"
+                    "createdDate": "2019-06-06T08:04:59",
+                    "lastModified": "2019-06-06T08:04:59"
                 }
             ]
         }

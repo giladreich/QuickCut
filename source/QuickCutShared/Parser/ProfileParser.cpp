@@ -46,7 +46,7 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             QString actionType   = bpt::get(actionJson.second, "type", "");
             QString srcKey       = bpt::get(actionJson.second, "srcKey", "");
             QString dstKey       = bpt::get(actionJson.second, "dstKey", "");
-            QString appPath      = bpt::get(actionJson.second, "appPath", "");
+            QString targetPath   = bpt::get(actionJson.second, "targetPath", "");
             QString appArgs      = bpt::get(actionJson.second, "appArgs", "");
             QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             QString lastModified = bpt::get(actionJson.second, "lastModified", "");
@@ -54,7 +54,7 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             profile->getActionManager().add(
                 new Action(actionId, actionName, lastModified,
                            QuickCut::fromValue<Action::ActionType>(actionType), srcKey, dstKey,
-                           appPath, appArgs, createdDate));
+                           targetPath, appArgs, createdDate));
         }
 
         outData->emplace_back(profile);
@@ -92,7 +92,7 @@ bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
             bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
             bpt::put(actionJson, "srcKey", action->getSrcKey());
             bpt::put(actionJson, "dstKey", action->getDstKey());
-            bpt::put(actionJson, "appPath", action->getAppPath());
+            bpt::put(actionJson, "targetPath", action->getTargetPath());
             bpt::put(actionJson, "appArgs", action->getAppArgs());
             bpt::put(actionJson, "createdDate", action->getCreatedDate());
             bpt::put(actionJson, "lastModified", action->getLastModified());

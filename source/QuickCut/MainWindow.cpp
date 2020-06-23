@@ -444,7 +444,7 @@ void MainWindow::onBtnActionDuplicate()
 
     Action * newAction =
         new Action(action->getName(), action->getType(), action->getSrcKey(),
-                   action->getDstKey(), action->getAppPath(), action->getAppArgs());
+                   action->getDstKey(), action->getTargetPath(), action->getAppArgs());
 
     profile->getActionManager().insert(currIndex, newAction);
 

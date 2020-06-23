@@ -93,7 +93,7 @@
         <bool>true</bool>
        </property>
        <property name="text">
-        <string>Application Path:</string>
+        <string>Target Path:</string>
        </property>
       </widget>
      </item>
@@ -105,9 +105,12 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QLineEdit" name="tbxAppPath">
+      <widget class="QLineEdit" name="tbxTargetPath">
+       <property name="toolTip">
+        <string>The application or directory path to be launched.</string>
+       </property>
        <property name="placeholderText">
-        <string>The exe location.</string>
+        <string>The target location.</string>
        </property>
       </widget>
      </item>
@@ -121,7 +124,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="lblAppArgs">
        <property name="text">
-        <string>Application Args:</string>
+        <string>Arguments:</string>
        </property>
       </widget>
      </item>
@@ -157,6 +160,9 @@ QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
      </item>
      <item row="5" column="1">
       <widget class="QLineEdit" name="tbxAppArgs">
+       <property name="toolTip">
+        <string>You can pass here arguments delimited with comma to the target process.</string>
+       </property>
        <property name="placeholderText">
         <string>Arguments delimited with , (comma).</string>
        </property>
@@ -217,7 +223,7 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QPushButton" name="btnFilePicker">
+      <widget class="QPushButton" name="btnPicker">
        <property name="maximumSize">
         <size>
          <width>34</width>
@@ -254,8 +260,8 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
  <tabstops>
   <tabstop>tbxName</tabstop>
   <tabstop>cbxType</tabstop>
-  <tabstop>tbxAppPath</tabstop>
-  <tabstop>btnFilePicker</tabstop>
+  <tabstop>tbxTargetPath</tabstop>
+  <tabstop>btnPicker</tabstop>
   <tabstop>tbxAppArgs</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnCancel</tabstop>
