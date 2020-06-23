@@ -27,10 +27,6 @@ void QuickCutServiceWindows::start()
 
     std::wstring process =
         (QCoreApplication::applicationDirPath() + "/" + QUICKCUTCONSOLE_BIN).toStdWString();
-
-    WinExec(qPrintable(
-                QString((QCoreApplication::applicationDirPath() + "/" + QUICKCUTCONSOLE_BIN))),
-            SW_SHOW);
     RunProcessAsUserW(process);
 }
 
