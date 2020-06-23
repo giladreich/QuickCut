@@ -104,7 +104,7 @@ void QuickCutConsole::executeProcess(const QString & process, const QString & ar
 #elif defined(Q_OS_UNIX)
     // Writing as script temporary to disk to avoid any white spaces issues
     // that QProcess doesn't handle very well...
-    QString filePath = applicationDirPath() + "/tempCmd.sh" + extension;
+    QString filePath = applicationDirPath() + "/tempCmd.sh";
     QFile   scriptFile(filePath);
     scriptFile.open(QIODevice::ReadWrite);
     QTextStream ts(&scriptFile);
