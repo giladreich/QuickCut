@@ -141,11 +141,12 @@ void MainWindow::activateHook()
         if (service.start())
         {
             qDebug() << "[MainWindow::activateHook]: Successfully started the service.";
-            ui->statusBar->showMessage(QString("Activated %1.").arg(QUICKCUTSERVICE_NAME));
+            statusBar()->showMessage("Successfully started the service.");
         }
         else
         {
             qDebug() << "[MainWindow::activateHook]: Failed to start the service.";
+            statusBar()->showMessage("Failed to start the service.");
         }
     }
 
