@@ -126,4 +126,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/pch.h)
 
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")
+    set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY VS_DEBUGGER_COMMAND_ARGUMENTS "-e")
 endif()
