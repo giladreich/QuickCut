@@ -19,9 +19,9 @@
 MainWindow::MainWindow(QWidget * parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindowClass)
-    , m_ActionEditWindow(nullptr)
+    , m_ActionWindow(nullptr)
     , m_AboutWindow(nullptr)
-    , m_CheckUpdatesWindow(nullptr)
+    , m_UpdatesWindow(nullptr)
     , m_ExamplesWindow(nullptr)
     , m_Profiles("Config/profiles.json")
     , m_Preference("Config/preference.json")
@@ -412,17 +412,17 @@ void MainWindow::onActionDoubleClicked(const QModelIndex & index)
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     Action *  action  = profile->getActionManager()[index.row()];
 
-    m_ActionEditWindow = new ActionEditWindow(this, action);
-    connect(m_ActionEditWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
-    m_ActionEditWindow->exec();
+    m_ActionWindow = new ActionEditWindow(this, action);
+    connect(m_ActionWindow, &ActionEditWindow::onSaved, this, &MainWindow::onActionSaved);
+    m_ActionWindow->exec();
 }
 
 void MainWindow::onBtnActionCreate()
 {
-    m_ActionEditWindow = new ActionEditWindow(this);
-    connect(m_ActionEditWindow, &ActionEditWindow::onCreated, this,
+    m_ActionWindow = new ActionEditWindow(this);
+    connect(m_ActionWindow, &ActionEditWindow::onCreated, this,
             &MainWindow::onActionCreated);
-    m_ActionEditWindow->exec();
+    m_ActionWindow->exec();
 }
 
 void MainWindow::onBtnActionDelete()
@@ -612,8 +612,8 @@ void MainWindow::onActionHelpExamples()
 
 void MainWindow::onActionHelpCheckUpdates()
 {
-    m_CheckUpdatesWindow = new CheckUpdatesWindow(this);
-    m_CheckUpdatesWindow->exec();
+    m_UpdatesWindow = new CheckUpdatesWindow(this);
+    m_UpdatesWindow->exec();
 }
 
 void MainWindow::onActionLoadTheme(QCTheme::ThemeType type)
