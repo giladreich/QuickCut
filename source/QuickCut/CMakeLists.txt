@@ -52,7 +52,7 @@ set(CXX_FILES
     ${SHARED_ROOT_CXX_FILES}
     ${QUICKCUT_MANAGERS_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
-    ${QUICKCUT_PARSER_CXX_FILES}
+    ${QUICKCUT_PARSERS_CXX_FILES}
     ${QTSINGLEAPP_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
     ${QTSERVICE_CXX_FILES}
@@ -125,8 +125,8 @@ source_group("Source Files\\Shared\\Managers" FILES
 source_group("Source Files\\Shared\\Models" FILES
     ${QUICKCUT_MODELS_CXX_FILES}
 )
-source_group("Source Files\\Shared\\Parser" FILES
-    ${QUICKCUT_PARSER_CXX_FILES}
+source_group("Source Files\\Shared\\Parsers" FILES
+    ${QUICKCUT_PARSERS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
