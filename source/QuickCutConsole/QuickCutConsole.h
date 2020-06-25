@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include <QCoreApplication>
 
 class Profile;

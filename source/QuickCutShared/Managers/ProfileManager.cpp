@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "ProfileManager.h"
 
 ProfileManager::ProfileManager() noexcept

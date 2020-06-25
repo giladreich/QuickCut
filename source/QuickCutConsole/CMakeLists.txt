@@ -155,7 +155,7 @@ else() # UNIX
     )
 endif()
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/pch.h)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h)
 # target_precompile_headers(${PROJECT_NAME} REUSE_FROM QuickCut) # slow and some warnings.
 
 if(WIN32)

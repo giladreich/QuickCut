@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include <QtCore/QCoreApplication>
 #include "Utils/QSingleApplication/QSingleInstance.h"
 

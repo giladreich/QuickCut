@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "QShortcutInput.h"
 
 QShortcutInput * QShortcutInput::s_Instance = nullptr;

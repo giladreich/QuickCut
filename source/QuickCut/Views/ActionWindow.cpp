@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "ActionWindow.h"
 #include "Models/Action.h"
 #include "Widgets/QShortcutInput.h"

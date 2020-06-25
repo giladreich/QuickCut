@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "QCTheme.h"
 
 QCTheme::QCTheme(QCTheme::ThemeType type)

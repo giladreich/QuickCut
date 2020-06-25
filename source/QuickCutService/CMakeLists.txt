@@ -21,8 +21,8 @@ include_directories(
 # Project Files
 ##################################################################################################################
 set(SHARED_CXX_FILES
-    ${QUICKCUT_SHARED_DIR}/pch.h
-    ${QUICKCUT_SHARED_DIR}/pch.cpp
+    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h
+    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.cpp
 )
 set(MISC_CXX_FILES
     main.cpp
@@ -121,7 +121,7 @@ else() # UNIX
     )
 endif()
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/pch.h)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h)
 # target_precompile_headers(${PROJECT_NAME} REUSE_FROM QuickCut) # slow and some warnings.
 
 if(WIN32)

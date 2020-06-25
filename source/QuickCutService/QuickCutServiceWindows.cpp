@@ -1,7 +1,7 @@
 
 #pragma comment(lib, "userenv.lib")
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "QuickCutServiceWindows.h"
 
 #include <TlHelp32.h>

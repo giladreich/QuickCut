@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include <QLineEdit>
 
 class QShortcutInput : public QLineEdit

@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include <QtCore/QCoreApplication>
 
 #if defined(Q_OS_WIN)

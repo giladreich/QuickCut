@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutPCH.h"
 #include "QuickCutConsole.h"
 #include "Managers/ProfileManager.h"
 
