@@ -1,8 +1,10 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "ActionView.h"
-#include "Models/Action.h"
+
 #include "Widgets/QShortcutInput.h"
+
+#include "QuickCutShared/Models/Action.h"
 
 #include <QFileDialog>
 //#include <QKeySequenceEdit>

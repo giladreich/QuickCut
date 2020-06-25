@@ -1,8 +1,9 @@
 
 #pragma once
 
+#include "QuickCutShared/Models/Action.h"
+
 #include <QDialog>
-#include "Models/Action.h"
 #include "ui_ActionView.h"
 
 class QShortcutInput;

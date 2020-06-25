@@ -1,4 +1,4 @@
-
+// Precompiled Header
 #pragma once
 
 // STL includes
@@ -23,8 +23,8 @@
 #include <QStandardPaths>
 
 // Project includes
-#include "Types.h"
-#include "Utils/Utility.h"
+#include "QuickCutShared/Types.h"
+#include "QuickCutShared/Utils/Utility.h"
 
 // Other includes
 #if defined(Q_OS_WIN)

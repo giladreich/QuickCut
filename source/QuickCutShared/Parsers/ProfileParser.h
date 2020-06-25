@@ -2,7 +2,8 @@
 #pragma once
 
 #include "BaseParser.h"
-#include "Models/Profile.h"
+
+#include "QuickCutShared/Models/Profile.h"
 
 class ProfileParser : public BaseParser<std::vector<Profile *>>
 {

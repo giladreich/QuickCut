@@ -1,9 +1,9 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "BaseManager.h"
 
-#include "Models/Action.h"
-#include "Models/Profile.h"
+#include "QuickCutShared/Models/Action.h"
+#include "QuickCutShared/Models/Profile.h"
 
 template class BaseManager<Action>;
 template class BaseManager<Profile>;

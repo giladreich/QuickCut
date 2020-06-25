@@ -1,5 +1,5 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "AboutView.h"
 
 AboutView::AboutView(QWidget * parent)

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "QuickCutShared/Types.h"
 
 namespace boost
 {

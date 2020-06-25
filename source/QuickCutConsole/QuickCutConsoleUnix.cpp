@@ -1,7 +1,8 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "QuickCutConsoleUnix.h"
-#include "Managers/ProfileManager.h"
+
+#include "QuickCutShared/Managers/ProfileManager.h"
 
 QuickCutConsoleUnix::QuickCutConsoleUnix(int argc, char * argv[])
     : QuickCutConsole(argc, argv)

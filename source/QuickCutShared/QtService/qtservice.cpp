@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "qtservice.h"
 #include "qtservice_p.h"
 #include <QCoreApplication>

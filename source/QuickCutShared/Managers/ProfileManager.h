@@ -3,7 +3,8 @@
 
 #include "BaseManager.h"
 #include "IParserOperations.h"
-#include "Parsers/ProfileParser.h"
+
+#include "QuickCutShared/Parsers/ProfileParser.h"
 
 class ProfileManager : public BaseManager<Profile>, IParserOperations
 {

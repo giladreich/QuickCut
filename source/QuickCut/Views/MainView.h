@@ -1,11 +1,11 @@
 
 #pragma once
 
+#include "QuickCutShared/Managers/ProfileManager.h"
+#include "QuickCutShared/Managers/PreferenceManager.h"
+
 #include <QtWidgets/QMainWindow>
 #include "ui_MainView.h"
-
-#include "Managers/ProfileManager.h"
-#include "Managers/PreferenceManager.h"
 
 class ExamplesView;
 class UpdatesView;

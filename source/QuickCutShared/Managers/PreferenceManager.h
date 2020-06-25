@@ -1,7 +1,8 @@
 
 
 #include "IParserOperations.h"
-#include "Parsers/PreferenceParser.h"
+
+#include "QuickCutShared/Parsers/PreferenceParser.h"
 
 class PreferenceManager : IParserOperations
 {

@@ -1,7 +1,8 @@
 
 #pragma once
 
-#include "Utils/Utility.h"
+#include "QuickCutShared/Utils/Utility.h"
+
 #include <QFileInfo>
 
 template <typename T>

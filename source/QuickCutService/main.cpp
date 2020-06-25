@@ -1,12 +1,13 @@
 
-#include "QuickCutPCH.h"
-#include <QtCore/QCoreApplication>
+#include "QuickCutShared/QuickCutPCH.h"
 
 #if defined(Q_OS_WIN)
 #    include "QuickCutServiceWindows.h"
 #elif defined(Q_OS_UNIX)
 #    include "QuickCutServiceUnix.h"
 #endif
+
+#include <QtCore/QCoreApplication>
 
 int main(int argc, char * argv[])
 {

@@ -1,5 +1,5 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "QuickCutServiceUnix.h"
 
 QuickCutServiceUnix::QuickCutServiceUnix(int argc, char * argv[])

@@ -1,5 +1,5 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "Profile.h"
 
 Profile::Profile() noexcept

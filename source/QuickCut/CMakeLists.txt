@@ -20,7 +20,7 @@ add_definitions(
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${QUICKCUT_SHARED_DIR}
+    ${SOURCE_ROOT_DIR}
     ${PROJECT_BINARY_DIR} # generated "ui_*.h" files.
 )
 

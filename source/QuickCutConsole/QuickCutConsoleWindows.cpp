@@ -1,7 +1,8 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "QuickCutConsoleWindows.h"
-#include "Managers/ProfileManager.h"
+
+#include "QuickCutShared/Managers/ProfileManager.h"
 
 #define KEY_WAS_DOWN_MASK 0x80
 #define KEY_IS_DOWN_MASK  0x01

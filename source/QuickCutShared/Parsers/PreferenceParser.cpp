@@ -1,5 +1,5 @@
 
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "PreferenceParser.h"
 
 PreferenceParser::PreferenceParser(const QString & path)

@@ -1,8 +1,8 @@
 
-#include "QuickCutPCH.h"
-#include <QtWidgets/QApplication>
+#include "QuickCutShared/QuickCutPCH.h"
 #include "Views/MainView.h"
-#include "Utils/QSingleApplication/QSingleInstance.h"
+#include "QuickCutShared/Utils/QSingleApplication/QSingleInstance.h"
+#include <QtWidgets/QApplication>
 
 int main(int argc, char * argv[])
 {

@@ -1,6 +1,13 @@
 ﻿
-#include "QuickCutPCH.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "MainView.h"
+
+#include "ActionView.h"
+#include "AboutView.h"
+#include "UpdatesView.h"
+#include "ExamplesView.h"
+
+#include "QuickCutShared/QtService/QtService.h"
 
 #include <QThread>
 #include <QTimer>
@@ -8,13 +15,6 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
-
-#include <QtService/QtService>
-
-#include "ActionView.h"
-#include "AboutView.h"
-#include "UpdatesView.h"
-#include "ExamplesView.h"
 
 MainView::MainView(QWidget * parent)
     : QMainWindow(parent)

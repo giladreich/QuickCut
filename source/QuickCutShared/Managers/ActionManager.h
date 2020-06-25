@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseManager.h"
-#include "Models/Action.h"
+#include "QuickCutShared/Models/Action.h"
 
 class ActionManager : public BaseManager<Action>
 {
