@@ -185,7 +185,8 @@ void ActionWindow::onBtnFilePicker()
 
     QString filePath;
     if (m_Action->getType() == Action::ActionAppLaunch)
-        filePath = QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
+        filePath =
+            QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
     else if (m_Action->getType() == Action::ActionDirLaunch)
         filePath = QFileDialog::getExistingDirectory(this, "Get Target Directory", homeDir);
 
