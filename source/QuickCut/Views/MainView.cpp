@@ -1,6 +1,6 @@
 ﻿
 #include "QuickCutPCH.h"
-#include "MainWindow.h"
+#include "MainView.h"
 
 #include <QThread>
 #include <QTimer>
@@ -11,18 +11,18 @@
 
 #include <QtService/QtService>
 
-#include "ActionWindow.h"
-#include "AboutWindow.h"
-#include "UpdatesWindow.h"
-#include "ExamplesWindow.h"
+#include "ActionView.h"
+#include "AboutView.h"
+#include "UpdatesView.h"
+#include "ExamplesView.h"
 
-MainWindow::MainWindow(QWidget * parent)
+MainView::MainView(QWidget * parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindowClass)
-    , m_ActionWindow(nullptr)
-    , m_AboutWindow(nullptr)
-    , m_UpdatesWindow(nullptr)
-    , m_ExamplesWindow(nullptr)
+    , ui(new Ui::MainView)
+    , m_ActionView(nullptr)
+    , m_AboutView(nullptr)
+    , m_UpdatesView(nullptr)
+    , m_ExamplesView(nullptr)
     , m_Profiles("Config/profiles.json")
     , m_Preference("Config/preference.json")
     , m_LocalSocket(new QLocalSocket(this))
@@ -42,31 +42,29 @@ MainWindow::MainWindow(QWidget * parent)
     statusBar()->showMessage("Ready.");
 }
 
-MainWindow::~MainWindow()
+MainView::~MainView()
 {
     m_Profiles.clear();
 }
 
-void MainWindow::connectSlots()
+void MainView::connectSlots()
 {
     connect(m_LocalSocket, &QLocalSocket::readyRead, this,
-            &MainWindow::onReloadProfilesResponse);
+            &MainView::onReloadProfilesResponse);
 
     // File Menu
-    connect(ui->actionFileOpen, &QAction::triggered, this, &MainWindow::onActionFileOpen);
-    connect(ui->actionFileSave, &QAction::triggered, this, &MainWindow::onActionFileSave);
-    connect(ui->actionFileSaveAs, &QAction::triggered, this, &MainWindow::onActionFileSaveAs);
+    connect(ui->actionFileOpen, &QAction::triggered, this, &MainView::onActionFileOpen);
+    connect(ui->actionFileSave, &QAction::triggered, this, &MainView::onActionFileSave);
+    connect(ui->actionFileSaveAs, &QAction::triggered, this, &MainView::onActionFileSaveAs);
     connect(ui->actionFileRestartService, &QAction::triggered, this,
-            &MainWindow::onActionFileRestartService);
-    connect(ui->actionFileExit, &QAction::triggered, this, &MainWindow::onActionFileExit);
+            &MainView::onActionFileRestartService);
+    connect(ui->actionFileExit, &QAction::triggered, this, &MainView::onActionFileExit);
 
     // View Menu
-    connect(ui->actionViewToolBar, &QAction::triggered, this,
-            &MainWindow::onActionViewToolBar);
+    connect(ui->actionViewToolBar, &QAction::triggered, this, &MainView::onActionViewToolBar);
     connect(ui->actionViewStatusBar, &QAction::triggered, this,
-            &MainWindow::onActionViewStatusBar);
-    connect(ui->actionViewRefresh, &QAction::triggered, this,
-            &MainWindow::onActionViewRefresh);
+            &MainView::onActionViewStatusBar);
+    connect(ui->actionViewRefresh, &QAction::triggered, this, &MainView::onActionViewRefresh);
 
     // Preference Menu
     connect(ui->actionThemeDefault, &QAction::triggered, this,
@@ -84,61 +82,59 @@ void MainWindow::connectSlots()
     connect(ui->actionThemeDarkOrange, &QAction::triggered, this,
             [&] { onActionLoadTheme(QCTheme::ThemeDarkOrange); });
     connect(ui->actionThemeLoadQss, &QAction::triggered, this,
-            &MainWindow::onLoadCustomStylesheet);
+            &MainView::onLoadCustomStylesheet);
 
     // Help Menu
-    connect(ui->actionHelpAbout, &QAction::triggered, this, &MainWindow::onActionHelpAbout);
+    connect(ui->actionHelpAbout, &QAction::triggered, this, &MainView::onActionHelpAbout);
     connect(ui->actionHelpExamples, &QAction::triggered, this,
-            &MainWindow::onActionHelpExamples);
+            &MainView::onActionHelpExamples);
     connect(ui->actionHelpCheckUpdates, &QAction::triggered, this,
-            &MainWindow::onActionHelpCheckUpdates);
+            &MainView::onActionHelpCheckUpdates);
 
     // Controls
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
-            &MainWindow::onActionSelChange);
+            &MainView::onActionSelChange);
     connect(ui->lbxActions, &QListWidget::doubleClicked, this,
-            &MainWindow::onActionDoubleClicked);
+            &MainView::onActionDoubleClicked);
     connect(ui->cbxProfile, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
-            &MainWindow::onProfileSelChange);
+            &MainView::onProfileSelChange);
 
-    connect(ui->btnSetActive, &QPushButton::clicked, this, &MainWindow::onBtnSetActiveProfile);
-    connect(ui->btnCreateProfile, &QPushButton::clicked, this,
-            &MainWindow::onBtnCreateProfile);
-    connect(ui->btnDeleteProfile, &QPushButton::clicked, this,
-            &MainWindow::onBtnDeleteProfile);
+    connect(ui->btnSetActive, &QPushButton::clicked, this, &MainView::onBtnSetActiveProfile);
+    connect(ui->btnCreateProfile, &QPushButton::clicked, this, &MainView::onBtnCreateProfile);
+    connect(ui->btnDeleteProfile, &QPushButton::clicked, this, &MainView::onBtnDeleteProfile);
 
-    connect(ui->btnActionCreate, &QPushButton::clicked, this, &MainWindow::onBtnActionCreate);
-    connect(ui->btnActionDelete, &QPushButton::clicked, this, &MainWindow::onBtnActionDelete);
+    connect(ui->btnActionCreate, &QPushButton::clicked, this, &MainView::onBtnActionCreate);
+    connect(ui->btnActionDelete, &QPushButton::clicked, this, &MainView::onBtnActionDelete);
     connect(ui->btnActionDuplicate, &QPushButton::clicked, this,
-            &MainWindow::onBtnActionDuplicate);
+            &MainView::onBtnActionDuplicate);
 
     connect(ui->btnActionMoveDown, &QPushButton::clicked, this,
-            &MainWindow::onBtnActionMoveDown);
-    connect(ui->btnActionMoveUp, &QPushButton::clicked, this, &MainWindow::onBtnActionMoveUp);
+            &MainView::onBtnActionMoveDown);
+    connect(ui->btnActionMoveUp, &QPushButton::clicked, this, &MainView::onBtnActionMoveUp);
 }
 
 // TODO(Gilad): Consider moving everything to QuickCutShared/Utils/HookHelper class.
-void MainWindow::activateHook()
+void MainView::activateHook()
 {
     QtServiceController service(QUICKCUTSERVICE_NAME);
     if (!service.isInstalled())
     {
         if (service.install(QUICKCUTSERVICE_BIN))
-            qDebug() << "[MainWindow::activateHook]: Successfully installed the service.";
+            qDebug() << "[MainView::activateHook]: Successfully installed the service.";
         else
-            qDebug() << "[MainWindow::activateHook]: Failed to install the service.";
+            qDebug() << "[MainView::activateHook]: Failed to install the service.";
     }
 
     if (!service.isRunning())
     {
         if (service.start())
         {
-            qDebug() << "[MainWindow::activateHook]: Successfully started the service.";
+            qDebug() << "[MainView::activateHook]: Successfully started the service.";
             statusBar()->showMessage("Successfully started the service.");
         }
         else
         {
-            qDebug() << "[MainWindow::activateHook]: Failed to start the service.";
+            qDebug() << "[MainView::activateHook]: Failed to start the service.";
             statusBar()->showMessage("Failed to start the service.");
         }
     }
@@ -194,12 +190,12 @@ void MainWindow::activateHook()
 #endif
 }
 
-void MainWindow::showEvent(QShowEvent * event)
+void MainView::showEvent(QShowEvent * event)
 {
     QMainWindow::showEvent(event);
 }
 
-void MainWindow::initThemes()
+void MainView::initThemes()
 {
     m_ThemeActions.insert(QCTheme::ThemeDefault, ui->actionThemeDefault);
     m_ThemeActions.insert(QCTheme::ThemeDark, ui->actionThemeDark);
@@ -210,7 +206,7 @@ void MainWindow::initThemes()
     m_ThemeActions.insert(QCTheme::ThemeDarkOrange, ui->actionThemeDarkOrange);
 }
 
-void MainWindow::initPreference()
+void MainView::initPreference()
 {
     if (!m_Preference.load()) m_Preference.save();
 
@@ -223,7 +219,7 @@ void MainWindow::initPreference()
     ui->statusBar->setVisible(m_Preference.get().isStatusBarVisible());
 }
 
-void MainWindow::initProfiles()
+void MainView::initProfiles()
 {
     ui->lbxActions->clear();
     ui->cbxProfile->clear();
@@ -261,7 +257,7 @@ void MainWindow::initProfiles()
     ui->btnSetActive->setEnabled(false);
 }
 
-bool MainWindow::reloadProfiles()
+bool MainView::reloadProfiles()
 {
     if (!loadProfiles()) return false;
 
@@ -270,19 +266,19 @@ bool MainWindow::reloadProfiles()
     return true;
 }
 
-bool MainWindow::loadProfiles()
+bool MainView::loadProfiles()
 {
     return m_Profiles.load();
 }
 
-bool MainWindow::saveProfiles()
+bool MainView::saveProfiles()
 {
     bool result = m_Profiles.save();
     if (result) sendReloadProfiles();
     return result;
 }
 
-bool MainWindow::sendReloadProfiles()
+bool MainView::sendReloadProfiles()
 {
     m_SocketBlockSize = 0;
     m_LocalSocket->abort();
@@ -290,7 +286,7 @@ bool MainWindow::sendReloadProfiles()
     return true;
 }
 
-void MainWindow::onReloadProfilesResponse()
+void MainView::onReloadProfilesResponse()
 {
     if (m_SocketBlockSize == 0)
     {
@@ -303,11 +299,11 @@ void MainWindow::onReloadProfilesResponse()
 
     QString responseMessage;
     m_SocketStreamIn >> responseMessage;
-    qDebug() << "[MainWindow::onReloadProfilesResponse]: Response -> "
+    qDebug() << "[MainView::onReloadProfilesResponse]: Response -> "
              << qPrintable(responseMessage);
 }
 
-void MainWindow::onProfileSelChange(int index)
+void MainView::onProfileSelChange(int index)
 {
     ui->lbxActions->clear();
     Profile * profile = m_Profiles[index];
@@ -326,11 +322,11 @@ void MainWindow::onProfileSelChange(int index)
     ui->btnActionCreate->setEnabled(true);
 
     disconnect(ui->lbxActions, &QListWidget::currentRowChanged, this,
-               &MainWindow::onActionSelChange);
+               &MainView::onActionSelChange);
     for (auto && action : profile->getActionManager())
         ui->lbxActions->addItem(action->getName());
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
-            &MainWindow::onActionSelChange);
+            &MainView::onActionSelChange);
 
     if (profile->getActionManager().empty())
         onActionSelChange(-1);
@@ -338,7 +334,7 @@ void MainWindow::onProfileSelChange(int index)
         ui->lbxActions->setCurrentRow(0);
 }
 
-void MainWindow::onBtnSetActiveProfile()
+void MainView::onBtnSetActiveProfile()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     if (!profile) return;
@@ -348,7 +344,7 @@ void MainWindow::onBtnSetActiveProfile()
     reloadProfiles();
 }
 
-void MainWindow::onBtnDeleteProfile()
+void MainView::onBtnDeleteProfile()
 {
     const int currIndex = ui->cbxProfile->currentIndex();
     Profile * profile   = m_Profiles[currIndex];
@@ -365,7 +361,7 @@ void MainWindow::onBtnDeleteProfile()
     reloadProfiles();
 }
 
-Profile * MainWindow::onBtnCreateProfile()
+Profile * MainView::onBtnCreateProfile()
 {
     bool    ok;
     QString profileName = QInputDialog::getText(
@@ -396,7 +392,7 @@ Profile * MainWindow::onBtnCreateProfile()
     return profile;
 }
 
-void MainWindow::onActionSelChange(int index)
+void MainView::onActionSelChange(int index)
 {
     bool enabled = index >= 0;
     if (!enabled) ui->btnActionCreate->setFocus();
@@ -407,24 +403,24 @@ void MainWindow::onActionSelChange(int index)
     ui->btnActionMoveDown->setEnabled(enabled);
 }
 
-void MainWindow::onActionDoubleClicked(const QModelIndex & index)
+void MainView::onActionDoubleClicked(const QModelIndex & index)
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     Action *  action  = profile->getActionManager()[index.row()];
 
-    m_ActionWindow = new ActionWindow(this, action);
-    connect(m_ActionWindow, &ActionWindow::onSaved, this, &MainWindow::onActionSaved);
-    m_ActionWindow->exec();
+    m_ActionView = new ActionView(this, action);
+    connect(m_ActionView, &ActionView::onSaved, this, &MainView::onActionSaved);
+    m_ActionView->exec();
 }
 
-void MainWindow::onBtnActionCreate()
+void MainView::onBtnActionCreate()
 {
-    m_ActionWindow = new ActionWindow(this);
-    connect(m_ActionWindow, &ActionWindow::onCreated, this, &MainWindow::onActionCreated);
-    m_ActionWindow->exec();
+    m_ActionView = new ActionView(this);
+    connect(m_ActionView, &ActionView::onCreated, this, &MainView::onActionCreated);
+    m_ActionView->exec();
 }
 
-void MainWindow::onBtnActionDelete()
+void MainView::onBtnActionDelete()
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
@@ -435,7 +431,7 @@ void MainWindow::onBtnActionDelete()
     ui->lbxActions->setCurrentRow(currIndex - 1);
 }
 
-void MainWindow::onBtnActionDuplicate()
+void MainView::onBtnActionDuplicate()
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
@@ -452,7 +448,7 @@ void MainWindow::onBtnActionDuplicate()
     ui->lbxActions->setCurrentRow(currIndex + 1);
 }
 
-void MainWindow::onBtnActionMoveDown()
+void MainView::onBtnActionMoveDown()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveDown(ui->lbxActions->currentRow());
@@ -461,7 +457,7 @@ void MainWindow::onBtnActionMoveDown()
     saveProfiles();
 }
 
-void MainWindow::onBtnActionMoveUp()
+void MainView::onBtnActionMoveUp()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveUp(ui->lbxActions->currentRow());
@@ -470,7 +466,7 @@ void MainWindow::onBtnActionMoveUp()
     saveProfiles();
 }
 
-void MainWindow::listItemSwap(QListWidget * list, bool moveUp)
+void MainView::listItemSwap(QListWidget * list, bool moveUp)
 {
     const int currIndex = list->currentRow();
     if (currIndex == -1) return;
@@ -495,7 +491,7 @@ void MainWindow::listItemSwap(QListWidget * list, bool moveUp)
     }
 }
 
-void MainWindow::onActionSaved()
+void MainView::onActionSaved()
 {
     const int currIndex = ui->lbxActions->currentRow();
     saveProfiles();
@@ -503,7 +499,7 @@ void MainWindow::onActionSaved()
     ui->lbxActions->setCurrentRow(currIndex);
 }
 
-void MainWindow::onActionCreated(Action * action)
+void MainView::onActionCreated(Action * action)
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
@@ -517,7 +513,7 @@ void MainWindow::onActionCreated(Action * action)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MainWindow::onActionFileOpen()
+void MainView::onActionFileOpen()
 {
     QString desktopDir =
         QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first();
@@ -536,19 +532,19 @@ void MainWindow::onActionFileOpen()
     QString dstFilePath = m_Profiles.getConfigFilePath();
     if (!QFile::copy(srcFilePath, dstFilePath))
     {
-        qDebug() << "[MainWindow::onActionFileOpen] - Failed to copy file from '"
-                 << srcFilePath << "' to '" << dstFilePath << "'";
+        qDebug() << "[MainView::onActionFileOpen] - Failed to copy file from '" << srcFilePath
+                 << "' to '" << dstFilePath << "'";
         return;
     }
 }
 
-void MainWindow::onActionFileSave()
+void MainView::onActionFileSave()
 {
     m_Profiles.save();
     m_Preference.save();
 }
 
-void MainWindow::onActionFileSaveAs()
+void MainView::onActionFileSaveAs()
 {
     QString dstFilePath = QFileDialog::getSaveFileName(this, tr("Save As File"), "",
                                                        tr("Profiles File (*.json)"));
@@ -557,25 +553,25 @@ void MainWindow::onActionFileSaveAs()
     QString srcFilePath = m_Profiles.getConfigFilePath();
     if (!QFile::copy(srcFilePath, dstFilePath))
     {
-        qDebug() << "[MainWindow::onActionFileSaveAs] - Failed to copy file from '"
+        qDebug() << "[MainView::onActionFileSaveAs] - Failed to copy file from '"
                  << srcFilePath << "' to '" << dstFilePath << "'";
         return;
     }
 }
 
-void MainWindow::onActionFileRestartService()
+void MainView::onActionFileRestartService()
 {
     QtServiceController service(QUICKCUTSERVICE_NAME);
     service.stop();
     QTimer::singleShot(1000, [&] { activateHook(); });
 }
 
-void MainWindow::onActionFileExit()
+void MainView::onActionFileExit()
 {
     close();
 }
 
-void MainWindow::onActionViewToolBar()
+void MainView::onActionViewToolBar()
 {
     bool visible = ui->actionViewToolBar->isChecked();
     ui->toolBar->setVisible(visible);
@@ -583,7 +579,7 @@ void MainWindow::onActionViewToolBar()
     m_Preference.save();
 }
 
-void MainWindow::onActionViewStatusBar()
+void MainView::onActionViewStatusBar()
 {
     bool visible = ui->actionViewStatusBar->isChecked();
     ui->statusBar->setVisible(visible);
@@ -591,37 +587,37 @@ void MainWindow::onActionViewStatusBar()
     m_Preference.save();
 }
 
-void MainWindow::onActionViewRefresh()
+void MainView::onActionViewRefresh()
 {
     sendReloadProfiles();
     initProfiles();
 }
 
-void MainWindow::onActionHelpAbout()
+void MainView::onActionHelpAbout()
 {
-    m_AboutWindow = new AboutWindow(this);
-    m_AboutWindow->exec();
+    m_AboutView = new AboutView(this);
+    m_AboutView->exec();
 }
 
-void MainWindow::onActionHelpExamples()
+void MainView::onActionHelpExamples()
 {
-    m_ExamplesWindow = new ExamplesWindow(this);
-    m_ExamplesWindow->exec();
+    m_ExamplesView = new ExamplesView(this);
+    m_ExamplesView->exec();
 }
 
-void MainWindow::onActionHelpCheckUpdates()
+void MainView::onActionHelpCheckUpdates()
 {
-    m_UpdatesWindow = new UpdatesWindow(this);
-    m_UpdatesWindow->exec();
+    m_UpdatesView = new UpdatesView(this);
+    m_UpdatesView->exec();
 }
 
-void MainWindow::onActionLoadTheme(QCTheme::ThemeType type)
+void MainView::onActionLoadTheme(QCTheme::ThemeType type)
 {
     onActionLoadTheme(QCTheme::getResourcePath(type), m_ThemeActions[type]);
     m_Preference.get().getTheme().set(type);
     m_Preference.save();
 }
-void MainWindow::onActionLoadTheme(const QString & qssPath, QAction * action /*= nullptr*/)
+void MainView::onActionLoadTheme(const QString & qssPath, QAction * action /*= nullptr*/)
 {
     for (auto && qAction : m_ThemeActions) qAction->setChecked(false);
 
@@ -638,7 +634,7 @@ void MainWindow::onActionLoadTheme(const QString & qssPath, QAction * action /*=
     qApp->setStyleSheet(ts.readAll());
 }
 
-void MainWindow::onLoadCustomStylesheet()
+void MainView::onLoadCustomStylesheet()
 {
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open Stylesheet File"), "",
                                                     tr("Stylesheet File (*.qss)"));

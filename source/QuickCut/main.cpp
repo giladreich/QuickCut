@@ -1,7 +1,7 @@
 
 #include "QuickCutPCH.h"
 #include <QtWidgets/QApplication>
-#include "Views/MainWindow.h"
+#include "Views/MainView.h"
 #include "Utils/QSingleApplication/QSingleInstance.h"
 
 int main(int argc, char * argv[])
@@ -13,7 +13,7 @@ int main(int argc, char * argv[])
     QCoreApplication::setApplicationVersion(QUICKCUT_VERSION);
 
     QApplication a(argc, argv);
-    MainWindow   w;
+    MainView     w;
     w.show();
     return a.exec();
 }
