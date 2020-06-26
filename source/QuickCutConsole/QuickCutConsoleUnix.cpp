@@ -14,16 +14,22 @@ QuickCutConsoleUnix::~QuickCutConsoleUnix() {}
 
 bool QuickCutConsoleUnix::start()
 {
-    if (!QuickCutConsole::start()) return false;
-
-    // TODO: Implement hook.
+    if (!QuickCutConsole::start())
+    {
+        qDebug() << "[QuickCutConsoleUnix::start]: Failed to start...";
+        return false;
+    }
 
     return true;
 }
 
 bool QuickCutConsoleUnix::stop()
 {
-    if (!QuickCutConsole::stop()) return false;
+    if (!QuickCutConsole::stop())
+    {
+        qDebug() << "[QuickCutConsoleUnix::stop]: Failed to stop...";
+        return false;
+    }
 
     return true;
 }

@@ -1,7 +1,12 @@
 
 #pragma once
 
-#include "QuickCutShared/QuickCutPCH.h"
+#if defined(Q_OS_WINDOWS)
+#    include "QuickCutShared/Hooks/KeyboardHookWindows.h"
+#elif defined(Q_OS_UNIX)
+#    include "QuickCutShared/Hooks/KeyboardHookUnix.h"
+#endif
+
 #include <QLineEdit>
 
 class QShortcutInput : public QLineEdit
@@ -12,18 +17,15 @@ public:
     QShortcutInput(QWidget * parent);
     ~QShortcutInput();
 
-#if defined(Q_OS_WIN)
-    static LRESULT CALLBACK WndProc(int nCode, WPARAM wParam, LPARAM lParam);
-#endif
-
-protected:
     void focusInEvent(QFocusEvent * event) override;
     void focusOutEvent(QFocusEvent * event) override;
 
-public:
-    static QShortcutInput * s_Instance;
+public slots:
+    void onKeysPress(const QStringList & keys, bool * outSwallowKey);
 
-#if defined(Q_OS_WIN)
-    static HHOOK s_Hook;
-#endif
+public:
+    std::shared_ptr<QStringList> m_CurrentKeys;
+
+private:
+    QPointer<KeyboardHook> m_Hook;
 };
