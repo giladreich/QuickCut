@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################################################################################
 # Setup
 ##################################################################################################################
+
 project(QuickCutService)
 
 add_definitions(
@@ -20,58 +21,68 @@ include_directories(
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
-set(SHARED_CXX_FILES
-    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h
-    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.cpp
-)
-set(MISC_CXX_FILES
+
+# Sources
+set(ROOT_CXX_FILES
     main.cpp
     QuickCutService.h
     QuickCutService.cpp
 )
 
 if(WIN32)
-    set(MISC_CXX_FILES
-        ${MISC_CXX_FILES}
+    set(ROOT_CXX_FILES
+        ${ROOT_CXX_FILES}
         QuickCutServiceWindows.h
         QuickCutServiceWindows.cpp
     )
+elseif(UNIX)
+    set(ROOT_CXX_FILES
+        ${ROOT_CXX_FILES}
+        QuickCutServiceUnix.h
+        QuickCutServiceUnix.cpp
+    )
+endif()
+
+set(SHARED_CXX_FILES
+    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h
+    ${QUICKCUT_SHARED_DIR}/QuickCutPCH.cpp
+)
+set(CXX_FILES
+    ${ROOT_CXX_FILES}
+    ${QTSERVICE_CXX_FILES}
+    ${SHARED_CXX_FILES}
+    ${QUICKCUT_UTILS_CXX_FILES}
+)
+
+# Resources
+if(WIN32)
     set(RESOURCE_FILES
         Resources/QuickCutService.rc
     )
 elseif(UNIX)
-    set(MISC_CXX_FILES
-        ${MISC_CXX_FILES}
-        QuickCutServiceUnix.h
-        QuickCutServiceUnix.cpp
-    )
     set(RESOURCE_FILES
         "" # TODO(Gilad): Create resource for unix systems.
     )
 endif()
 
-set(CXX_FILES
-    ${MISC_CXX_FILES}
-    ${QTSERVICE_CXX_FILES}
-    ${SHARED_CXX_FILES}
-    ${QUICKCUT_UTILS_CXX_FILES}
-)
-
 ##################################################################################################################
 # IDE Representation
 ##################################################################################################################
+
 source_group("Source Files" FILES
-    ${MISC_CXX_FILES}
+    ${ROOT_CXX_FILES}
 )
+
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
-)
-source_group("Source Files\\Shared\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
+source_group("Source Files\\Shared\\Utils" FILES
+    ${QUICKCUT_UTILS_CXX_FILES}
+)
+
 source_group("Resources" FILES
     ${RESOURCE_FILES}
 )
@@ -81,7 +92,6 @@ list(FILTER CMAKE_GENERATED_FILES INCLUDE REGEX "^.*\.(hxx|cxx)$")
 source_group("_GeneratedFiles\\CMake" FILES
     ${CMAKE_GENERATED_FILES}
 )
-
 file(GLOB_RECURSE QT_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
 list(FILTER QT_GENERATED_FILES INCLUDE REGEX "^.*(mocs_.*|ui_.*|qrc_.*)\.(h|cpp)$")
 source_group("_GeneratedFiles\\Qt" FILES
@@ -89,20 +99,20 @@ source_group("_GeneratedFiles\\Qt" FILES
     ${QT_GENERATED_FILES}
 )
 
-
 ##################################################################################################################
 # Qt Framework
 ##################################################################################################################
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 #qt5_wrap_ui()
 #qt5_wrap_cpp()
 
-
 ##################################################################################################################
 # Target
 ##################################################################################################################
+
 add_executable(${PROJECT_NAME}
     ${CXX_FILES}
     ${RESOURCE_FILES}

@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 ##################################################################################################################
 # Setup
 ##################################################################################################################
+
 project(QuickCutConsole)
 
 add_definitions(
@@ -20,6 +21,28 @@ include_directories(
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
+
+# Sources
+set(ROOT_CXX_FILES
+    main.cpp
+    QuickCutConsole.h
+    QuickCutConsole.cpp
+)
+
+if(WIN32)
+    set(ROOT_CXX_FILES
+        ${ROOT_CXX_FILES}
+        QuickCutConsoleWindows.h
+        QuickCutConsoleWindows.cpp
+    )
+elseif(UNIX)
+    set(ROOT_CXX_FILES
+        ${ROOT_CXX_FILES}
+        QuickCutConsoleUnix.h
+        QuickCutConsoleUnix.cpp
+    )
+endif()
+
 set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_CXX_FILES}
 )
@@ -45,51 +68,45 @@ set(PARSERS_CXX_FILES
     ${QUICKCUT_PARSERS_DIR}/ProfileParser.h
     ${QUICKCUT_PARSERS_DIR}/ProfileParser.cpp
 )
-
-set(MISC_CXX_FILES
-    main.cpp
-    QuickCutConsole.h
-    QuickCutConsole.cpp
+set(UTILS_CXX_FILES
+    ${QUICKCUT_UTILS_DIR}/Utility.h
+    ${QUICKCUT_UTILS_DIR}/Utility.cpp
+)
+set(CXX_FILES
+    ${ROOT_CXX_FILES}
+    ${SHARED_CXX_FILES}
+    ${QUICKCUT_HOOKS_CXX_FILES}
+    ${MANAGERS_CXX_FILES}
+    ${MODELS_CXX_FILES}
+    ${PARSERS_CXX_FILES}
+    ${QTSINGLEAPP_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 
+# Resources
 if(WIN32)
-    set(MISC_CXX_FILES
-        ${MISC_CXX_FILES}
-        QuickCutConsoleWindows.h
-        QuickCutConsoleWindows.cpp
-    )
     set(RESOURCE_FILES
         Resources/QuickCutConsole.rc
     )
 elseif(UNIX)
-    set(MISC_CXX_FILES
-        ${MISC_CXX_FILES}
-        QuickCutConsoleUnix.h
-        QuickCutConsoleUnix.cpp
-    )
     set(RESOURCE_FILES
         "" # TODO(Gilad): Create resource for unix systems.
     )
 endif()
 
-set(CXX_FILES
-    ${MISC_CXX_FILES}
-    ${SHARED_CXX_FILES}
-    ${MANAGERS_CXX_FILES}
-    ${MODELS_CXX_FILES}
-    ${PARSERS_CXX_FILES}
-    ${QTSINGLEAPP_CXX_FILES}
-    ${QUICKCUT_UTILS_CXX_FILES}
-)
-
 ##################################################################################################################
 # IDE Representation
 ##################################################################################################################
+
 source_group("Source Files" FILES
-    ${MISC_CXX_FILES}
+    ${ROOT_CXX_FILES}
 )
+
 source_group("Source Files\\Shared" FILES
     ${SHARED_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Hooks" FILES
+    ${QUICKCUT_HOOKS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Managers" FILES
     ${MANAGERS_CXX_FILES}
@@ -101,11 +118,12 @@ source_group("Source Files\\Shared\\Parsers" FILES
     ${PARSERS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Utils\\QSingleApp" FILES
     ${QTSINGLEAPP_CXX_FILES}
 )
+
 source_group("Resources" FILES
     ${RESOURCE_FILES}
 )
@@ -115,7 +133,6 @@ list(FILTER CMAKE_GENERATED_FILES INCLUDE REGEX "^.*\.(hxx|cxx)$")
 source_group("_GeneratedFiles\\CMake" FILES
     ${CMAKE_GENERATED_FILES}
 )
-
 file(GLOB_RECURSE QT_GENERATED_FILES ${PROJECT_BINARY_DIR}/*)
 list(FILTER QT_GENERATED_FILES INCLUDE REGEX "^.*(mocs_.*|ui_.*|qrc_.*)\.(h|cpp)$")
 source_group("_GeneratedFiles\\Qt" FILES
@@ -123,20 +140,20 @@ source_group("_GeneratedFiles\\Qt" FILES
     ${QT_GENERATED_FILES}
 )
 
-
 ##################################################################################################################
 # Qt Framework
 ##################################################################################################################
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 #qt5_wrap_ui()
 #qt5_wrap_cpp()
 
-
 ##################################################################################################################
 # Target
 ##################################################################################################################
+
 add_executable(${PROJECT_NAME}
     ${CXX_FILES}
     ${RESOURCE_FILES}
