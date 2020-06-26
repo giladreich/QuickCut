@@ -73,6 +73,10 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
 
     KBDLLHOOKSTRUCT * kbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
 
+    // If it's an input we sent by simulating keyboard presses, don't do anything.
+    bool injectedKeys = kbd->flags & LLKHF_LOWER_IL_INJECTED || kbd->flags & LLKHF_INJECTED;
+    if (injectedKeys) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
+
     // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
     // lParam: (lParam & KF_REPEAT)
     static DWORD prevVkCode = 0;
