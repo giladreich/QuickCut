@@ -13,5 +13,6 @@ public:
     bool start() override;
     bool stop() override;
 
-public:
+    void sendInput(const QStringList & dstKeys) override;
+    void executeProcess(const QString & process, const QString & arguments) override;
 };

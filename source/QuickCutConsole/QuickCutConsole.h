@@ -24,8 +24,8 @@ protected:
 
     virtual bool start();
     virtual bool stop();
-
-    static void executeProcess(const QString & process, const QString & arguments);
+    virtual void sendInput(const QStringList & dstKeys)                             = 0;
+    virtual void executeProcess(const QString & process, const QString & arguments) = 0;
 
     static bool loadProfiles();
     static bool notifyStatusToClient(const QString & message);

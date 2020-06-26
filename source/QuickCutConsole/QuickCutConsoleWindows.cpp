@@ -33,3 +33,28 @@ bool QuickCutConsoleWindows::stop()
 
     return true;
 }
+
+void QuickCutConsoleWindows::sendInput(const QStringList & dstKeys)
+{
+    if (dstKeys.isEmpty()) return;
+
+    //// TODO(Gilad): Re-work models to store key-codes + key-names. It will make it easier
+    ///also / using that data in the UI.
+}
+
+void QuickCutConsoleWindows::executeProcess(const QString & process, const QString & arguments)
+{
+    QString command = QString(R"(cmd /c start "" "%1")").arg(process);
+
+    QStringList argsTmp = arguments.trimmed().split(",");
+    for (auto && arg : argsTmp)
+    {
+        QString argTrimmed = arg.trimmed();
+        if (argTrimmed.isEmpty()) continue;
+
+        command += " " + argTrimmed;
+    }
+    qDebug() << "[QuickCutConsoleWindows::executeProcess] - Command: " << qPrintable(command);
+
+    WinExec(qPrintable(command), SW_SHOW);
+}

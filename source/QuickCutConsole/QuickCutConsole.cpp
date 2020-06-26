@@ -123,38 +123,3 @@ void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey
         }
     }
 }
-
-void QuickCutConsole::executeProcess(const QString & process, const QString & arguments)
-{
-#if defined(Q_OS_WIN)
-    QString command = QString(R"(cmd /c start "" "%1")").arg(process);
-#elif defined(Q_OS_UNIX)
-    QString command = QString(R"(sh -c '%1')").arg(process);
-#endif
-
-    QStringList argsTmp = arguments.trimmed().split(",");
-    for (auto && arg : argsTmp)
-    {
-        QString argTrimmed = arg.trimmed();
-        if (argTrimmed.isEmpty()) continue;
-
-        command += " " + argTrimmed;
-    }
-    qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: "
-             << "[" << qPrintable(command) << "]";
-
-#if defined(Q_OS_WIN)
-    WinExec(qPrintable(command), SW_HIDE);
-#elif defined(Q_OS_UNIX)
-    // Writing as script temporary to disk to avoid any white spaces issues
-    // that QProcess doesn't handle very well...
-    QString filePath = applicationDirPath() + "/tempCmd.sh";
-    QFile   scriptFile(filePath);
-    scriptFile.open(QIODevice::ReadWrite);
-    QTextStream ts(&scriptFile);
-    ts << command;
-    scriptFile.close();
-    QProcess::execute(filePath, QStringList());
-    scriptFile.remove();
-#endif
-}
