@@ -35,4 +35,7 @@ namespace QuickCut
     {
         return static_cast<QEnum>(QMetaEnum::fromType<QEnum>().keyToValue(qPrintable(value)));
     }
+
+    void logToFile(const QString & filePath, const QString & text);
+
 } // namespace QuickCut

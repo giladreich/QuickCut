@@ -158,13 +158,3 @@ void QuickCutConsole::executeProcess(const QString & process, const QString & ar
     scriptFile.remove();
 #endif
 }
-
-void QuickCutConsole::log(const QString & filePath, const QString & text)
-{
-    QFile file(filePath);
-    file.open(QFile::WriteOnly);
-    QTextStream ts(&file);
-    ts << text;
-    file.flush();
-    file.close();
-}

@@ -30,8 +30,6 @@ protected:
     static bool loadProfiles();
     static bool notifyStatusToClient(const QString & message);
 
-    static void log(const QString & filePath, const QString & text);
-
 public slots:
     void onKeysPress(const QStringList & keys, bool * outSwallowKey);
 
