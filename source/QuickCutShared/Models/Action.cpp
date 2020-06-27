@@ -95,22 +95,22 @@ void Action::setType(ActionType type)
     if (type != Action::ActionInvalid) m_Type = type;
 }
 
-QString Action::getSrcKey() const
+QString Action::getSrcKeys() const
 {
     return m_SrcKey;
 }
 
-void Action::setSrcKey(const QString & key)
+void Action::setSrcKeys(const QString & key)
 {
     m_SrcKey = key;
 }
 
-QString Action::getDstKey() const
+QString Action::getDstKeys() const
 {
     return m_DstKey;
 }
 
-void Action::setDstKey(const QString & key)
+void Action::setDstKeys(const QString & key)
 {
     m_DstKey = key;
 }

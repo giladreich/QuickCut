@@ -64,11 +64,11 @@ public:
     ActionType getType() const;
     void       setType(const ActionType type);
 
-    QString getSrcKey() const;
-    void    setSrcKey(const QString & key);
+    QString getSrcKeys() const;
+    void    setSrcKeys(const QString & key);
 
-    QString getDstKey() const;
-    void    setDstKey(const QString & key);
+    QString getDstKeys() const;
+    void    setDstKeys(const QString & key);
 
     const QString & getTargetPath() const;
     void            setTargetPath(const QString & path);

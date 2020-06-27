@@ -97,7 +97,7 @@ void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey
     pressedKeyCodes                 = pressedKeyCodes.left(pressedKeyCodes.length() - 1);
     for (auto && action : actions)
     {
-        QString srcKeyCodes = action->getSrcKey();
+        QString srcKeyCodes = action->getSrcKeys();
         if (pressedKeyCodes == srcKeyCodes)
         {
             qDebug() << "Found match: " << pressedKeyCodes;
@@ -105,7 +105,7 @@ void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey
             if (actionType == Action::ActionKeyMap)
             {
                 qDebug() << "Mapped keys -> " << qPrintable(pressedKeyCodes) << " ~ "
-                         << qPrintable(action->getDstKey());
+                         << qPrintable(action->getDstKeys());
 
                 *outSwallowKey = true;
                 // sendInput(action->getDstKey());
