@@ -44,17 +44,35 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             QString actionId     = bpt::get(actionJson.second, "id", "");
             QString actionName   = bpt::get(actionJson.second, "actionName", "");
             QString actionType   = bpt::get(actionJson.second, "type", "");
-            QString srcKey       = bpt::get(actionJson.second, "srcKeys", "");
-            QString dstKey       = bpt::get(actionJson.second, "dstKeys", "");
             QString targetPath   = bpt::get(actionJson.second, "targetPath", "");
             QString appArgs      = bpt::get(actionJson.second, "appArgs", "");
             QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             QString lastModified = bpt::get(actionJson.second, "lastModified", "");
 
+            KeyboardKeys srcKeys;
+            JSON         srcKeysJson = actionJson.second.get_child("srcKeys");
+            srcKeys.reserve(srcKeysJson.size());
+            for (auto && srcKey : srcKeysJson)
+            {
+                QString keyName = bpt::get(srcKey.second, "keyName", "");
+                QString keyCode = bpt::get(srcKey.second, "keyCode", "");
+                srcKeys.push_back(KeyData(keyName, keyCode));
+            }
+
+            KeyboardKeys dstKeys;
+            JSON         dstKeysJson = actionJson.second.get_child("dstKeys");
+            dstKeys.reserve(dstKeysJson.size());
+            for (auto && dstKey : dstKeysJson)
+            {
+                QString keyName = bpt::get(dstKey.second, "keyName", "");
+                QString keyCode = bpt::get(dstKey.second, "keyCode", "");
+                dstKeys.push_back(KeyData(keyName, keyCode));
+            }
+
             profile->getActionManager().add(
                 new Action(actionId, actionName, lastModified,
-                           QuickCut::fromValue<Action::ActionType>(actionType), srcKey, dstKey,
-                           targetPath, appArgs, createdDate));
+                           QuickCut::fromValue<Action::ActionType>(actionType), srcKeys,
+                           dstKeys, targetPath, appArgs, createdDate));
         }
 
         outData->emplace_back(profile);
@@ -83,19 +101,38 @@ bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
         bpt::put(profileJson, "lastModified", profile->getLastModified());
         profileJson.put("actionsCount", profile->getActionManager().count());
 
-        JSON actionsJson;
-        for (auto && action : profile->getActionManager())
+        ActionManager & actions = profile->getActionManager();
+        JSON            actionsJson;
+        for (auto && action : actions)
         {
             JSON actionJson;
             bpt::put(actionJson, "id", action->getId());
             bpt::put(actionJson, "actionName", action->getName());
             bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
-            bpt::put(actionJson, "srcKeys", action->getSrcKeys());
-            bpt::put(actionJson, "dstKeys", action->getDstKeys());
             bpt::put(actionJson, "targetPath", action->getTargetPath());
             bpt::put(actionJson, "appArgs", action->getAppArgs());
             bpt::put(actionJson, "createdDate", action->getCreatedDate());
             bpt::put(actionJson, "lastModified", action->getLastModified());
+
+            JSON srcKeysJson;
+            for (auto && srcKey : action->getSrcKeys())
+            {
+                JSON keyJson;
+                bpt::put(keyJson, "keyName", srcKey.getKeyName());
+                bpt::put(keyJson, "keyCode", srcKey.getKeyCodeHex());
+                srcKeysJson.push_back(std::make_pair("", keyJson));
+            }
+            actionJson.push_back(std::make_pair("srcKeys", srcKeysJson));
+
+            JSON dstKeysJson;
+            for (auto && dstKey : action->getDstKeys())
+            {
+                JSON keyJson;
+                bpt::put(keyJson, "keyName", dstKey.getKeyName());
+                bpt::put(keyJson, "keyCode", dstKey.getKeyCodeHex());
+                dstKeysJson.push_back(std::make_pair("", keyJson));
+            }
+            actionJson.push_back(std::make_pair("dstKeys", dstKeysJson));
 
             actionsJson.push_back(std::make_pair("", actionJson));
         }

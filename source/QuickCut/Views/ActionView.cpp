@@ -55,7 +55,7 @@ void ActionView::fillEntries()
     ui->tbxName->setText(m_Action->getName());
     ui->cbxType->setCurrentIndex(typeIndex);
     // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(m_Action->getSrcKeys()));
-    ui->tbxSrcKey->setText(m_Action->getSrcKeys());
+    // ui->tbxSrcKey->setText(m_Action->getSrcKeys());
     onTypeSelChange(typeIndex);
 }
 
@@ -132,7 +132,7 @@ void ActionView::onTypeSelChange(int index)
         default:
         {
             // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKeys()));
-            ui->tbxDstKey->setText(m_Action->getDstKeys());
+            // ui->tbxDstKey->setText(m_Action->getDstKeys());
             ui->tbxTargetPath->clear();
             ui->tbxAppArgs->clear();
             break;
@@ -222,11 +222,10 @@ void ActionView::onBtnSave()
 
     m_Action->setName(ui->tbxName->text());
     m_Action->setType(type);
-    m_Action->setSrcKeys(ui->tbxSrcKey->text());
-    // m_Action->setSrcKeys(ui->tbxSrcKey->keySequence().toString());
-    // if (type == ActionKeyMap) {
-    // m_Action->setDstKeys(ui->tbxDstKey->keySequence().toString()); }
-    m_Action->setDstKeys(ui->tbxDstKey->text());
+
+    // m_Action->setSrcKeys(ui->tbxSrcKey->text());
+    // m_Action->setDstKeys(ui->tbxDstKey->text());
+
     m_Action->setTargetPath(ui->tbxTargetPath->text());
     m_Action->setAppArgs(ui->tbxAppArgs->text());
 
