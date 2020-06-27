@@ -170,3 +170,11 @@ T * BaseManager<T>::operator[](int index)
 
     return m_Data[index];
 }
+
+template <typename T>
+const T * const BaseManager<T>::operator[](int index) const
+{
+    if (index < 0 || index >= count()) return nullptr;
+
+    return m_Data[index];
+}

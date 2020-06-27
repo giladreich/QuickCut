@@ -18,7 +18,8 @@ public:
     bool            isLoadSucceed() override;
     const QString & getConfigFilePath() override;
 
-    Preference & get();
+    Preference &       get();
+    const Preference & get() const;
 
 private:
     Preference       m_Preference;

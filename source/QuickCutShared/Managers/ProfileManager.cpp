@@ -55,6 +55,15 @@ Profile * ProfileManager::getActiveProfile()
     return *activeProfile;
 }
 
+const Profile * const ProfileManager::getActiveProfile() const
+{
+    auto activeProfile = std::find_if(m_Data.begin(), m_Data.end(),
+                                      [](auto profile) { return profile->isActive(); });
+    if (activeProfile == m_Data.end()) return nullptr;
+
+    return *activeProfile;
+}
+
 void ProfileManager::setActiveProfile(int index)
 {
     if (index < 0 || index >= count()) return;

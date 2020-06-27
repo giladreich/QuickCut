@@ -20,9 +20,10 @@ public:
     bool            isLoadSucceed() override;
     const QString & getConfigFilePath() override;
 
-    Profile * getActiveProfile();
-    void      setActiveProfile(int index);
-    void      setActiveProfile(Profile * profile);
+    Profile *             getActiveProfile();
+    const Profile * const getActiveProfile() const;
+    void                  setActiveProfile(int index);
+    void                  setActiveProfile(Profile * profile);
 
 private:
     ProfileParser m_Parser;

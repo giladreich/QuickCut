@@ -42,3 +42,8 @@ ActionManager & Profile::getActionManager()
 {
     return m_Actions;
 }
+
+const ActionManager & Profile::getActionManager() const
+{
+    return m_Actions;
+}

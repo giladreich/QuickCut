@@ -33,7 +33,8 @@ public:
     bool isActive() const;
     void setActive(bool active);
 
-    ActionManager & getActionManager();
+    ActionManager &       getActionManager();
+    const ActionManager & getActionManager() const;
 
     Profile & operator=(const Profile & profile) = default;
     Profile & operator=(Profile && profile) = default;
