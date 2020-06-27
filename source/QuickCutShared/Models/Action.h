@@ -28,14 +28,16 @@ public:
            const KeyboardKeys & srcKeys,
            const KeyboardKeys & dstKeys,
            const QString &      targetPath,
-           const QString &      appArgs) noexcept;
+           const QString &      appArgs,
+           const bool &         enabled = true) noexcept;
 
     Action(QString &&      name,
            ActionType &&   type,
            KeyboardKeys && srcKeys,
            KeyboardKeys && dstKeys,
            QString &&      targetPath,
-           QString &&      appArgs) noexcept;
+           QString &&      appArgs,
+           bool &&         enabled = true) noexcept;
 
     // Constructs existing Action
     Action(const QString &      id,
@@ -46,7 +48,8 @@ public:
            const KeyboardKeys & dstKeys,
            const QString &      targetPath,
            const QString &      appArgs,
-           const QString &      createdDate) noexcept;
+           const QString &      createdDate,
+           const bool &         enabled) noexcept;
 
     Action(QString &&      id,
            QString &&      name,
@@ -56,7 +59,8 @@ public:
            KeyboardKeys && dstKeys,
            QString &&      targetPath,
            QString &&      appArgs,
-           QString &&      createdDate) noexcept;
+           QString &&      createdDate,
+           bool &&         enabled) noexcept;
 
     // Constructs copy
     Action(const Action & action) = default;
@@ -72,6 +76,9 @@ public:
     void            setAppArgs(const QString & path);
 
     const QString & getCreatedDate() const;
+
+    bool isEnabled() const;
+    void setEnabled(bool enabled);
 
     void reset();
 
@@ -102,4 +109,5 @@ private:
     QString      m_TargetPath;
     QString      m_AppArgs;
     QString      m_CreatedDate;
+    bool         m_Enabled;
 };

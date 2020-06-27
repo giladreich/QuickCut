@@ -48,6 +48,7 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             QString appArgs      = bpt::get(actionJson.second, "appArgs", "");
             QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             QString lastModified = bpt::get(actionJson.second, "lastModified", "");
+            bool    enabled      = actionJson.second.get<bool>("enabled", true);
 
             KeyboardKeys srcKeys;
             JSON         srcKeysJson = actionJson.second.get_child("srcKeys");
@@ -72,7 +73,7 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
             profile->getActionManager().add(
                 new Action(actionId, actionName, lastModified,
                            QuickCut::fromValue<Action::ActionType>(actionType), srcKeys,
-                           dstKeys, targetPath, appArgs, createdDate));
+                           dstKeys, targetPath, appArgs, createdDate, enabled));
         }
 
         outData->emplace_back(profile);
@@ -113,6 +114,7 @@ bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
             bpt::put(actionJson, "appArgs", action->getAppArgs());
             bpt::put(actionJson, "createdDate", action->getCreatedDate());
             bpt::put(actionJson, "lastModified", action->getLastModified());
+            actionJson.put<bool>("enabled", action->isEnabled());
 
             JSON srcKeysJson;
             for (auto && srcKey : action->getSrcKeys())

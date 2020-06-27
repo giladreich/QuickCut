@@ -10,6 +10,7 @@ Action::Action() noexcept
     , m_TargetPath()
     , m_AppArgs()
     , m_CreatedDate(QuickCut::getDateTime())
+    , m_Enabled(true)
 {
 }
 
@@ -18,7 +19,8 @@ Action::Action(const QString &      name,
                const KeyboardKeys & srcKeys,
                const KeyboardKeys & dstKeys,
                const QString &      targetPath,
-               const QString &      appArgs) noexcept
+               const QString &      appArgs,
+               const bool &         enabled) noexcept
     : BaseModel(QuickCut::createUuid(), name, QuickCut::getDateTime())
     , m_Type(type)
     , m_SrcKeys(srcKeys)
@@ -26,6 +28,7 @@ Action::Action(const QString &      name,
     , m_TargetPath(targetPath)
     , m_AppArgs(appArgs)
     , m_CreatedDate(QuickCut::getDateTime())
+    , m_Enabled(enabled)
 {
 }
 
@@ -34,7 +37,8 @@ Action::Action(QString &&      name,
                KeyboardKeys && srcKeys,
                KeyboardKeys && dstKeys,
                QString &&      targetPath,
-               QString &&      appArgs) noexcept
+               QString &&      appArgs,
+               bool &&         enabled) noexcept
     : BaseModel(std::move(QuickCut::createUuid()),
                 std::move(name),
                 std::move(QuickCut::getDateTime()))
@@ -44,6 +48,7 @@ Action::Action(QString &&      name,
     , m_TargetPath(std::move(targetPath))
     , m_AppArgs(std::move(appArgs))
     , m_CreatedDate(std::move(QuickCut::getDateTime()))
+    , m_Enabled(std::move(enabled))
 {
 }
 
@@ -55,7 +60,8 @@ Action::Action(const QString &      id,
                const KeyboardKeys & dstKeys,
                const QString &      targetPath,
                const QString &      appArgs,
-               const QString &      createdDate) noexcept
+               const QString &      createdDate,
+               const bool &         enabled) noexcept
     : BaseModel(id, name, lastModified)
     , m_Type(type)
     , m_SrcKeys(srcKeys)
@@ -63,6 +69,7 @@ Action::Action(const QString &      id,
     , m_TargetPath(targetPath)
     , m_AppArgs(appArgs)
     , m_CreatedDate(createdDate)
+    , m_Enabled(enabled)
 {
 }
 
@@ -74,7 +81,8 @@ Action::Action(QString &&      id,
                KeyboardKeys && dstKeys,
                QString &&      targetPath,
                QString &&      appArgs,
-               QString &&      createdDate) noexcept
+               QString &&      createdDate,
+               bool &&         enabled) noexcept
     : BaseModel(std::move(id), std::move(name), std::move(lastModified))
     , m_Type(std::move(type))
     , m_SrcKeys(std::move(srcKeys))
@@ -82,6 +90,7 @@ Action::Action(QString &&      id,
     , m_TargetPath(std::move(targetPath))
     , m_AppArgs(std::move(appArgs))
     , m_CreatedDate(std::move(createdDate))
+    , m_Enabled(std::move(enabled))
 {
 }
 
@@ -118,6 +127,16 @@ void Action::setAppArgs(const QString & args)
 const QString & Action::getCreatedDate() const
 {
     return m_CreatedDate;
+}
+
+bool Action::isEnabled() const
+{
+    return m_Enabled;
+}
+
+void Action::setEnabled(bool enabled)
+{
+    m_Enabled = enabled;
 }
 
 void Action::reset()
