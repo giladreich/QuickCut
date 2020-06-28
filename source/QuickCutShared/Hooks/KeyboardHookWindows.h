@@ -9,7 +9,9 @@ class KeyboardHookWindows : public KeyboardHook
 {
     Q_OBJECT
 public:
-    KeyboardHookWindows(bool multiShortcuts, QObject * parent = nullptr);
+    KeyboardHookWindows(bool      multiShortcuts,
+                        bool      autoRepeatEnabled,
+                        QObject * parent = nullptr);
     ~KeyboardHookWindows();
 
     bool activateHook() override;

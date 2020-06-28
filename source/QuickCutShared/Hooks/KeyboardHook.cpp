@@ -4,9 +4,10 @@
 
 KeyboardHook * KeyboardHook::s_Instance = nullptr;
 
-KeyboardHook::KeyboardHook(bool multiShortcuts, QObject * parent)
+KeyboardHook::KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent)
     : QObject(parent)
     , m_MultiShortcuts(multiShortcuts)
+    , m_AutoRepeatEnabled(autoRepeatEnabled)
 {
     s_Instance = this;
 }
@@ -36,4 +37,14 @@ bool KeyboardHook::isMultiShortcutsEnabled() const
 void KeyboardHook::setMultiShortcuts(bool multiShortcuts)
 {
     m_MultiShortcuts = multiShortcuts;
+}
+
+bool KeyboardHook::isAutoRepeatEnabled() const
+{
+    return m_AutoRepeatEnabled;
+}
+
+void KeyboardHook::setAutoRepeatEnabled(bool autoRepeatEnabled)
+{
+    m_AutoRepeatEnabled = autoRepeatEnabled;
 }

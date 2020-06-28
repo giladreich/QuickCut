@@ -19,15 +19,19 @@ public:
     bool isMultiShortcutsEnabled() const;
     void setMultiShortcuts(bool multiShortcuts);
 
+    bool isAutoRepeatEnabled() const;
+    void setAutoRepeatEnabled(bool autoRepeatEnabled);
+
 signals:
     void keysPressed(const QStringList & keys, bool * outSwallowKey);
 
 protected:
-    KeyboardHook(bool multiShortcuts, QObject * parent = nullptr);
+    KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent = nullptr);
     virtual ~KeyboardHook();
 
 protected:
     static KeyboardHook * s_Instance;
 
     bool m_MultiShortcuts;
+    bool m_AutoRepeatEnabled;
 };

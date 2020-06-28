@@ -20,15 +20,23 @@ union KeyState
 
 HHOOK KeyboardHookWindows::s_Hook = nullptr;
 
-KeyboardHookWindows::KeyboardHookWindows(bool multiShortcuts, QObject * parent)
-    : KeyboardHook(multiShortcuts, parent)
+KeyboardHookWindows::KeyboardHookWindows(bool      multiShortcuts,
+                                         bool      autoRepeatEnabled,
+                                         QObject * parent)
+    : KeyboardHook(multiShortcuts, autoRepeatEnabled, parent)
 {
     s_Hook = nullptr;
 }
 
 KeyboardHookWindows::~KeyboardHookWindows()
 {
-    deactivateHook();
+    if (s_Hook)
+    {
+        qDebug() << "[KeyboardHookWindows::dtor] - Unhooking...";
+        if (!UnhookWindowsHookEx(s_Hook))
+            qDebug() << "[KeyboardHookWindows::dtor] - Failed to deactivate keyboard hook...";
+        s_Hook = nullptr;
+    }
 }
 
 bool KeyboardHookWindows::activateHook()
@@ -86,7 +94,7 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
     {
         bool isRepeatedKeyPress = prevVkCode == kbd->vkCode;
-        if (isRepeatedKeyPress) return -1;
+        if (!s_Instance->isAutoRepeatEnabled() && isRepeatedKeyPress) return -1;
 
         prevVkCode = kbd->vkCode;
 
