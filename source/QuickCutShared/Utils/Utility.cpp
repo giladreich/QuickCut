@@ -45,6 +45,21 @@ namespace QuickCut
         return QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate);
     }
 
+    QString getCurrentOSName()
+    {
+#if defined(Q_OS_MACOS)
+        return QLatin1String("MacOS");
+#elif defined(Q_OS_WIN)
+        return QLatin1String("Windows");
+#elif defined(Q_OS_LINUX)
+        return QLatin1String("Linux");
+#elif defined(Q_OS_UNIX)
+        return QLatin1String("Unix");
+#else
+        return QLatin1String("Unknown");
+#endif
+    }
+
     QString createUuid() { return QUuid::createUuid().toString(); }
 
     void logToFile(const QString & filePath, const QString & text)
@@ -52,7 +67,7 @@ namespace QuickCut
         QFile file(filePath);
         file.open(QFile::WriteOnly | QFile::Append);
         QTextStream ts(&file);
-        ts << QLatin1Char('\n') << text;
+        ts << text << QLatin1Char('\n');
         file.flush();
         file.close();
     }
