@@ -101,7 +101,11 @@ Action::ActionType Action::getType() const
 
 void Action::setType(ActionType type)
 {
-    if (type != Action::ActionInvalid) m_Type = type;
+    if (type != Action::ActionInvalid)
+    {
+        m_Type         = type;
+        m_LastModified = QuickCut::getDateTime();
+    }
 }
 
 const QString & Action::getTargetPath() const
@@ -111,7 +115,8 @@ const QString & Action::getTargetPath() const
 
 void Action::setTargetPath(const QString & path)
 {
-    m_TargetPath = path;
+    m_TargetPath   = path;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 const QString & Action::getAppArgs() const
@@ -121,7 +126,8 @@ const QString & Action::getAppArgs() const
 
 void Action::setAppArgs(const QString & args)
 {
-    m_AppArgs = args;
+    m_AppArgs      = args;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 const QString & Action::getCreatedDate() const
@@ -142,7 +148,8 @@ void Action::setEnabled(bool enabled)
 void Action::reset()
 {
     m_Name.clear();
-    m_Type = Action::ActionKeyMap;
+    m_LastModified = QuickCut::getDateTime();
+    m_Type         = Action::ActionKeyMap;
     m_SrcKeys.clear();
     m_DstKeys.clear();
     m_TargetPath.clear();
@@ -156,7 +163,8 @@ const KeyboardKeys & Action::getSrcKeys() const
 
 void Action::setSrcKeys(const KeyboardKeys & keys)
 {
-    m_SrcKeys = keys;
+    m_SrcKeys      = keys;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 QStringList Action::getSrcKeysNames() const
@@ -181,7 +189,8 @@ const KeyboardKeys & Action::getDstKeys() const
 
 void Action::setDstKeys(const KeyboardKeys & keys)
 {
-    m_DstKeys = keys;
+    m_DstKeys      = keys;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 QStringList Action::getDstKeysNames() const
