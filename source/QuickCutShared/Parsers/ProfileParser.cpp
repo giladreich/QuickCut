@@ -12,7 +12,70 @@ ProfileParser::ProfileParser(const QString & path)
 {
 }
 
-ProfileParser::~ProfileParser() {}
+bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
+{
+    QString activeProfileId = "";
+    auto    profileItr = std::find_if(data.begin(), data.end(), [&](const Profile * profile) {
+        return profile->isActive();
+    });
+    if (profileItr != data.end()) activeProfileId = (*profileItr)->getId();
+
+    bpt::put(m_Content, "activeProfile", activeProfileId);
+    m_Content.put("profileCount", data.size());
+
+    JSON profilesJson;
+    for (auto && profile : data)
+    {
+        JSON profileJson;
+        bpt::put(profileJson, "id", profile->getId());
+        bpt::put(profileJson, "name", profile->getName());
+        bpt::put(profileJson, "lastModified", profile->getLastModified());
+        profileJson.put("actionsCount", profile->getActionManager().count());
+
+        ActionManager & actions = profile->getActionManager();
+        JSON            actionsJson;
+        for (auto && action : actions)
+        {
+            JSON actionJson;
+            bpt::put(actionJson, "id", action->getId());
+            bpt::put(actionJson, "actionName", action->getName());
+            bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
+            bpt::put(actionJson, "targetPath", action->getTargetPath());
+            bpt::put(actionJson, "appArgs", action->getAppArgs());
+            bpt::put(actionJson, "createdDate", action->getCreatedDate());
+            bpt::put(actionJson, "lastModified", action->getLastModified());
+            actionJson.put<bool>("enabled", action->isEnabled());
+
+            JSON srcKeysJson;
+            for (auto && srcKey : action->getSrcKeys())
+            {
+                JSON keyJson;
+                bpt::put(keyJson, "keyName", srcKey.getKeyName());
+                bpt::put(keyJson, "keyCode", srcKey.getKeyCodeHex());
+                srcKeysJson.push_back(std::make_pair("", keyJson));
+            }
+            actionJson.push_back(std::make_pair("srcKeys", srcKeysJson));
+
+            JSON dstKeysJson;
+            for (auto && dstKey : action->getDstKeys())
+            {
+                JSON keyJson;
+                bpt::put(keyJson, "keyName", dstKey.getKeyName());
+                bpt::put(keyJson, "keyCode", dstKey.getKeyCodeHex());
+                dstKeysJson.push_back(std::make_pair("", keyJson));
+            }
+            actionJson.push_back(std::make_pair("dstKeys", dstKeysJson));
+
+            actionsJson.push_back(std::make_pair("", actionJson));
+        }
+
+        profileJson.push_back(std::make_pair("actions", actionsJson));
+        profilesJson.push_back(std::make_pair("", profileJson));
+    }
+    m_Content.add_child("profiles", profilesJson);
+
+    return true;
+}
 
 bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
 {
@@ -78,71 +141,6 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
 
         outData->emplace_back(profile);
     }
-
-    return true;
-}
-
-bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
-{
-    QString activeProfileId = "";
-    auto    profileItr = std::find_if(data.begin(), data.end(), [&](const Profile * profile) {
-        return profile->isActive();
-    });
-    if (profileItr != data.end()) activeProfileId = (*profileItr)->getId();
-
-    bpt::put(m_Content, "activeProfile", activeProfileId);
-    m_Content.put("profileCount", data.size());
-
-    JSON profilesJson;
-    for (auto && profile : data)
-    {
-        JSON profileJson;
-        bpt::put(profileJson, "id", profile->getId());
-        bpt::put(profileJson, "name", profile->getName());
-        bpt::put(profileJson, "lastModified", profile->getLastModified());
-        profileJson.put("actionsCount", profile->getActionManager().count());
-
-        ActionManager & actions = profile->getActionManager();
-        JSON            actionsJson;
-        for (auto && action : actions)
-        {
-            JSON actionJson;
-            bpt::put(actionJson, "id", action->getId());
-            bpt::put(actionJson, "actionName", action->getName());
-            bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
-            bpt::put(actionJson, "targetPath", action->getTargetPath());
-            bpt::put(actionJson, "appArgs", action->getAppArgs());
-            bpt::put(actionJson, "createdDate", action->getCreatedDate());
-            bpt::put(actionJson, "lastModified", action->getLastModified());
-            actionJson.put<bool>("enabled", action->isEnabled());
-
-            JSON srcKeysJson;
-            for (auto && srcKey : action->getSrcKeys())
-            {
-                JSON keyJson;
-                bpt::put(keyJson, "keyName", srcKey.getKeyName());
-                bpt::put(keyJson, "keyCode", srcKey.getKeyCodeHex());
-                srcKeysJson.push_back(std::make_pair("", keyJson));
-            }
-            actionJson.push_back(std::make_pair("srcKeys", srcKeysJson));
-
-            JSON dstKeysJson;
-            for (auto && dstKey : action->getDstKeys())
-            {
-                JSON keyJson;
-                bpt::put(keyJson, "keyName", dstKey.getKeyName());
-                bpt::put(keyJson, "keyCode", dstKey.getKeyCodeHex());
-                dstKeysJson.push_back(std::make_pair("", keyJson));
-            }
-            actionJson.push_back(std::make_pair("dstKeys", dstKeysJson));
-
-            actionsJson.push_back(std::make_pair("", actionJson));
-        }
-
-        profileJson.push_back(std::make_pair("actions", actionsJson));
-        profilesJson.push_back(std::make_pair("", profileJson));
-    }
-    m_Content.add_child("profiles", profilesJson);
 
     return true;
 }

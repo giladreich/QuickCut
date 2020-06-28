@@ -10,9 +10,9 @@ class ProfileParser : public BaseParser<std::vector<Profile *>>
 public:
     ProfileParser(QString && path);
     ProfileParser(const QString & path);
-    virtual ~ProfileParser();
+    virtual ~ProfileParser() = default;
 
 private:
-    bool parseImpl(std::vector<Profile *> * outData) override;
     bool saveImpl(const std::vector<Profile *> & data) override;
+    bool parseImpl(std::vector<Profile *> * outData) override;
 };

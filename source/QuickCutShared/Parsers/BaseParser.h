@@ -17,8 +17,8 @@ protected:
     virtual bool saveImpl(const T & data) = 0;
 
 public:
-    bool parse(T * outData);
     bool save(const T & data);
+    bool parse(T * outData);
 
     const QString & getFilePath();
 
