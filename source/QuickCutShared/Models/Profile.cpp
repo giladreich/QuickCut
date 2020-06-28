@@ -23,6 +23,12 @@ Profile::Profile(QString && id, QString && name, QString && lastModified, bool a
 {
 }
 
+Profile::Profile(const Profile & other)
+{
+    m_Active  = other.m_Active;
+    m_Actions = ActionManager(other.m_Actions);
+}
+
 Profile::~Profile()
 {
     m_Actions.clear();
@@ -35,7 +41,8 @@ bool Profile::isActive() const
 
 void Profile::setActive(bool active)
 {
-    m_Active = active;
+    m_Active       = active;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 ActionManager & Profile::getActionManager()
@@ -46,4 +53,17 @@ ActionManager & Profile::getActionManager()
 const ActionManager & Profile::getActionManager() const
 {
     return m_Actions;
+}
+
+Profile & Profile::operator=(const Profile & other)
+{
+    if (this != &other)
+    {
+        m_Active = other.m_Active;
+
+        m_Actions.clear();
+        m_Actions = ActionManager(other.m_Actions);
+    }
+
+    return *this;
 }
