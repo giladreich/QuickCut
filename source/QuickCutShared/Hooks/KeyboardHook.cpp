@@ -9,7 +9,8 @@ KeyboardHook::KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject 
     , m_MultiShortcuts(multiShortcuts)
     , m_AutoRepeatEnabled(autoRepeatEnabled)
 {
-    s_Instance = this;
+    s_Instance   = this;
+    m_Identifier = std::hash<const char *>{}(QUICKCUT_NAME QUICKCUT_VERSION);
 }
 
 KeyboardHook::~KeyboardHook() = default;
@@ -47,4 +48,9 @@ bool KeyboardHook::isAutoRepeatEnabled() const
 void KeyboardHook::setAutoRepeatEnabled(bool autoRepeatEnabled)
 {
     m_AutoRepeatEnabled = autoRepeatEnabled;
+}
+
+const size_t & KeyboardHook::getIdentifier() const
+{
+    return m_Identifier;
 }
