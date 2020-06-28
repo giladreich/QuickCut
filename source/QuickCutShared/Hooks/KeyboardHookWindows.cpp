@@ -130,11 +130,11 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
     return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 
-QStringList KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys)
+KeyboardKeys KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys)
 {
-    if (pressedKeys.isEmpty()) return QStringList();
+    if (pressedKeys.isEmpty()) return {};
 
-    QStringList keysData;
+    KeyboardKeys keysData;
     for (auto && kbd : pressedKeys)
     {
         KeyState state;
@@ -156,7 +156,8 @@ QStringList KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pr
 
         QString keyName = QString::fromWCharArray(keyBuff);
         if (keyName.isEmpty()) keyName = mapMissingKeyName(kbd.vkCode);
-        keysData << keyName;
+        qDebug() << keyName;
+        keysData.push_back(KeyData(keyName, kbd.vkCode));
     }
 
     return keysData;

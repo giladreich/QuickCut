@@ -19,7 +19,7 @@ public:
 
 private:
     static LRESULT CALLBACK SysKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static QStringList      getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys);
+    static KeyboardKeys     getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys);
     static QString          mapMissingKeyName(const int key);
 
 private:

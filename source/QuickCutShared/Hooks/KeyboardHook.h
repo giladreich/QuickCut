@@ -28,7 +28,7 @@ public:
     const size_t & getIdentifier() const;
 
 signals:
-    void keysPressed(const QStringList & keys, bool * outSwallowKey);
+    void keysPressed(const KeyboardKeys & keys, bool * outSwallowKey);
 
 protected:
     KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent = nullptr);
