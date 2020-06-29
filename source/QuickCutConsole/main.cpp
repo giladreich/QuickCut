@@ -1,5 +1,6 @@
 
 #include "QuickCutShared/QuickCutPCH.h"
+#include "QuickCutShared/Utils/QSingleApplication/QSingleInstance.h"
 
 #if defined(Q_OS_WIN)
 #    include "QuickCutConsoleWindows.h"
@@ -7,7 +8,6 @@
 #    include "QuickCutConsoleUnix.h"
 #endif
 
-#include "QuickCutShared/Utils/QSingleApplication/QSingleInstance.h"
 #include <QtCore/QCoreApplication>
 
 int main(int argc, char * argv[])
@@ -18,13 +18,13 @@ int main(int argc, char * argv[])
     QCoreApplication::setApplicationName(QUICKCUTCONSOLE_NAME);
     QCoreApplication::setApplicationVersion(QUICKCUT_VERSION);
 
+    std::unique_ptr<QuickCutConsole> qc;
 #if defined(Q_OS_WIN)
-    QuickCutConsoleWindows qc(argc, argv);
+    qc = std::make_unique<QuickCutConsoleWindows>(argc, argv);
 #elif defined(Q_OS_UNIX)
-    QuickCutConsoleUnix qc(argc, argv);
+    qc = std::make_unique<QuickCutConsoleUnix>(argc, argv);
 #endif
+    qc->start();
 
-    qc.start();
-
-    return qc.exec();
+    return qc->exec();
 }
