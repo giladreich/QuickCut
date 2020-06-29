@@ -21,7 +21,7 @@ public:
     void focusOutEvent(QFocusEvent * event) override;
 
 public slots:
-    void onKeysPress(const QStringList & keys, bool * outSwallowKey);
+    void onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey);
 
 public:
     std::shared_ptr<QStringList> m_CurrentKeys;
