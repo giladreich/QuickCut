@@ -13,8 +13,8 @@ class QShortcutInput : public QLineEdit
 {
     Q_OBJECT
 
-    //Q_PROPERTY(bool multiShortcuts READ isMultiShortcuts WRITE setMultiShortcuts)
-    //Q_PROPERTY(bool autoRepeatEnabled READ isAutoRepeatEnabled WRITE setAutoRepeatEnabled)
+    // Q_PROPERTY(bool multiShortcuts READ isMultiShortcuts WRITE setMultiShortcuts)
+    // Q_PROPERTY(bool autoRepeatEnabled READ isAutoRepeatEnabled WRITE setAutoRepeatEnabled)
 public:
     QShortcutInput(QWidget * parent);
     ~QShortcutInput();
@@ -26,7 +26,7 @@ public slots:
     void onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey);
 
 public:
-    std::shared_ptr<QStringList> m_CurrentKeys;
+    std::shared_ptr<KeyboardKeys> m_CurrentKeys;
 
 private:
     QPointer<KeyboardHook> m_Hook;

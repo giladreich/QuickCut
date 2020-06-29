@@ -42,7 +42,7 @@ void QShortcutInput::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey
     if (keys.isEmpty()) return;
 
     // Always save the current keys, so the UI can know whether new keys were set.
-    // m_CurrentKeys = std::make_shared<KeyboardKeys>(keys);
+    m_CurrentKeys = std::make_shared<KeyboardKeys>(keys);
 
     // Don't process any keyboard inputs globally when receiving inputs.
     // i.e. so keys like Super/WinKey won't pop-up a menu while it gets inputs.
