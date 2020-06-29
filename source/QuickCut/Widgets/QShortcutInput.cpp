@@ -8,12 +8,13 @@ QShortcutInput::QShortcutInput(QWidget * parent)
 {
     // Note that multiShortcuts custom property is still false during constructions, therefore
     // we also call to set it every time we activate the hook.
-    bool multiShortcuts = property("multiShortcuts").toBool();
+    bool multiShortcuts    = property("multiShortcuts").toBool();
+    bool autoRepeatEnabled = property("autoRepeatEnabled").toBool();
 
 #if defined(Q_OS_WINDOWS)
-    m_Hook = new KeyboardHookWindows(multiShortcuts, this);
+    m_Hook = new KeyboardHookWindows(multiShortcuts, autoRepeatEnabled, this);
 #elif defined(Q_OS_UNIX)
-    m_Hook = new KeyboardHookUnix(multiShortcuts, this);
+    m_Hook = new KeyboardHookUnix(multiShortcuts, autoRepeatEnabled, this);
 #endif
 
     connect(m_Hook, &KeyboardHook::keysPressed, this, &QShortcutInput::onKeysPress);

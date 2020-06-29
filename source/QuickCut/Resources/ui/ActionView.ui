@@ -190,6 +190,9 @@ QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
        <property name="multiShortcuts" stdset="0">
         <bool>false</bool>
        </property>
+       <property name="autoRepeatEnabled" stdset="0">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item row="2" column="2">
@@ -242,6 +245,9 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
        </property>
        <property name="multiShortcuts" stdset="0">
         <bool>true</bool>
+       </property>
+       <property name="autoRepeatEnabled" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

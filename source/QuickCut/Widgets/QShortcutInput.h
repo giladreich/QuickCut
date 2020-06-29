@@ -13,6 +13,8 @@ class QShortcutInput : public QLineEdit
 {
     Q_OBJECT
 
+    //Q_PROPERTY(bool multiShortcuts READ isMultiShortcuts WRITE setMultiShortcuts)
+    //Q_PROPERTY(bool autoRepeatEnabled READ isAutoRepeatEnabled WRITE setAutoRepeatEnabled)
 public:
     QShortcutInput(QWidget * parent);
     ~QShortcutInput();
