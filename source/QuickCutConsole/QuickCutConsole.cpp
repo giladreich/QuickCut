@@ -4,14 +4,12 @@
 
 #include "QuickCutShared/Managers/ProfileManager.h"
 
-QuickCutConsole * QuickCutConsole::s_Instance    = nullptr;
-QLocalServer *    QuickCutConsole::s_LocalSocket = nullptr;
-
-Profile *      QuickCutConsole::s_Profile = nullptr;
-ProfileManager QuickCutConsole::s_ProfileManager;
+QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
 
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
+    , m_Profile(nullptr)
+    , m_LocalSocket(new QLocalServer(this))
 #if defined(Q_OS_WINDOWS)
     , m_Hook(new KeyboardHookWindows(true, this))
 #else
@@ -21,14 +19,13 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     s_Instance = this;
 
     // Intercept changes coming from GUI locally
-    s_LocalSocket = new QLocalServer(this);
-    if (!s_LocalSocket->listen(QUICKCUT_IPC))
+    if (!m_LocalSocket->listen(QUICKCUT_IPC))
     {
         qDebug() << "[QuickCutConsole::ctor]: Failed to start IPC local server -> "
-                 << s_LocalSocket->errorString();
+                 << m_LocalSocket->errorString();
     }
 
-    connect(s_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
+    connect(m_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
     connect(m_Hook, &KeyboardHook::keysPressed, this, &QuickCutConsole::onKeysPress);
 }
 
@@ -48,15 +45,15 @@ bool QuickCutConsole::stop()
 
 bool QuickCutConsole::loadProfiles()
 {
-    if (!s_ProfileManager.load())
+    if (!m_ProfileManager.load())
     {
         QString message = QString("[QuickCutConsole::loadProfiles]: Failed to load %1 file.")
-                              .arg(s_ProfileManager.getConfigFilePath());
+                              .arg(m_ProfileManager.getConfigFilePath());
         notifyStatusToClient(message);
         qDebug() << qPrintable(message);
         return false;
     }
-    s_Profile = s_ProfileManager.getActiveProfile();
+    m_Profile = m_ProfileManager.getActiveProfile();
 
     QString message = "[QuickCutConsole::loadProfiles]: Successfully reloaded profiles.";
     notifyStatusToClient(message);
@@ -66,7 +63,7 @@ bool QuickCutConsole::loadProfiles()
 
 bool QuickCutConsole::notifyStatusToClient(const QString & message)
 {
-    if (!s_LocalSocket->hasPendingConnections()) return false;
+    if (!m_LocalSocket->hasPendingConnections()) return false;
 
     QByteArray  block;
     QDataStream out(&block, QIODevice::WriteOnly);
@@ -74,7 +71,7 @@ bool QuickCutConsole::notifyStatusToClient(const QString & message)
     out << message.size();
     out << message;
 
-    QLocalSocket * clientConnection = s_LocalSocket->nextPendingConnection();
+    QLocalSocket * clientConnection = m_LocalSocket->nextPendingConnection();
     connect(clientConnection, &QLocalSocket::disconnected, clientConnection,
             &QLocalSocket::deleteLater);
 
@@ -88,16 +85,16 @@ bool QuickCutConsole::notifyStatusToClient(const QString & message)
     return succeed;
 }
 
-void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey)
+void QuickCutConsole::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey)
 {
-    if (s_Profile || s_Profile->getActionManager().empty() || keys.isEmpty()) return;
+    if (!m_Profile || m_Profile->getActionManager().empty() || keys.isEmpty()) return;
 
-    ActionManager & actions         = s_Profile->getActionManager();
-    QString         pressedKeyCodes = keys.join(QLatin1Char('+'));
-    pressedKeyCodes                 = pressedKeyCodes.left(pressedKeyCodes.length() - 1);
-    for (auto && action : actions)
+    QString pressedKeyCodes = Action::getKeysCode(keys);
+    for (auto && action : m_Profile->getActionManager())
     {
-        QString srcKeyCodes = action->getSrcKeys();
+        if (!action->isEnabled()) continue;
+
+        QString srcKeyCodes = action->getSrcKeysCode();
         if (pressedKeyCodes == srcKeyCodes)
         {
             qDebug() << "Found match: " << pressedKeyCodes;
@@ -105,7 +102,7 @@ void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey
             if (actionType == Action::ActionKeyMap)
             {
                 qDebug() << "Mapped keys -> " << qPrintable(pressedKeyCodes) << " ~ "
-                         << qPrintable(action->getDstKeys());
+                         << qPrintable(action->getDstKeysCode());
 
                 *outSwallowKey = true;
                 // sendInput(action->getDstKey());
@@ -118,7 +115,7 @@ void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey
             else if (actionType == Action::ActionDirLaunch)
             {
                 qDebug() << "Launch directory -> " << action->getTargetPath();
-                executeProcess(action->getTargetPath(), "");
+                executeProcess(action->getTargetPath(), QString());
             }
         }
     }
