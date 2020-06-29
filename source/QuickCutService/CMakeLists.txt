@@ -47,11 +47,15 @@ set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h
     ${QUICKCUT_SHARED_DIR}/QuickCutPCH.cpp
 )
+set(UTILS_CXX_FILES
+    ${QUICKCUT_UTILS_DIR}/Utility.h
+    ${QUICKCUT_UTILS_DIR}/Utility.cpp
+)
 set(CXX_FILES
     ${ROOT_CXX_FILES}
     ${QTSERVICE_CXX_FILES}
     ${SHARED_CXX_FILES}
-    ${QUICKCUT_UTILS_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 
 # Resources
@@ -80,7 +84,7 @@ source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 
 source_group("Resources" FILES

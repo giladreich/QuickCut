@@ -2,6 +2,8 @@
 #include "QuickCutShared/QuickCutPCH.h"
 #include "QShortcutInput.h"
 
+#include "QuickCutShared/Utils/UtilityUI.h"
+
 QShortcutInput::QShortcutInput(QWidget * parent)
     : QLineEdit(parent)
     , m_CurrentKeys(nullptr)
@@ -48,13 +50,32 @@ void QShortcutInput::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey
     // i.e. so keys like Super/WinKey won't pop-up a menu while it gets inputs.
     *outSwallowKey = true;
 
+    QList<QTextLayout::FormatRange> formats;
+    QTextCharFormat                 frm;
+    frm.setFontWeight(QFont::Bold);
+
     QString text;
     for (auto && key : keys)
     {
         QString keyName = key.getKeyName();
+        frm.setForeground(Qt::magenta);
+        QTextLayout::FormatRange frmRange;
+        frmRange.start  = text.length();
+        frmRange.length = keyName.length();
+        frmRange.format = frm;
+        formats.append(frmRange);
+
+        frm.setForeground(Qt::gray);
+        QTextLayout::FormatRange frmDelimiter;
+        frmDelimiter.start  = text.length() + keyName.length();
+        frmDelimiter.length = 1;
+        frmDelimiter.format = frm;
+        formats.append(frmDelimiter);
+
         text += QString("%1+").arg(keyName);
     }
     text = text.left(text.length() - 1);
 
     setText(text);
+    QuickCut::setLineEditTextFormat(this, formats);
 }
