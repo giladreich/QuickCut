@@ -34,7 +34,7 @@ bool QuickCutConsoleUnix::stop()
     return true;
 }
 
-void QuickCutConsoleUnix::sendInput(const QStringList & dstKeys)
+void QuickCutConsoleUnix::sendInput(const KeyboardKeys & dstKeys)
 {
     if (dstKeys.isEmpty()) return;
 
@@ -45,13 +45,13 @@ void QuickCutConsoleUnix::executeProcess(const QString & process, const QString 
 {
     QString command = QString(R"(sh -c '%1')").arg(process);
 
-    QStringList argsTmp = arguments.trimmed().split(",");
+    QStringList argsTmp = arguments.trimmed().split(',');
     for (auto && arg : argsTmp)
     {
         QString argTrimmed = arg.trimmed();
         if (argTrimmed.isEmpty()) continue;
 
-        command += " " + argTrimmed;
+        command += ' ' + argTrimmed;
     }
     qDebug() << "[QuickCutConsoleUnix::executeProcess] - Command: " << qPrintable(command);
 

@@ -105,7 +105,7 @@ void QuickCutConsole::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKe
                          << qPrintable(action->getDstKeysCode());
 
                 *outSwallowKey = true;
-                // sendInput(action->getDstKey());
+                sendInput(action->getDstKeys());
             }
             else if (actionType == Action::ActionAppLaunch)
             {

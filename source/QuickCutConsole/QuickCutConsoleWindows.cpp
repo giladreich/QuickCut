@@ -34,12 +34,57 @@ bool QuickCutConsoleWindows::stop()
     return true;
 }
 
-void QuickCutConsoleWindows::sendInput(const QStringList & dstKeys)
+void QuickCutConsoleWindows::sendInput(const KeyboardKeys & dstKeys)
 {
     if (dstKeys.isEmpty()) return;
 
-    // TODO(Gilad): Re-work models to store key-codes + key-names. It will make it easier
-    // also using that data in the UI.
+    int     inputsCount = dstKeys.size();
+    INPUT * inputs      = new INPUT[inputsCount];
+    memset(inputs, 0, inputsCount * sizeof(INPUT));
+
+    for (int i = 0; i < inputsCount; ++i)
+    {
+        INPUT & input = inputs[i];
+        switch (dstKeys[i].getKeyCode())
+        {
+            case VK_LEFT:
+            case VK_UP:
+            case VK_RIGHT:
+            case VK_DOWN:
+            case VK_RCONTROL:
+            case VK_RMENU:
+            case VK_LWIN:
+            case VK_RWIN:
+            case VK_APPS:
+            case VK_PRIOR:
+            case VK_NEXT:
+            case VK_END:
+            case VK_HOME:
+            case VK_INSERT:
+            case VK_DELETE:
+            case VK_DIVIDE:
+            case VK_NUMLOCK:
+                input.ki.dwFlags |= KF_EXTENDED;
+                break;
+        }
+
+        input.type           = INPUT_KEYBOARD;
+        input.ki.wVk         = dstKeys[i].getKeyCode();
+        input.ki.wScan       = MapVirtualKey(dstKeys[i].getKeyCode(), MAPVK_VK_TO_VSC);
+        input.ki.dwExtraInfo = m_Hook->getIdentifier();
+    }
+    // BlockInput(true);
+    int successfulSents = SendInput(inputsCount, inputs, sizeof(INPUT));
+    // BlockInput(false);
+    if (successfulSents == 0)
+        qDebug() << "Failed to send inputs.";
+    else
+        qDebug() << "Successfully sent " << successfulSents << " inputs.";
+
+    for (int i = 0; i < inputsCount; ++i) inputs[i].ki.dwFlags |= KEYEVENTF_KEYUP;
+    SendInput(inputsCount, inputs, sizeof(INPUT));
+
+    delete[] inputs;
 }
 
 void QuickCutConsoleWindows::executeProcess(const QString & process, const QString & arguments)
