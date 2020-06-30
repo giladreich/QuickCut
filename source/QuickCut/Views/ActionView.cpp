@@ -35,6 +35,7 @@ ActionView::ActionView(QWidget * parent)
 ActionView::ActionView(QWidget * parent, Action * action)
     : ActionView(parent, ActionEdit)
 {
+    Q_CHECK_PTR(action);
     m_Action = action;
     ui->btnSave->setText("Save");
 
@@ -44,7 +45,10 @@ ActionView::ActionView(QWidget * parent, Action * action)
     onTypeSelChange(typeIndex);
 }
 
-ActionView::~ActionView() {}
+ActionView::~ActionView()
+{
+    if (m_WindowMode == ActionView::ActionCreate) delete m_Action;
+}
 
 void ActionView::connectSlots()
 {
