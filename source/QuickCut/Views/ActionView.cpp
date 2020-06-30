@@ -9,10 +9,10 @@
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
-ActionView::ActionView(QWidget * parent, WindowMode editMode)
+ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
     : QDialog(parent)
     , ui(new Ui::ActionView())
-    , m_EditMode(editMode)
+    , m_WindowMode(windowMode)
 {
     ui->setupUi(this);
 
@@ -116,9 +116,9 @@ void ActionView::updateVisibility(Action::ActionType type)
     }
 }
 
-WindowMode ActionView::getEditMode()
+ActionView::WindowMode ActionView::getWindowMode()
 {
-    return m_EditMode;
+    return m_WindowMode;
 }
 
 void ActionView::onTypeSelChange(int index)
@@ -199,7 +199,7 @@ void ActionView::onBtnFilePicker()
 
 void ActionView::onBtnCancel()
 {
-    if (m_EditMode == ActionCreate)
+    if (m_WindowMode == ActionCreate)
     {
         delete m_Action;
         m_Action = nullptr;
@@ -229,7 +229,7 @@ void ActionView::onBtnSave()
     m_Action->setTargetPath(ui->tbxTargetPath->text());
     m_Action->setAppArgs(ui->tbxAppArgs->text());
 
-    if (m_EditMode == ActionCreate)
+    if (m_WindowMode == ActionCreate)
         emit onCreated(m_Action);
     else
         emit onSaved();
