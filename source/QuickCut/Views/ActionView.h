@@ -30,8 +30,6 @@ public:
     WindowMode getWindowMode();
 
 private:
-    void fillActionTypes();
-    void fillEntries();
     void connectSlots();
     void updateVisibility(Action::ActionType type);
 

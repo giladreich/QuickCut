@@ -17,7 +17,10 @@ ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    fillActionTypes();
+    ui->cbxType->addItem("Key Mapping");
+    ui->cbxType->addItem("Application Launch");
+    ui->cbxType->addItem("Directory Launch");
+
     connectSlots();
 }
 
@@ -35,26 +38,13 @@ ActionView::ActionView(QWidget * parent, Action * action)
     m_Action = action;
     ui->btnSave->setText("Save");
 
-    fillEntries();
-}
-
-ActionView::~ActionView() {}
-
-void ActionView::fillActionTypes()
-{
-    ui->cbxType->addItem("Key Mapping");
-    ui->cbxType->addItem("Application Launch");
-    ui->cbxType->addItem("Directory Launch");
-}
-
-void ActionView::fillEntries()
-{
-    int typeIndex = static_cast<int>(m_Action->getType());
-
-    ui->tbxName->setText(m_Action->getName());
+    int typeIndex = static_cast<int>(action->getType());
+    ui->tbxName->setText(action->getName());
     ui->cbxType->setCurrentIndex(typeIndex);
     onTypeSelChange(typeIndex);
 }
+
+ActionView::~ActionView() {}
 
 void ActionView::connectSlots()
 {
