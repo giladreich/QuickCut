@@ -8,7 +8,7 @@
 
 class QShortcutInput;
 
-enum EditMode
+enum WindowMode
 {
     ActionEdit   = 1,
     ActionCreate = 2
@@ -19,14 +19,14 @@ class ActionView : public QDialog
     Q_OBJECT
 
 private:
-    ActionView(QWidget * parent, EditMode EditMode);
+    ActionView(QWidget * parent, WindowMode WindowMode);
 
 public:
     ActionView(QWidget * parent);
     ActionView(QWidget * parent, Action * action);
     ~ActionView();
 
-    EditMode getEditMode();
+    WindowMode getEditMode();
 
 private:
     void fillActionTypes();
@@ -54,5 +54,5 @@ private:
 
     Action * m_Action;
 
-    EditMode m_EditMode;
+    WindowMode m_EditMode;
 };

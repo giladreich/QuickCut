@@ -9,7 +9,7 @@
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
-ActionView::ActionView(QWidget * parent, EditMode editMode)
+ActionView::ActionView(QWidget * parent, WindowMode editMode)
     : QDialog(parent)
     , ui(new Ui::ActionView())
     , m_EditMode(editMode)
@@ -116,7 +116,7 @@ void ActionView::updateVisibility(Action::ActionType type)
     }
 }
 
-EditMode ActionView::getEditMode()
+WindowMode ActionView::getEditMode()
 {
     return m_EditMode;
 }
