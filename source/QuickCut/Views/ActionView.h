@@ -35,7 +35,7 @@ private:
 
 signals:
     void onSaved();
-    void onCreated(Action * action);
+    void onCreated(const Action & action);
     void onClosed();
 
 public slots:

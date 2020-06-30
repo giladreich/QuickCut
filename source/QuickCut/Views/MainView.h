@@ -54,7 +54,7 @@ public slots:
     void listItemSwap(QListWidget * list, bool moveUp);
 
     void onActionSaved();
-    void onActionCreated(Action * action);
+    void onActionCreated(const Action & action);
 
     void onReloadProfilesResponse();
 

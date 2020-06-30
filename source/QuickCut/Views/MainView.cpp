@@ -499,11 +499,11 @@ void MainView::onActionSaved()
     ui->lbxActions->setCurrentRow(currIndex);
 }
 
-void MainView::onActionCreated(Action * action)
+void MainView::onActionCreated(const Action & action)
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->getActionManager().add(action);
+    profile->getActionManager().add(new Action(action));
     saveProfiles();
     reloadProfiles();
     ui->lbxActions->setCurrentRow((currIndex >= 0) ? (currIndex + 1) : 0);
