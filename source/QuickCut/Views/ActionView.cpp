@@ -7,7 +7,6 @@
 #include "QuickCutShared/Models/Action.h"
 
 #include <QFileDialog>
-//#include <QKeySequenceEdit>
 
 ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
     : QDialog(parent)
@@ -54,8 +53,6 @@ void ActionView::fillEntries()
 
     ui->tbxName->setText(m_Action->getName());
     ui->cbxType->setCurrentIndex(typeIndex);
-    // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(m_Action->getSrcKeys()));
-    // ui->tbxSrcKey->setText(m_Action->getSrcKeys());
     onTypeSelChange(typeIndex);
 }
 
@@ -131,8 +128,6 @@ void ActionView::onTypeSelChange(int index)
         case Action::ActionKeyMap:
         default:
         {
-            // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKeys()));
-            // ui->tbxDstKey->setText(m_Action->getDstKeys());
             ui->tbxTargetPath->clear();
             ui->tbxAppArgs->clear();
             break;
@@ -154,7 +149,6 @@ void ActionView::onTypeSelChange(int index)
     }
 }
 
-// void ActionView::onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * button)
 void ActionView::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 {
     if (input->isEnabled())

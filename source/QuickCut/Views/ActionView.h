@@ -44,7 +44,6 @@ public slots:
 
     void onTypeSelChange(int index);
 
-    // void onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * pBtn);
     void onBtnKeyPlay(QShortcutInput * input, QPushButton * button);
     void onBtnFilePicker();
     void onBtnCancel();
