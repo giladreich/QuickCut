@@ -183,7 +183,7 @@ void MainView::activateHook()
     // which sometimes fails(QuickCutServiceWindows::RunProcessAsUserW), so if the user starts
     // QuickCut GUI, we use the chance to start QuickCutConsole as the current user.
     WinExec("taskkill /f /t /im " QUICKCUTCONSOLE_BIN, SW_HIDE);
-    QTimer::singleShot(5000, [] {
+    QTimer::singleShot(2000, [] {
         QThread * t = QThread::create([] {
             QThread::msleep(1000);
             WinExec(QUICKCUTCONSOLE_BIN, SW_HIDE);
