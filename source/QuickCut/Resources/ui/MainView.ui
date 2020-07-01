@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
-    <height>351</height>
+    <width>700</width>
+    <height>625</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>625</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>QuickCut</string>
@@ -20,11 +26,142 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="4">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionCreate">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Create Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionEdit">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Edit Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionDuplicate">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Duplicate Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionToggleEnabled">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Disable Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnActionDelete">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>85</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Delete Action</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="lblUserActions">
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
-        <width>100</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -35,48 +172,11 @@
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>User Actions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>19</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="btnActionMoveDown">
-      <property name="minimumSize">
-       <size>
-        <width>50</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>30</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Moves action down.</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <activeon>:/icons/btn_movedown.png</activeon>
-       </iconset>
       </property>
      </widget>
     </item>
@@ -107,118 +207,15 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="4">
-     <widget class="QListWidget" name="lbxActions"/>
-    </item>
-    <item row="1" column="4">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QPushButton" name="btnActionCreate">
-        <property name="minimumSize">
-         <size>
-          <width>105</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>85</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Create Action</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnActionDelete">
-        <property name="minimumSize">
-         <size>
-          <width>105</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>85</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Delete Action</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnActionDuplicate">
-        <property name="minimumSize">
-         <size>
-          <width>105</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>85</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Duplicate Action</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="2" column="0" colspan="5">
+    <item row="2" column="0" colspan="4">
      <widget class="QGroupBox" name="gbxProfile">
       <property name="title">
        <string>Profile</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="lblProfile">
-           <property name="minimumSize">
-            <size>
-             <width>32</width>
-             <height>16</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>32</width>
-             <height>16</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Name:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="cbxProfile"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="btnSetActive">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Default</string>
-           </property>
-          </widget>
-         </item>
-         <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="1" column="3">
           <widget class="QPushButton" name="btnDeleteProfile">
            <property name="minimumSize">
             <size>
@@ -226,12 +223,15 @@
              <height>25</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Delete the current selected profile and all its actions.</string>
+           </property>
            <property name="text">
             <string>Delete</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="4">
           <widget class="QPushButton" name="btnCreateProfile">
            <property name="minimumSize">
             <size>
@@ -239,15 +239,300 @@
              <height>25</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Create new profile, in case you want to manage multiple profiles with different keyboard layouts.</string>
+           </property>
            <property name="text">
             <string>Create</string>
            </property>
           </widget>
          </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblProfileName">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="4">
+          <widget class="QComboBox" name="cbxProfile">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="btnSetActive">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Set the selected profile as default, which all created actions will be currently activated.</string>
+           </property>
+           <property name="text">
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
       </layout>
      </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="btnActionMoveDown">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Moves action down.</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <activeon>:/icons/btn_movedown.png</activeon>
+       </iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <widget class="QTableWidget" name="actions">
+      <property name="font">
+       <font>
+        <family>MS Shell Dlg 2</family>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableWidget {
+	border: none;
+	background-repeat: none;
+	background-clip: border-box;
+  	background-position: center;
+	background-color: rgba(255, 255, 255, 0.3);
+	background-image: url(:/logo_transparent.png);
+	alternate-background-color: rgba(255, 255, 255, 0.0);
+}
+
+QTableView::item:selected {
+	font-weight: bold;
+	selection-background-color: rgba(250, 201, 40, 0.7);
+	selection-color: rgb(68, 60, 33, 0.95);
+}
+
+QHeaderView::section {
+	background-color: rgba(255, 255, 255, 0.3);
+}</string>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="tabKeyNavigation">
+       <bool>false</bool>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="dragDropOverwriteMode">
+       <bool>false</bool>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="showGrid">
+       <bool>false</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::NoPen</enum>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>80</number>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>180</number>
+      </attribute>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>true</bool>
+      </attribute>
+      <row>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Keys</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Action</string>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>Broken Caps Lock</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>[F17] ~ [Caps Lock]</string>
+       </property>
+      </item>
+      <item row="0" column="2">
+       <property name="text">
+        <string>Key Mapping</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>Open SnippingTool</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>[CTRL+SHIFT+K]</string>
+       </property>
+      </item>
+      <item row="1" column="2">
+       <property name="text">
+        <string>Open Application</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>Open MyScript</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>[F16]</string>
+       </property>
+      </item>
+      <item row="2" column="2">
+       <property name="text">
+        <string>Open Application</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>My Project Dir</string>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string>[CTRL+SHIFT+F2]</string>
+       </property>
+      </item>
+      <item row="3" column="2">
+       <property name="text">
+        <string>Open Directory</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>19</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
@@ -256,8 +541,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>360</width>
-     <height>21</height>
+     <width>700</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -529,9 +814,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>lbxActions</tabstop>
   <tabstop>btnActionCreate</tabstop>
-  <tabstop>btnActionDelete</tabstop>
   <tabstop>btnActionDuplicate</tabstop>
   <tabstop>cbxProfile</tabstop>
   <tabstop>btnCreateProfile</tabstop>

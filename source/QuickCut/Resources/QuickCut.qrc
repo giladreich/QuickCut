@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>logo.png</file>
+        <file>logo_transparent.png</file>
         <file>icons/btn_start_recording.png</file>
         <file>icons/btn_stop_recording.png</file>
         <file>icons/file_exit.png</file>

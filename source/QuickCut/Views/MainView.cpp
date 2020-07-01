@@ -92,9 +92,10 @@ void MainView::connectSlots()
             &MainView::onActionHelpCheckUpdates);
 
     // Controls
-    connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
+    connect(ui->actions, &QTableWidget::itemSelectionChanged, this,
             &MainView::onActionSelChange);
-    connect(ui->lbxActions, &QListWidget::doubleClicked, this, &MainView::onActionDoubleClick);
+    connect(ui->actions, &QTableWidget::itemDoubleClicked, this,
+            &MainView::onActionDoubleClick);
     connect(ui->cbxProfile, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &MainView::onProfileSelChange);
 
@@ -103,9 +104,12 @@ void MainView::connectSlots()
     connect(ui->btnDeleteProfile, &QPushButton::clicked, this, &MainView::onBtnDeleteProfile);
 
     connect(ui->btnActionCreate, &QPushButton::clicked, this, &MainView::onBtnActionCreate);
-    connect(ui->btnActionDelete, &QPushButton::clicked, this, &MainView::onBtnActionDelete);
+    connect(ui->btnActionEdit, &QPushButton::clicked, this, &MainView::onBtnActionEdit);
     connect(ui->btnActionDuplicate, &QPushButton::clicked, this,
             &MainView::onBtnActionDuplicate);
+    connect(ui->btnActionToggleEnabled, &QPushButton::clicked, this,
+            &MainView::onActionToggleEnable);
+    connect(ui->btnActionDelete, &QPushButton::clicked, this, &MainView::onBtnActionDelete);
 
     connect(ui->btnActionMoveDown, &QPushButton::clicked, this,
             &MainView::onBtnActionMoveDown);
@@ -220,7 +224,7 @@ void MainView::initPreference()
 
 void MainView::initProfiles()
 {
-    ui->lbxActions->clear();
+    ui->actions->clearContents();
     ui->cbxProfile->clear();
 
     if (!m_Profiles.load() || m_Profiles.empty())
@@ -231,8 +235,8 @@ void MainView::initProfiles()
         else
             onProfileSelChange(-1);
 
-        onActionSelChange(-1);
         saveProfiles();
+        onActionSelChange();
     }
     else
     {
@@ -242,18 +246,61 @@ void MainView::initProfiles()
         if (profile)
         {
             ui->cbxProfile->setCurrentText(profile->getName());
-            if (!profile->getActionManager().empty())
-            {
-                for (auto && action : profile->getActionManager())
-                    ui->lbxActions->addItem(action->getName());
-                onActionSelChange(0);
-            }
-            else
-                onActionSelChange(-1);
+            populateActionEntries(profile->getActionManager());
+            onActionSelChange();
         }
     }
 
     ui->btnSetActive->setEnabled(false);
+}
+
+void MainView::populateActionEntries(const ActionManager & actions)
+{
+    if (actions.empty()) return;
+
+    disconnect(ui->actions, &QTableWidget::itemSelectionChanged, this,
+               &MainView::onActionSelChange);
+
+    ui->actions->clearContents();
+    ui->actions->setRowCount(actions.count());
+    for (int row = 0; row < actions.count(); ++row)
+    {
+        Action * action = actions.getByIndex(row);
+        ui->actions->setItem(row, ActionsTable::ColumnName,
+                             new QTableWidgetItem(action->getName()));
+        if (action->getType() == Action::ActionKeyMap)
+        {
+            QString text = QString("[%1] ~ [%2]")
+                               .arg(action->getSrcKeysName())
+                               .arg(action->getDstKeysName());
+            ui->actions->setItem(row, ActionsTable::ColumnKeys, new QTableWidgetItem(text));
+        }
+        else
+        {
+            QString text = QString("[%1]").arg(action->getSrcKeysName());
+            ui->actions->setItem(row, ActionsTable::ColumnKeys, new QTableWidgetItem(text));
+        }
+
+        QString typeName;
+        if (action->getType() == Action::ActionKeyMap)
+            typeName = "Key Mapping";
+        else if (action->getType() == Action::ActionAppLaunch)
+            typeName = "Open Application";
+        else if (action->getType() == Action::ActionDirLaunch)
+            typeName = "Open Directory";
+
+        ui->actions->setItem(row, ActionsTable::ColumnAction, new QTableWidgetItem(typeName));
+    }
+    int padding = 20;
+    ui->actions->resizeColumnsToContents();
+    ui->actions->setColumnWidth(ActionsTable::ColumnName,
+                                ui->actions->columnWidth(ActionsTable::ColumnName) + padding);
+    ui->actions->setColumnWidth(ActionsTable::ColumnKeys,
+                                ui->actions->columnWidth(ActionsTable::ColumnKeys) + padding);
+
+    connect(ui->actions, &QTableWidget::itemSelectionChanged, this,
+            &MainView::onActionSelChange);
+    ui->actions->selectRow(0);
 }
 
 bool MainView::reloadProfiles()
@@ -304,7 +351,7 @@ void MainView::onReloadProfilesResponse()
 
 void MainView::onProfileSelChange(int index)
 {
-    ui->lbxActions->clear();
+    ui->actions->clearContents();
     Profile * profile = m_Profiles[index];
     if (!profile)
     {
@@ -320,17 +367,8 @@ void MainView::onProfileSelChange(int index)
     ui->btnDeleteProfile->setEnabled(true);
     ui->btnActionCreate->setEnabled(true);
 
-    disconnect(ui->lbxActions, &QListWidget::currentRowChanged, this,
-               &MainView::onActionSelChange);
-    for (auto && action : profile->getActionManager())
-        ui->lbxActions->addItem(action->getName());
-    connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
-            &MainView::onActionSelChange);
-
-    if (profile->getActionManager().empty())
-        onActionSelChange(-1);
-    else
-        ui->lbxActions->setCurrentRow(0);
+    populateActionEntries(profile->getActionManager());
+    onActionSelChange();
 }
 
 void MainView::onBtnSetActiveProfile()
@@ -391,21 +429,57 @@ Profile * MainView::onBtnCreateProfile()
     return profile;
 }
 
-void MainView::onActionSelChange(int index)
+void MainView::onActionSelChange()
 {
-    bool enabled = index >= 0;
-    if (!enabled) ui->btnActionCreate->setFocus();
+    bool enabled = ui->actions->rowCount() >= 0;
     ui->btnActionDelete->setEnabled(enabled);
     ui->btnActionDuplicate->setEnabled(enabled);
 
     ui->btnActionMoveUp->setEnabled(enabled);
     ui->btnActionMoveDown->setEnabled(enabled);
+
+    // Set default text, in case it was changed.
+    ui->btnActionToggleEnabled->setText(QLatin1String("Disable Action"));
+
+    if (!enabled)
+    {
+        ui->btnActionCreate->setFocus();
+        return;
+    }
+
+    const int index = ui->actions->currentRow();
+    if (index < 0) return;
+
+    auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    if (!profile) return;
+
+    auto actions    = profile->getActionManager();
+    auto currAction = actions.getByIndex(index);
+
+    // When creating new profile currAction, this will be null.
+    if (!currAction) return;
+
+    ui->btnActionToggleEnabled->setText(
+        QLatin1String(currAction->isEnabled() ? "Disable Action" : "Enable Action"));
+
+    for (int row = 0; row < ui->actions->rowCount(); ++row)
+    {
+        for (int col = 0; col < ui->actions->columnCount(); ++col)
+        {
+            auto action = actions.getByIndex(row);
+            auto cell   = ui->actions->item(row, col);
+            if (!action || !cell) continue;
+
+            cell->setBackgroundColor(action->isEnabled() ? QColor(255, 255, 255, 30)
+                                                         : QColor(178, 173, 173, 180));
+        }
+    }
 }
 
-void MainView::onActionDoubleClick(const QModelIndex & index)
+void MainView::onActionDoubleClick(QTableWidgetItem * item)
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action  = profile->getActionManager()[index.row()];
+    Action *  action  = profile->getActionManager().getByIndex(item->row());
 
     m_ActionView = new ActionView(this, action);
     connect(m_ActionView, &ActionView::onSaved, this, &MainView::onActionSave);
@@ -419,20 +493,25 @@ void MainView::onBtnActionCreate()
     m_ActionView->exec();
 }
 
+void MainView::onBtnActionEdit()
+{
+    onActionDoubleClick(ui->actions->currentItem());
+}
+
 void MainView::onBtnActionDelete()
 {
-    const int currIndex = ui->lbxActions->currentRow();
+    const int currIndex = ui->actions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().remove(currIndex);
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(currIndex - 1);
+    ui->actions->selectRow(currIndex - 1);
 }
 
 void MainView::onBtnActionDuplicate()
 {
-    const int currIndex = ui->lbxActions->currentRow();
+    const int currIndex = ui->actions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
     Action *  action    = profile->getActionManager().getByIndex(currIndex);
 
@@ -444,68 +523,88 @@ void MainView::onBtnActionDuplicate()
 
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(currIndex + 1);
+    ui->actions->selectRow(currIndex + 1);
+}
+
+void MainView::onActionToggleEnable()
+{
+    const int currIndex = ui->actions->currentRow();
+    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    Action *  action    = profile->getActionManager().getByIndex(currIndex);
+
+    action->setEnabled(!action->isEnabled());
+    saveProfiles();
+    onActionSelChange();
 }
 
 void MainView::onBtnActionMoveDown()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->getActionManager().moveDown(ui->lbxActions->currentRow());
+    profile->getActionManager().moveDown(ui->actions->currentRow());
 
-    listItemSwap(ui->lbxActions, false);
+    moveItemUp(false);
     saveProfiles();
 }
 
 void MainView::onBtnActionMoveUp()
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->getActionManager().moveUp(ui->lbxActions->currentRow());
+    profile->getActionManager().moveUp(ui->actions->currentRow());
 
-    listItemSwap(ui->lbxActions, true);
+    moveItemUp(true);
     saveProfiles();
 }
 
-void MainView::listItemSwap(QListWidget * list, bool moveUp)
+void MainView::moveItemUp(bool moveUp)
 {
-    const int currIndex = list->currentRow();
+    auto      actions   = ui->actions;
+    const int currIndex = actions->currentRow();
     if (currIndex == -1) return;
 
     if (moveUp)
     {
-        if (currIndex > 0)
+        if (currIndex < 1) return;
+
+        for (int col = 0; col < ActionsTable::ColumnCount; ++col)
         {
-            QListWidgetItem * item = list->takeItem(currIndex);
-            list->insertItem(currIndex - 1, item);
-            list->setCurrentRow(currIndex - 1);
+            QTableWidgetItem * itemAbove = actions->takeItem(currIndex - 1, col);
+            QTableWidgetItem * item      = actions->takeItem(currIndex, col);
+            actions->setItem(currIndex - 1, col, item);
+            actions->setItem(currIndex, col, itemAbove);
+            actions->selectRow(currIndex - 1);
         }
     }
     else
     {
-        if (currIndex < list->count() - 1)
+        if (currIndex >= actions->rowCount() - 1) return;
+
+        for (int col = 0; col < ActionsTable::ColumnCount; ++col)
         {
-            QListWidgetItem * item = list->takeItem(currIndex);
-            list->insertItem(currIndex + 1, item);
-            list->setCurrentRow(currIndex + 1);
+            QTableWidgetItem * itemBelow = actions->takeItem(currIndex + 1, col);
+            QTableWidgetItem * item      = actions->takeItem(currIndex, col);
+            actions->setItem(currIndex + 1, col, item);
+            actions->setItem(currIndex, col, itemBelow);
+            actions->selectRow(currIndex + 1);
         }
     }
 }
 
 void MainView::onActionSave()
 {
-    const int currIndex = ui->lbxActions->currentRow();
+    const int currIndex = ui->actions->currentRow();
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow(currIndex);
+    ui->actions->selectRow(currIndex);
 }
 
 void MainView::onActionCreate(const Action & action)
 {
-    const int currIndex = ui->lbxActions->currentRow();
+    const int currIndex = ui->actions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().add(new Action(action));
     saveProfiles();
     reloadProfiles();
-    ui->lbxActions->setCurrentRow((currIndex >= 0) ? (currIndex + 1) : 0);
+    ui->actions->selectRow((currIndex >= 0) ? (currIndex + 1) : 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
