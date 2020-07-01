@@ -94,8 +94,7 @@ void MainView::connectSlots()
     // Controls
     connect(ui->lbxActions, &QListWidget::currentRowChanged, this,
             &MainView::onActionSelChange);
-    connect(ui->lbxActions, &QListWidget::doubleClicked, this,
-            &MainView::onActionDoubleClicked);
+    connect(ui->lbxActions, &QListWidget::doubleClicked, this, &MainView::onActionDoubleClick);
     connect(ui->cbxProfile, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &MainView::onProfileSelChange);
 
@@ -403,20 +402,20 @@ void MainView::onActionSelChange(int index)
     ui->btnActionMoveDown->setEnabled(enabled);
 }
 
-void MainView::onActionDoubleClicked(const QModelIndex & index)
+void MainView::onActionDoubleClick(const QModelIndex & index)
 {
     Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
     Action *  action  = profile->getActionManager()[index.row()];
 
     m_ActionView = new ActionView(this, action);
-    connect(m_ActionView, &ActionView::onSaved, this, &MainView::onActionSaved);
+    connect(m_ActionView, &ActionView::onSaved, this, &MainView::onActionSave);
     m_ActionView->exec();
 }
 
 void MainView::onBtnActionCreate()
 {
     m_ActionView = new ActionView(this);
-    connect(m_ActionView, &ActionView::onCreated, this, &MainView::onActionCreated);
+    connect(m_ActionView, &ActionView::onCreated, this, &MainView::onActionCreate);
     m_ActionView->exec();
 }
 
@@ -491,7 +490,7 @@ void MainView::listItemSwap(QListWidget * list, bool moveUp)
     }
 }
 
-void MainView::onActionSaved()
+void MainView::onActionSave()
 {
     const int currIndex = ui->lbxActions->currentRow();
     saveProfiles();
@@ -499,7 +498,7 @@ void MainView::onActionSaved()
     ui->lbxActions->setCurrentRow(currIndex);
 }
 
-void MainView::onActionCreated(const Action & action)
+void MainView::onActionCreate(const Action & action)
 {
     const int currIndex = ui->lbxActions->currentRow();
     Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];

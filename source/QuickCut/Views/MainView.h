@@ -44,7 +44,7 @@ public slots:
     Profile * onBtnCreateProfile();
 
     void onActionSelChange(int index);
-    void onActionDoubleClicked(const QModelIndex & index);
+    void onActionDoubleClick(const QModelIndex & index);
     void onBtnActionCreate();
     void onBtnActionDelete();
     void onBtnActionDuplicate();
@@ -53,8 +53,8 @@ public slots:
 
     void listItemSwap(QListWidget * list, bool moveUp);
 
-    void onActionSaved();
-    void onActionCreated(const Action & action);
+    void onActionSave();
+    void onActionCreate(const Action & action);
 
     void onReloadProfilesResponse();
 
