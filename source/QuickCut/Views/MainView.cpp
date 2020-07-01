@@ -386,6 +386,14 @@ void MainView::onBtnDeleteProfile()
     const int currIndex = ui->cbxProfile->currentIndex();
     Profile * profile   = m_Profiles[currIndex];
 
+    auto answer =
+        QMessageBox::warning(this, "Warning",
+                             QString("You are about to delete '%1' profile including all the "
+                                     "keyboard actions.\nAre you sure you want to continue?")
+                                 .arg(profile->getName()),
+                             QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (answer != QMessageBox::Yes) return;
+
     bool wasActiveProfile = profile->isActive();
     m_Profiles.remove(currIndex);
     ui->cbxProfile->removeItem(currIndex);
