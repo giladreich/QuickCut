@@ -25,18 +25,19 @@ public:
             bool       active = false) noexcept;
 
     // Constructs copy
-    Profile(const Profile & profile) = default;
-    Profile(Profile && profile)      = default;
+    Profile(const Profile & other);
+    Profile(Profile && other) = default;
 
     ~Profile();
 
     bool isActive() const;
     void setActive(bool active);
 
-    ActionManager & getActionManager();
+    ActionManager &       getActionManager();
+    const ActionManager & getActionManager() const;
 
-    Profile & operator=(const Profile & profile) = default;
-    Profile & operator=(Profile && profile) = default;
+    Profile & operator=(const Profile & other);
+    Profile & operator=(Profile && other) = default;
 
 private:
     bool          m_Active;

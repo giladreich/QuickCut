@@ -7,11 +7,9 @@ class KeyboardHookUnix : public KeyboardHook
 {
     Q_OBJECT
 public:
-    KeyboardHookUnix(bool multiShortcuts, QObject * parent = nullptr);
+    KeyboardHookUnix(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent = nullptr);
     ~KeyboardHookUnix();
 
     bool activateHook() override;
     bool deactivateHook() override;
-
-private:
 };

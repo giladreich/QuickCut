@@ -7,7 +7,12 @@ class ActionManager : public BaseManager<Action>
 {
 public:
     ActionManager() noexcept;
+
+    ActionManager(const ActionManager & other);
+    ActionManager(ActionManager && other) = default;
+
     ~ActionManager();
 
-private:
+    ActionManager & operator=(const ActionManager & other);
+    ActionManager & operator=(ActionManager && other) = default;
 };

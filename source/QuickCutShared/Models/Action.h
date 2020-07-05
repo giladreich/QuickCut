@@ -2,6 +2,7 @@
 #pragma once
 
 #include "BaseModel.h"
+#include "KeyData.h"
 
 class Action : public BaseModel
 {
@@ -22,40 +23,44 @@ public:
     Action() noexcept;
 
     // Constructs new Action
-    Action(const QString &    name,
-           const ActionType & type,
-           const QString &    srcKey,
-           const QString &    dstKey,
-           const QString &    targetPath,
-           const QString &    appArgs) noexcept;
+    Action(const QString &      name,
+           const ActionType &   type,
+           const KeyboardKeys & srcKeys,
+           const KeyboardKeys & dstKeys,
+           const QString &      targetPath,
+           const QString &      appArgs,
+           const bool &         enabled = true) noexcept;
 
-    Action(QString &&    name,
-           ActionType && type,
-           QString &&    srcKey,
-           QString &&    dstKey,
-           QString &&    targetPath,
-           QString &&    appArgs) noexcept;
+    Action(QString &&      name,
+           ActionType &&   type,
+           KeyboardKeys && srcKeys,
+           KeyboardKeys && dstKeys,
+           QString &&      targetPath,
+           QString &&      appArgs,
+           bool &&         enabled = true) noexcept;
 
     // Constructs existing Action
-    Action(const QString &    id,
-           const QString &    name,
-           const QString &    lastModified,
-           const ActionType & type,
-           const QString &    srcKey,
-           const QString &    dstKey,
-           const QString &    targetPath,
-           const QString &    appArgs,
-           const QString &    createdDate) noexcept;
+    Action(const QString &      id,
+           const QString &      name,
+           const QString &      lastModified,
+           const ActionType &   type,
+           const KeyboardKeys & srcKeys,
+           const KeyboardKeys & dstKeys,
+           const QString &      targetPath,
+           const QString &      appArgs,
+           const QString &      createdDate,
+           const bool &         enabled) noexcept;
 
-    Action(QString &&    id,
-           QString &&    name,
-           QString &&    lastModified,
-           ActionType && type,
-           QString &&    srcKey,
-           QString &&    dstKey,
-           QString &&    targetPath,
-           QString &&    appArgs,
-           QString &&    createdDate) noexcept;
+    Action(QString &&      id,
+           QString &&      name,
+           QString &&      lastModified,
+           ActionType &&   type,
+           KeyboardKeys && srcKeys,
+           KeyboardKeys && dstKeys,
+           QString &&      targetPath,
+           QString &&      appArgs,
+           QString &&      createdDate,
+           bool &&         enabled) noexcept;
 
     // Constructs copy
     Action(const Action & action) = default;
@@ -63,12 +68,6 @@ public:
 
     ActionType getType() const;
     void       setType(const ActionType type);
-
-    QString getSrcKey() const;
-    void    setSrcKey(const QString & key);
-
-    QString getDstKey() const;
-    void    setDstKey(const QString & key);
 
     const QString & getTargetPath() const;
     void            setTargetPath(const QString & path);
@@ -78,16 +77,37 @@ public:
 
     const QString & getCreatedDate() const;
 
+    bool isEnabled() const;
+    void setEnabled(bool enabled);
+
     void reset();
 
+public: // Keys operations
+    const KeyboardKeys & getSrcKeys() const;
+    void                 setSrcKeys(const KeyboardKeys & keys);
+    QStringList          getSrcKeysNames() const;
+    QString              getSrcKeysName(QChar delimiter = '+') const;
+    QString              getSrcKeysCode() const;
+
+    const KeyboardKeys & getDstKeys() const;
+    void                 setDstKeys(const KeyboardKeys & keys);
+    QStringList          getDstKeysNames() const;
+    QString              getDstKeysName(QChar delimiter = '+') const;
+    QString              getDstKeysCode() const;
+
+    static QStringList getKeysNames(const KeyboardKeys & keys);
+    static QString     getKeysCode(const KeyboardKeys & keys);
+
+public: // Operators
     Action & operator=(const Action & action) = default;
     Action & operator=(Action && action) = default;
 
 private:
-    ActionType m_Type;
-    QString    m_SrcKey; // string with delimited ',' char. Could have multiple keys.
-    QString    m_DstKey;
-    QString    m_TargetPath;
-    QString    m_AppArgs;
-    QString    m_CreatedDate;
+    ActionType   m_Type;
+    KeyboardKeys m_SrcKeys;
+    KeyboardKeys m_DstKeys;
+    QString      m_TargetPath;
+    QString      m_AppArgs;
+    QString      m_CreatedDate;
+    bool         m_Enabled;
 };

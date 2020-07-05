@@ -13,6 +13,6 @@ public:
     virtual ~PreferenceParser() = default;
 
 private:
-    bool parseImpl(Preference * outData) override;
     bool saveImpl(const Preference & data) override;
+    bool parseImpl(Preference * outData) override;
 };

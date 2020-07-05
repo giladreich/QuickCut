@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "QuickCutShared/Models/KeyData.h"
+
 #include <QObject>
 
 class KeyboardHook : public QObject
@@ -19,15 +21,23 @@ public:
     bool isMultiShortcutsEnabled() const;
     void setMultiShortcuts(bool multiShortcuts);
 
+    bool isAutoRepeatEnabled() const;
+    void setAutoRepeatEnabled(bool autoRepeatEnabled);
+
+    // Returns a unique identifier for validating message exchanges when sending inputs.
+    const size_t & getIdentifier() const;
+
 signals:
-    void keysPressed(const QStringList & keys, bool * outSwallowKey);
+    void keysPressed(const KeyboardKeys & keys, bool * outSwallowKey);
 
 protected:
-    KeyboardHook(bool multiShortcuts, QObject * parent = nullptr);
+    KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent = nullptr);
     virtual ~KeyboardHook();
 
 protected:
     static KeyboardHook * s_Instance;
 
-    bool m_MultiShortcuts;
+    size_t m_Identifier;
+    bool   m_MultiShortcuts;
+    bool   m_AutoRepeatEnabled;
 };

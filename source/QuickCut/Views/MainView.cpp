@@ -438,8 +438,8 @@ void MainView::onBtnActionDuplicate()
     Action *  action    = profile->getActionManager().getByIndex(currIndex);
 
     Action * newAction =
-        new Action(action->getName(), action->getType(), action->getSrcKey(),
-                   action->getDstKey(), action->getTargetPath(), action->getAppArgs());
+        new Action(action->getName(), action->getType(), action->getSrcKeys(),
+                   action->getDstKeys(), action->getTargetPath(), action->getAppArgs());
 
     profile->getActionManager().insert(currIndex, newAction);
 

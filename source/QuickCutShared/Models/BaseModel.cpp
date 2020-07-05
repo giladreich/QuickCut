@@ -2,19 +2,10 @@
 #include "QuickCutShared/QuickCutPCH.h"
 #include "BaseModel.h"
 
-// TODO(Gilad): Manage lastModified differently after finishing refactoring.
-
 BaseModel::BaseModel() noexcept
     : m_Uuid(std::move(QuickCut::createUuid()))
     , m_Name()
     , m_LastModified(std::move(QuickCut::getDateTime()))
-{
-}
-
-BaseModel::BaseModel(QString && id, QString && name, QString && lastModified) noexcept
-    : m_Uuid(std::move(id))
-    , m_Name(std::move(name))
-    , m_LastModified(std::move(lastModified))
 {
 }
 
@@ -24,6 +15,13 @@ BaseModel::BaseModel(const QString & id,
     : m_Uuid(id)
     , m_Name(name)
     , m_LastModified(lastModified)
+{
+}
+
+BaseModel::BaseModel(QString && id, QString && name, QString && lastModified) noexcept
+    : m_Uuid(std::move(id))
+    , m_Name(std::move(name))
+    , m_LastModified(std::move(lastModified))
 {
 }
 
@@ -39,7 +37,8 @@ const QString & BaseModel::getName() const
 
 void BaseModel::setName(const QString & name)
 {
-    m_Name = name;
+    m_Name         = name;
+    m_LastModified = QuickCut::getDateTime();
 }
 
 const QString & BaseModel::getLastModified() const

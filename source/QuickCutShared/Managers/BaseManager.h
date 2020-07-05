@@ -29,7 +29,9 @@ public:
     bool moveUp(int index);
     bool moveDown(int index);
 
-    T *                                       operator[](int index);
+    T *             operator[](int index);
+    const T * const operator[](int index) const;
+
     typename std::vector<T *>::iterator       begin() { return m_Data.begin(); }
     typename std::vector<T *>::const_iterator begin() const { return m_Data.cbegin(); }
     typename std::vector<T *>::iterator       end() { return m_Data.end(); }

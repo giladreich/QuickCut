@@ -7,10 +7,8 @@ class BaseModel
 {
 protected:
     BaseModel() noexcept;
-
-    BaseModel(QString && id, QString && name, QString && lastModified) noexcept;
-
     BaseModel(const QString & id, const QString & name, const QString & lastModified) noexcept;
+    BaseModel(QString && id, QString && name, QString && lastModified) noexcept;
 
     virtual ~BaseModel() = default;
 

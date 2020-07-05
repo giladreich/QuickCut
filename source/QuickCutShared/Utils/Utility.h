@@ -21,6 +21,7 @@ namespace boost
 namespace QuickCut
 {
     QString getDateTime();
+    QString getCurrentOSName();
     QString createUuid();
 
     template <typename QEnum>

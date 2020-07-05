@@ -62,6 +62,8 @@ set(MODELS_CXX_FILES
     ${QUICKCUT_MODELS_DIR}/Profile.cpp
     ${QUICKCUT_MODELS_DIR}/Action.h
     ${QUICKCUT_MODELS_DIR}/Action.cpp
+    ${QUICKCUT_MODELS_DIR}/KeyData.h
+    ${QUICKCUT_MODELS_DIR}/KeyData.cpp
 )
 set(PARSERS_CXX_FILES
     ${QUICKCUT_PARSERS_DIR}/BaseParser.h

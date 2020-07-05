@@ -36,19 +36,23 @@ void QShortcutInput::focusOutEvent(QFocusEvent * event)
     m_Hook->deactivateHook();
 }
 
-void QShortcutInput::onKeysPress(const QStringList & keys, bool * outSwallowKey)
+void QShortcutInput::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey)
 {
     if (keys.isEmpty()) return;
 
     // Always save the current keys, so the UI can know whether new keys were set.
-    m_CurrentKeys = std::make_shared<QStringList>(keys);
+    // m_CurrentKeys = std::make_shared<KeyboardKeys>(keys);
 
     // Don't process any keyboard inputs globally when receiving inputs.
     // i.e. so keys like Super/WinKey won't pop-up a menu while it gets inputs.
     *outSwallowKey = true;
 
     QString text;
-    for (auto && key : keys) { text += QString("%1+").arg(key); }
+    for (auto && key : keys)
+    {
+        QString keyName = key.getKeyName();
+        text += QString("%1+").arg(keyName);
+    }
     text = text.left(text.length() - 1);
 
     setText(text);

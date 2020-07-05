@@ -20,15 +20,23 @@ union KeyState
 
 HHOOK KeyboardHookWindows::s_Hook = nullptr;
 
-KeyboardHookWindows::KeyboardHookWindows(bool multiShortcuts, QObject * parent)
-    : KeyboardHook(multiShortcuts, parent)
+KeyboardHookWindows::KeyboardHookWindows(bool      multiShortcuts,
+                                         bool      autoRepeatEnabled,
+                                         QObject * parent)
+    : KeyboardHook(multiShortcuts, autoRepeatEnabled, parent)
 {
     s_Hook = nullptr;
 }
 
 KeyboardHookWindows::~KeyboardHookWindows()
 {
-    deactivateHook();
+    if (s_Hook)
+    {
+        qDebug() << "[KeyboardHookWindows::dtor] - Unhooking...";
+        if (!UnhookWindowsHookEx(s_Hook))
+            qDebug() << "[KeyboardHookWindows::dtor] - Failed to deactivate keyboard hook...";
+        s_Hook = nullptr;
+    }
 }
 
 bool KeyboardHookWindows::activateHook()
@@ -75,7 +83,8 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
 
     // If it's an input we sent by simulating keyboard presses, don't do anything.
     bool injectedKeys = kbd->flags & LLKHF_LOWER_IL_INJECTED || kbd->flags & LLKHF_INJECTED;
-    if (injectedKeys) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
+    if (!kbd || kbd->dwExtraInfo == s_Instance->getIdentifier() || injectedKeys)
+        return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
     // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
     // lParam: (lParam & KF_REPEAT)
@@ -86,7 +95,7 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
     {
         bool isRepeatedKeyPress = prevVkCode == kbd->vkCode;
-        if (isRepeatedKeyPress) return -1;
+        if (!s_Instance->isAutoRepeatEnabled() && isRepeatedKeyPress) return -1;
 
         prevVkCode = kbd->vkCode;
 
@@ -121,11 +130,11 @@ LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, 
     return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 
-QStringList KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys)
+KeyboardKeys KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys)
 {
-    if (pressedKeys.isEmpty()) return QStringList();
+    if (pressedKeys.isEmpty()) return {};
 
-    QStringList keysData;
+    KeyboardKeys keysData;
     for (auto && kbd : pressedKeys)
     {
         KeyState state;
@@ -147,7 +156,8 @@ QStringList KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pr
 
         QString keyName = QString::fromWCharArray(keyBuff);
         if (keyName.isEmpty()) keyName = mapMissingKeyName(kbd.vkCode);
-        keysData << keyName;
+        qDebug() << keyName;
+        keysData.push_back(KeyData(keyName, kbd.vkCode));
     }
 
     return keysData;

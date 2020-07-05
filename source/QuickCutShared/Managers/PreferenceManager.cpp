@@ -47,3 +47,8 @@ Preference & PreferenceManager::get()
 {
     return m_Preference;
 }
+
+const Preference & PreferenceManager::get() const
+{
+    return m_Preference;
+}

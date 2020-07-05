@@ -2,8 +2,10 @@
 #include "QuickCutShared/QuickCutPCH.h"
 #include "KeyboardHookUnix.h"
 
-KeyboardHookUnix::KeyboardHookUnix(bool multiShortcuts, QObject * parent)
-    : KeyboardHook(multiShortcuts, parent)
+KeyboardHookUnix::KeyboardHookUnix(bool      multiShortcuts,
+                                   bool      autoRepeatEnabled,
+                                   QObject * parent)
+    : KeyboardHook(multiShortcuts, autoRepeatEnabled, parent)
 {
 }
 

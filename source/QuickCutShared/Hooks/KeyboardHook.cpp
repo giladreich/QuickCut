@@ -4,11 +4,13 @@
 
 KeyboardHook * KeyboardHook::s_Instance = nullptr;
 
-KeyboardHook::KeyboardHook(bool multiShortcuts, QObject * parent)
+KeyboardHook::KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent)
     : QObject(parent)
     , m_MultiShortcuts(multiShortcuts)
+    , m_AutoRepeatEnabled(autoRepeatEnabled)
 {
-    s_Instance = this;
+    s_Instance   = this;
+    m_Identifier = std::hash<const char *>{}(QUICKCUT_NAME QUICKCUT_VERSION);
 }
 
 KeyboardHook::~KeyboardHook() = default;
@@ -36,4 +38,19 @@ bool KeyboardHook::isMultiShortcutsEnabled() const
 void KeyboardHook::setMultiShortcuts(bool multiShortcuts)
 {
     m_MultiShortcuts = multiShortcuts;
+}
+
+bool KeyboardHook::isAutoRepeatEnabled() const
+{
+    return m_AutoRepeatEnabled;
+}
+
+void KeyboardHook::setAutoRepeatEnabled(bool autoRepeatEnabled)
+{
+    m_AutoRepeatEnabled = autoRepeatEnabled;
+}
+
+const size_t & KeyboardHook::getIdentifier() const
+{
+    return m_Identifier;
 }
