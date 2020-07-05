@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>753</width>
     <height>270</height>
    </rect>
   </property>
@@ -72,6 +72,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="1">
       <widget class="QComboBox" name="cbxType">
+       <property name="toolTip">
+        <string>The kind of action to be executed when the source key is triggered.</string>
+       </property>
        <property name="currentText">
         <string/>
        </property>
@@ -136,6 +139,9 @@
          <height>34</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Click it to start recording the destination keys.</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">#btnDstKeyPlay {
     border: none;
@@ -188,6 +194,9 @@ QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
         <bool>false</bool>
        </property>
        <property name="multiShortcuts" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="autoRepeatEnabled" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -199,6 +208,9 @@ QPushButton#btnDstKeyPlay[background-image=&quot;stop&quot;] {
          <width>34</width>
          <height>34</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Click it to start recording the source keys.</string>
        </property>
        <property name="styleSheet">
         <string notr="true">#btnSrcKeyPlay {
@@ -230,6 +242,9 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
          <height>32</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Select the target path.</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -242,6 +257,9 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
        </property>
        <property name="multiShortcuts" stdset="0">
         <bool>true</bool>
+       </property>
+       <property name="autoRepeatEnabled" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

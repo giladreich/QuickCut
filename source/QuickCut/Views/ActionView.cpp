@@ -7,18 +7,20 @@
 #include "QuickCutShared/Models/Action.h"
 
 #include <QFileDialog>
-//#include <QKeySequenceEdit>
 
-ActionView::ActionView(QWidget * parent, EditMode editMode)
+ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
     : QDialog(parent)
     , ui(new Ui::ActionView())
-    , m_EditMode(editMode)
+    , m_WindowMode(windowMode)
 {
     ui->setupUi(this);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    fillActionTypes();
+    ui->cbxType->addItem("Key Mapping");
+    ui->cbxType->addItem("Application Launch");
+    ui->cbxType->addItem("Directory Launch");
+
     connectSlots();
 }
 
@@ -33,30 +35,21 @@ ActionView::ActionView(QWidget * parent)
 ActionView::ActionView(QWidget * parent, Action * action)
     : ActionView(parent, ActionEdit)
 {
+    Q_CHECK_PTR(action);
     m_Action = action;
     ui->btnSave->setText("Save");
 
-    fillEntries();
-}
-
-ActionView::~ActionView() {}
-
-void ActionView::fillActionTypes()
-{
-    ui->cbxType->addItem("Key Mapping");
-    ui->cbxType->addItem("Application Launch");
-    ui->cbxType->addItem("Directory Launch");
-}
-
-void ActionView::fillEntries()
-{
-    int typeIndex = static_cast<int>(m_Action->getType());
-
-    ui->tbxName->setText(m_Action->getName());
+    int typeIndex = static_cast<int>(action->getType());
+    ui->tbxName->setText(action->getName());
     ui->cbxType->setCurrentIndex(typeIndex);
-    // ui->tbxSrcKey->setKeySequence(QKeySequence::fromString(m_Action->getSrcKeys()));
-    // ui->tbxSrcKey->setText(m_Action->getSrcKeys());
+    ui->tbxSrcKey->setText(action->getSrcKeysName());
+
     onTypeSelChange(typeIndex);
+}
+
+ActionView::~ActionView()
+{
+    if (m_WindowMode == ActionView::ActionCreate) delete m_Action;
 }
 
 void ActionView::connectSlots()
@@ -116,23 +109,21 @@ void ActionView::updateVisibility(Action::ActionType type)
     }
 }
 
-EditMode ActionView::getEditMode()
+ActionView::WindowMode ActionView::getWindowMode()
 {
-    return m_EditMode;
+    return m_WindowMode;
 }
 
 void ActionView::onTypeSelChange(int index)
 {
-    Action::ActionType type = static_cast<Action::ActionType>(index);
-    m_Action->setType(type);
+    auto type = static_cast<Action::ActionType>(index);
     updateVisibility(type);
     switch (type)
     {
         case Action::ActionKeyMap:
         default:
         {
-            // ui->tbxDstKey->setKeySequence(QKeySequence::fromString(m_Action->getDstKeys()));
-            // ui->tbxDstKey->setText(m_Action->getDstKeys());
+            ui->tbxDstKey->setText(m_Action->getDstKeysName());
             ui->tbxTargetPath->clear();
             ui->tbxAppArgs->clear();
             break;
@@ -154,7 +145,6 @@ void ActionView::onTypeSelChange(int index)
     }
 }
 
-// void ActionView::onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * button)
 void ActionView::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 {
     if (input->isEnabled())
@@ -184,12 +174,13 @@ void ActionView::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 void ActionView::onBtnFilePicker()
 {
     QString homeDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
+    auto    type    = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
 
     QString filePath;
-    if (m_Action->getType() == Action::ActionAppLaunch)
+    if (type == Action::ActionAppLaunch)
         filePath =
             QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
-    else if (m_Action->getType() == Action::ActionDirLaunch)
+    else if (type == Action::ActionDirLaunch)
         filePath = QFileDialog::getExistingDirectory(this, "Get Target Directory", homeDir);
 
     if (filePath.isEmpty()) return;
@@ -199,12 +190,6 @@ void ActionView::onBtnFilePicker()
 
 void ActionView::onBtnCancel()
 {
-    if (m_EditMode == ActionCreate)
-    {
-        delete m_Action;
-        m_Action = nullptr;
-    }
-
     close();
 }
 
@@ -216,23 +201,41 @@ void ActionView::onBtnSave()
         return;
     }
 
-    m_Action->reset();
+    if (m_WindowMode == ActionCreate)
+    {
+        auto name = ui->tbxName->text();
+        auto type = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
 
-    Action::ActionType type = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
+        KeyboardKeys srcKeys, dstKeys;
+        if (ui->tbxSrcKey->m_CurrentKeys) srcKeys = *ui->tbxSrcKey->m_CurrentKeys;
+        if (ui->tbxDstKey->m_CurrentKeys) dstKeys = *ui->tbxDstKey->m_CurrentKeys;
 
-    m_Action->setName(ui->tbxName->text());
-    m_Action->setType(type);
+        auto targetPath = ui->tbxTargetPath->text();
+        auto appArgs    = ui->tbxAppArgs->text();
 
-    // m_Action->setSrcKeys(ui->tbxSrcKey->text());
-    // m_Action->setDstKeys(ui->tbxDstKey->text());
-
-    m_Action->setTargetPath(ui->tbxTargetPath->text());
-    m_Action->setAppArgs(ui->tbxAppArgs->text());
-
-    if (m_EditMode == ActionCreate)
-        emit onCreated(m_Action);
+        emit onCreated(Action(name, type, srcKeys, dstKeys, targetPath, appArgs));
+    }
     else
+    {
+        Action actionBackup(*m_Action);
+        m_Action->reset();
+
+        Action::ActionType type = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
+
+        m_Action->setName(ui->tbxName->text());
+        m_Action->setType(type);
+
+        m_Action->setSrcKeys(ui->tbxSrcKey->m_CurrentKeys ? *ui->tbxSrcKey->m_CurrentKeys
+                                                          : actionBackup.getSrcKeys());
+
+        m_Action->setDstKeys(ui->tbxDstKey->m_CurrentKeys ? *ui->tbxDstKey->m_CurrentKeys
+                                                          : actionBackup.getDstKeys());
+
+        m_Action->setTargetPath(ui->tbxTargetPath->text());
+        m_Action->setAppArgs(ui->tbxAppArgs->text());
+
         emit onSaved();
+    }
 
     close();
 }

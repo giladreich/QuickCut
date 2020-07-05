@@ -47,11 +47,15 @@ set(SHARED_CXX_FILES
     ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h
     ${QUICKCUT_SHARED_DIR}/QuickCutPCH.cpp
 )
+set(UTILS_CXX_FILES
+    ${QUICKCUT_UTILS_DIR}/Utility.h
+    ${QUICKCUT_UTILS_DIR}/Utility.cpp
+)
 set(CXX_FILES
     ${ROOT_CXX_FILES}
     ${QTSERVICE_CXX_FILES}
     ${SHARED_CXX_FILES}
-    ${QUICKCUT_UTILS_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 
 # Resources
@@ -80,7 +84,7 @@ source_group("Source Files\\Shared\\QtService" FILES
     ${QTSERVICE_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Utils" FILES
-    ${QUICKCUT_UTILS_CXX_FILES}
+    ${UTILS_CXX_FILES}
 )
 
 source_group("Resources" FILES
@@ -137,4 +141,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/QuickCu
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY VS_DEBUGGER_COMMAND_ARGUMENTS "-e")
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endif()

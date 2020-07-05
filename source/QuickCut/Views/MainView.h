@@ -12,6 +12,16 @@ class UpdatesView;
 class AboutView;
 class ActionView;
 class QLocalSocket;
+class QTableWidgetItem;
+
+enum ActionsTable
+{
+    ColumnName = 0,
+    ColumnKeys,
+    ColumnAction,
+
+    ColumnCount
+};
 
 class MainView : public QMainWindow
 {
@@ -26,13 +36,15 @@ public:
     void initThemes();
     void initPreference();
     void initProfiles();
+    void populateActionEntries(const ActionManager & actions);
     void activateHook();
 
     bool loadProfiles();
     bool reloadProfiles();
     bool saveProfiles();
-
     bool sendReloadProfiles();
+
+    void moveItemUp(bool moveUp);
 
     void showEvent(QShowEvent * event) override;
 
@@ -43,18 +55,18 @@ public slots:
     void      onBtnDeleteProfile();
     Profile * onBtnCreateProfile();
 
-    void onActionSelChange(int index);
-    void onActionDoubleClicked(const QModelIndex & index);
+    void onActionSelChange();
+    void onActionDoubleClick(QTableWidgetItem * item);
     void onBtnActionCreate();
-    void onBtnActionDelete();
+    void onBtnActionEdit();
     void onBtnActionDuplicate();
+    void onActionToggleEnable();
+    void onBtnActionDelete();
     void onBtnActionMoveDown();
     void onBtnActionMoveUp();
 
-    void listItemSwap(QListWidget * list, bool moveUp);
-
-    void onActionSaved();
-    void onActionCreated(Action * action);
+    void onActionSave();
+    void onActionCreate(const Action & action);
 
     void onReloadProfilesResponse();
 

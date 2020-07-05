@@ -33,6 +33,10 @@ file(GLOB ROOT_CXX_FILES
     ${ROOT_DIR}/*.h
     ${ROOT_DIR}/*cpp
 )
+file(GLOB VIEWMODELS_CXX_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ViewModels/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ViewModels/*.cpp
+)
 file(GLOB VIEWS_CXX_FILES
     ${VIEWS_DIR}/*.h
     ${VIEWS_DIR}/*cpp
@@ -46,6 +50,7 @@ set(SHARED_ROOT_CXX_FILES
 )
 set(CXX_FILES
     ${ROOT_CXX_FILES}
+    ${VIEWMODELS_CXX_FILES}
     ${VIEWS_CXX_FILES}
     ${WIDGETS_CXX_FILES}
     # Shared sources:
@@ -110,6 +115,9 @@ set(RESOURCE_FILES
 # IDE Representation
 ##################################################################################################################
 
+source_group("Source Files\\ViewModels" FILES
+    ${VIEWMODELS_CXX_FILES}
+)
 source_group("Source Files\\Views" FILES
     ${VIEWS_CXX_FILES}
 )
@@ -203,4 +211,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/QuickCu
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /MANIFESTUAC:\"level='requireAdministrator'\"")
     set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS " /SUBSYSTEM:WINDOWS")
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endif()
