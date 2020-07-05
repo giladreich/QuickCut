@@ -46,4 +46,14 @@ namespace QuickCut
     }
 
     QString createUuid() { return QUuid::createUuid().toString(); }
+
+    void logToFile(const QString & filePath, const QString & text)
+    {
+        QFile file(filePath);
+        file.open(QFile::WriteOnly | QFile::Append);
+        QTextStream ts(&file);
+        ts << QLatin1Char('\n') << text;
+        file.flush();
+        file.close();
+    }
 } // namespace QuickCut

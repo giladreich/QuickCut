@@ -35,13 +35,3 @@ bool QuickCutService::isProcessRunning(const QString & process)
 {
     return false;
 }
-
-void QuickCutService::log(const QString & filePath, const QString & text)
-{
-    QFile file(filePath);
-    file.open(QFile::WriteOnly | QFile::Append);
-    QTextStream ts(&file);
-    ts << '\n' << text;
-    file.flush();
-    file.close();
-}

@@ -12,31 +12,38 @@ ProfileManager QuickCutConsole::s_ProfileManager;
 
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     : QCoreApplication(argc, argv)
+#if defined(Q_OS_WINDOWS)
+    , m_Hook(new KeyboardHookWindows(true, this))
+#else
+    , m_Hook(new KeyboardHookUnix(true, this))
+#endif
 {
     s_Instance = this;
 
     // Intercept changes coming from GUI locally
     s_LocalSocket = new QLocalServer(this);
     if (!s_LocalSocket->listen(QUICKCUT_IPC))
-    { qDebug() << "Failed to start IPC local server -> " << s_LocalSocket->errorString(); }
+    {
+        qDebug() << "[QuickCutConsole::ctor]: Failed to start IPC local server -> "
+                 << s_LocalSocket->errorString();
+    }
 
     connect(s_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
+    connect(m_Hook, &KeyboardHook::keysPressed, this, &QuickCutConsole::onKeysPress);
 }
 
 QuickCutConsole::~QuickCutConsole() = default;
 
 bool QuickCutConsole::start()
 {
-    // The QuickCut GUI every changes are made to our profiles, we'll restart the service to
-    // reload profiles.
     if (!loadProfiles()) return false;
 
-    return true;
+    return m_Hook->activateHook();
 }
 
 bool QuickCutConsole::stop()
 {
-    return true;
+    return m_Hook->deactivateHook();
 }
 
 bool QuickCutConsole::loadProfiles()
@@ -49,8 +56,8 @@ bool QuickCutConsole::loadProfiles()
         qDebug() << qPrintable(message);
         return false;
     }
+    s_Profile = s_ProfileManager.getActiveProfile();
 
-    s_Profile       = s_ProfileManager.getActiveProfile();
     QString message = "[QuickCutConsole::loadProfiles]: Successfully reloaded profiles.";
     notifyStatusToClient(message);
     qDebug() << qPrintable(message);
@@ -81,47 +88,38 @@ bool QuickCutConsole::notifyStatusToClient(const QString & message)
     return succeed;
 }
 
-void QuickCutConsole::executeProcess(const QString & process, const QString & arguments)
+void QuickCutConsole::onKeysPress(const QStringList & keys, bool * outSwallowKey)
 {
-#if defined(Q_OS_WIN)
-    QString command = QString(R"(cmd /c start "" "%1")").arg(process);
-#elif defined(Q_OS_UNIX)
-    QString command = QString(R"(sh -c '%1')").arg(process);
-#endif
+    if (s_Profile || s_Profile->getActionManager().empty() || keys.isEmpty()) return;
 
-    QStringList argsTmp = arguments.trimmed().split(",");
-    for (auto && arg : argsTmp)
+    ActionManager & actions         = s_Profile->getActionManager();
+    QString         pressedKeyCodes = keys.join(QLatin1Char('+'));
+    pressedKeyCodes                 = pressedKeyCodes.left(pressedKeyCodes.length() - 1);
+    for (auto && action : actions)
     {
-        QString argTrimmed = arg.trimmed();
-        if (argTrimmed.isEmpty()) continue;
+        QString srcKeyCodes = action->getSrcKey();
+        if (pressedKeyCodes == srcKeyCodes)
+        {
+            qDebug() << "Found match: " << pressedKeyCodes;
+            Action::ActionType actionType = action->getType();
+            if (actionType == Action::ActionKeyMap)
+            {
+                qDebug() << "Mapped keys -> " << qPrintable(pressedKeyCodes) << " ~ "
+                         << qPrintable(action->getDstKey());
 
-        command += " " + argTrimmed;
+                *outSwallowKey = true;
+                // sendInput(action->getDstKey());
+            }
+            else if (actionType == Action::ActionAppLaunch)
+            {
+                qDebug() << "Launch process -> " << action->getTargetPath();
+                executeProcess(action->getTargetPath(), action->getAppArgs());
+            }
+            else if (actionType == Action::ActionDirLaunch)
+            {
+                qDebug() << "Launch directory -> " << action->getTargetPath();
+                executeProcess(action->getTargetPath(), "");
+            }
+        }
     }
-    qDebug() << "[QuickCutConsole::executeProcess] - Execute Command: "
-             << "[" << qPrintable(command) << "]";
-
-#if defined(Q_OS_WIN)
-    WinExec(qPrintable(command), SW_HIDE);
-#elif defined(Q_OS_UNIX)
-    // Writing as script temporary to disk to avoid any white spaces issues
-    // that QProcess doesn't handle very well...
-    QString filePath = applicationDirPath() + "/tempCmd.sh";
-    QFile   scriptFile(filePath);
-    scriptFile.open(QIODevice::ReadWrite);
-    QTextStream ts(&scriptFile);
-    ts << command;
-    scriptFile.close();
-    QProcess::execute(filePath, QStringList());
-    scriptFile.remove();
-#endif
-}
-
-void QuickCutConsole::log(const QString & filePath, const QString & text)
-{
-    QFile file(filePath);
-    file.open(QFile::WriteOnly);
-    QTextStream ts(&file);
-    ts << text;
-    file.flush();
-    file.close();
 }

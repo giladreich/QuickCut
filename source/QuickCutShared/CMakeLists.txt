@@ -11,6 +11,7 @@ set(QUICKCUT_SHARED_CXX_FILES
     CACHE STRING "" FORCE
 )
 
+add_subdirectory(Hooks)
 add_subdirectory(Managers)
 add_subdirectory(Models)
 add_subdirectory(Parsers)

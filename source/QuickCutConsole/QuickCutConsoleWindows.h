@@ -7,7 +7,6 @@
 
 class QuickCutConsoleWindows : public QuickCutConsole
 {
-
 public:
     QuickCutConsoleWindows(int argc, char * argv[]);
     ~QuickCutConsoleWindows();
@@ -15,10 +14,6 @@ public:
     bool start() override;
     bool stop() override;
 
-    static LRESULT CALLBACK WndProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static bool             isKeyDown(BYTE key);
-    static void             printKeyName(KBDLLHOOKSTRUCT * kbd, const QString & pressedKeys);
-
-public:
-    static HHOOK s_Hook;
+    void sendInput(const QStringList & dstKeys) override;
+    void executeProcess(const QString & process, const QString & arguments) override;
 };

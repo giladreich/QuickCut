@@ -28,7 +28,7 @@ include_directories(
 # Project Files
 ##################################################################################################################
 
-# Source
+# Sources
 file(GLOB ROOT_CXX_FILES
     ${ROOT_DIR}/*.h
     ${ROOT_DIR}/*cpp
@@ -50,6 +50,7 @@ set(CXX_FILES
     ${WIDGETS_CXX_FILES}
     # Shared sources:
     ${SHARED_ROOT_CXX_FILES}
+    ${QUICKCUT_HOOKS_CXX_FILES}
     ${QUICKCUT_MANAGERS_CXX_FILES}
     ${QUICKCUT_MODELS_CXX_FILES}
     ${QUICKCUT_PARSERS_CXX_FILES}
@@ -118,6 +119,9 @@ source_group("Source Files\\Widgets" FILES
 
 source_group("Source Files\\Shared" FILES
     ${SHARED_ROOT_CXX_FILES}
+)
+source_group("Source Files\\Shared\\Hooks" FILES
+    ${QUICKCUT_HOOKS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Managers" FILES
     ${QUICKCUT_MANAGERS_CXX_FILES}

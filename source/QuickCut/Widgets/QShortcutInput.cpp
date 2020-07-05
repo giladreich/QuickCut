@@ -2,104 +2,54 @@
 #include "QuickCutShared/QuickCutPCH.h"
 #include "QShortcutInput.h"
 
-QShortcutInput * QShortcutInput::s_Instance = nullptr;
-
-#if defined(Q_OS_WIN)
-HHOOK QShortcutInput::s_Hook = nullptr;
-#endif
-
 QShortcutInput::QShortcutInput(QWidget * parent)
     : QLineEdit(parent)
+    , m_CurrentKeys(nullptr)
 {
+    // Note that multiShortcuts custom property is still false during constructions, therefore
+    // we also call to set it every time we activate the hook.
+    bool multiShortcuts = property("multiShortcuts").toBool();
+
+#if defined(Q_OS_WINDOWS)
+    m_Hook = new KeyboardHookWindows(multiShortcuts, this);
+#elif defined(Q_OS_UNIX)
+    m_Hook = new KeyboardHookUnix(multiShortcuts, this);
+#endif
+
+    connect(m_Hook, &KeyboardHook::keysPressed, this, &QShortcutInput::onKeysPress);
 }
 
 QShortcutInput::~QShortcutInput()
 {
-#if defined(Q_OS_WIN)
-    if (s_Hook)
-    {
-        qDebug() << "[QShortcutInput::dtor] - Unhooking...";
-        UnhookWindowsHookEx(s_Hook);
-        s_Instance = nullptr;
-        s_Hook     = nullptr;
-    }
-#endif
+    m_Hook->deactivateHook();
 }
 
-#if defined(Q_OS_WIN)
-LRESULT CALLBACK QShortcutInput::WndProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
-    if (nCode < 0 || !s_Instance) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
-
-    KBDLLHOOKSTRUCT * kbd = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
-
-    // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
-    // lParam: (lParam & KF_REPEAT)
-    static DWORD prevVkCode = 0;
-
-    static QString pressedKeys;
-
-    if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
-    {
-        if (prevVkCode == kbd->vkCode) return -1;
-
-        prevVkCode = kbd->vkCode;
-
-        if (s_Instance->property("multiShortcuts").toBool())
-            pressedKeys += QString::number(kbd->vkCode, 16);
-        else
-            pressedKeys = QString::number(kbd->vkCode, 16);
-
-        s_Instance->setText(pressedKeys);
-
-        return -1;
-    }
-
-    if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
-    {
-        pressedKeys.clear();
-
-        prevVkCode = 0;
-
-        return -1;
-    }
-
-    return CallNextHookEx(s_Hook, nCode, wParam, lParam);
-}
-#endif // #if defined(Q_OS_WIN)
-
-#if defined(Q_OS_WIN)
 void QShortcutInput::focusInEvent(QFocusEvent * event)
 {
-    if (!s_Hook)
-    {
-        qDebug() << "[QShortcutInput::focusInEvent] - Hooking...";
-        s_Instance = this;
-        s_Hook     = SetWindowsHookEx(WH_KEYBOARD_LL, WndProc, nullptr, 0);
-        if (!s_Hook) { qDebug() << "[QShortcutInput::focusInEvent] - Hook failed..."; }
-    }
+    m_Hook->setInstance(m_Hook);
+    m_Hook->setMultiShortcuts(property("multiShortcuts").toBool());
+    m_Hook->activateHook();
 }
-#elif defined(Q_OS_UNIX)
-void QShortcutInput::focusInEvent(QFocusEvent * event)
-{
-    // TODO: Add unix hook.
-}
-#endif // #if defined(Q_OS_WIN)
 
-#if defined(Q_OS_WIN)
 void QShortcutInput::focusOutEvent(QFocusEvent * event)
 {
-    if (s_Hook)
-    {
-        qDebug() << "[QShortcutInput::focusInEvent] - Unhooking...";
-        UnhookWindowsHookEx(s_Hook);
-        s_Instance = nullptr;
-        s_Hook     = nullptr;
-    }
+    m_Hook->deactivateHook();
 }
-#elif defined(Q_OS_UNIX)
-void QShortcutInput::focusOutEvent(QFocusEvent * event)
+
+void QShortcutInput::onKeysPress(const QStringList & keys, bool * outSwallowKey)
 {
-    // TODO: Add unix hook.
+    if (keys.isEmpty()) return;
+
+    // Always save the current keys, so the UI can know whether new keys were set.
+    m_CurrentKeys = std::make_shared<QStringList>(keys);
+
+    // Don't process any keyboard inputs globally when receiving inputs.
+    // i.e. so keys like Super/WinKey won't pop-up a menu while it gets inputs.
+    *outSwallowKey = true;
+
+    QString text;
+    for (auto && key : keys) { text += QString("%1+").arg(key); }
+    text = text.left(text.length() - 1);
+
+    setText(text);
 }
-#endif // #if defined(Q_OS_WIN)

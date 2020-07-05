@@ -16,7 +16,5 @@ public:
 
     virtual bool isProcessRunning(const QString & process);
 
-    static void log(const QString & filePath, const QString & text);
-
 public:
 };
