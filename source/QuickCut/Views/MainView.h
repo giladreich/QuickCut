@@ -1,25 +1,25 @@
 
 #pragma once
 
+#include "QuickCutShared/Managers/ProfileManager.h"
+#include "QuickCutShared/Managers/PreferenceManager.h"
+
 #include <QtWidgets/QMainWindow>
-#include "ui_MainWindow.h"
+#include "ui_MainView.h"
 
-#include "Managers/ProfileManager.h"
-#include "Managers/PreferenceManager.h"
-
-class ExamplesWindow;
-class UpdatesWindow;
-class AboutWindow;
-class ActionWindow;
+class ExamplesView;
+class UpdatesView;
+class AboutView;
+class ActionView;
 class QLocalSocket;
 
-class MainWindow : public QMainWindow
+class MainView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget * parent = nullptr);
-    ~MainWindow();
+    MainView(QWidget * parent = nullptr);
+    ~MainView();
 
     void connectSlots();
 
@@ -78,12 +78,12 @@ public slots:
     void onLoadCustomStylesheet();
 
 private:
-    Ui::MainWindowClass * ui;
+    Ui::MainView * ui;
 
-    QPointer<ActionWindow>   m_ActionWindow;
-    QPointer<AboutWindow>    m_AboutWindow;
-    QPointer<UpdatesWindow>  m_UpdatesWindow;
-    QPointer<ExamplesWindow> m_ExamplesWindow;
+    QPointer<ActionView>   m_ActionView;
+    QPointer<AboutView>    m_AboutView;
+    QPointer<UpdatesView>  m_UpdatesView;
+    QPointer<ExamplesView> m_ExamplesView;
 
     QMap<QCTheme::ThemeType, QAction *> m_ThemeActions;
 

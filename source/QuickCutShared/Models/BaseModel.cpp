@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "BaseModel.h"
 
 // TODO(Gilad): Manage lastModified differently after finishing refactoring.

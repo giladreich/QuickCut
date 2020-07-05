@@ -2,7 +2,8 @@
 #pragma once
 
 #include "BaseModel.h"
-#include "Managers/ActionManager.h"
+
+#include "QuickCutShared/Managers/ActionManager.h"
 
 class ActionManager;
 

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include <QtCore/QTime>
 #include <QtCore/QThread>
 #include <QtCore/QDateTime>

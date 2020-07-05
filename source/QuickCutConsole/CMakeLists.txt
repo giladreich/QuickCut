@@ -14,7 +14,7 @@ add_definitions(
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${QUICKCUT_SHARED_DIR}
+    ${SOURCE_ROOT_DIR}
 )
 
 ##################################################################################################################
@@ -40,10 +40,10 @@ set(MODELS_CXX_FILES
     ${QUICKCUT_MODELS_DIR}/Action.h
     ${QUICKCUT_MODELS_DIR}/Action.cpp
 )
-set(PARSER_CXX_FILES
-    ${QUICKCUT_PARSER_DIR}/BaseParser.h
-    ${QUICKCUT_PARSER_DIR}/ProfileParser.h
-    ${QUICKCUT_PARSER_DIR}/ProfileParser.cpp
+set(PARSERS_CXX_FILES
+    ${QUICKCUT_PARSERS_DIR}/BaseParser.h
+    ${QUICKCUT_PARSERS_DIR}/ProfileParser.h
+    ${QUICKCUT_PARSERS_DIR}/ProfileParser.cpp
 )
 
 set(MISC_CXX_FILES
@@ -77,7 +77,7 @@ set(CXX_FILES
     ${SHARED_CXX_FILES}
     ${MANAGERS_CXX_FILES}
     ${MODELS_CXX_FILES}
-    ${PARSER_CXX_FILES}
+    ${PARSERS_CXX_FILES}
     ${QTSINGLEAPP_CXX_FILES}
     ${QUICKCUT_UTILS_CXX_FILES}
 )
@@ -97,8 +97,8 @@ source_group("Source Files\\Shared\\Managers" FILES
 source_group("Source Files\\Shared\\Models" FILES
     ${MODELS_CXX_FILES}
 )
-source_group("Source Files\\Shared\\Parser" FILES
-    ${PARSER_CXX_FILES}
+source_group("Source Files\\Shared\\Parsers" FILES
+    ${PARSERS_CXX_FILES}
 )
 source_group("Source Files\\Shared\\Utils" FILES
     ${QUICKCUT_UTILS_CXX_FILES}
@@ -155,7 +155,7 @@ else() # UNIX
     )
 endif()
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/pch.h)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${QUICKCUT_SHARED_DIR}/QuickCutPCH.h)
 # target_precompile_headers(${PROJECT_NAME} REUSE_FROM QuickCut) # slow and some warnings.
 
 if(WIN32)

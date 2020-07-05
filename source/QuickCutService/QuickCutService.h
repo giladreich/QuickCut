@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "QtService/QtService"
+#include "QuickCutShared/QtService/QtService"
 
 class QuickCutService : public QtService<QCoreApplication>
 {

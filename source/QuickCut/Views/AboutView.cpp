@@ -1,10 +1,10 @@
 
-#include "pch.h"
-#include "AboutWindow.h"
+#include "QuickCutShared/QuickCutPCH.h"
+#include "AboutView.h"
 
-AboutWindow::AboutWindow(QWidget * parent)
+AboutView::AboutView(QWidget * parent)
     : QDialog(parent)
-    , ui(new Ui::AboutWindow())
+    , ui(new Ui::AboutView())
 {
     ui->setupUi(this);
     setWindowFlags((windowFlags() & ~Qt::WindowContextHelpButtonHint) |
@@ -13,4 +13,4 @@ AboutWindow::AboutWindow(QWidget * parent)
     connect(ui->btnClose, &QPushButton::clicked, this, [this] { close(); });
 }
 
-AboutWindow::~AboutWindow() {}
+AboutView::~AboutView() {}

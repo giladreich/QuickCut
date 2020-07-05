@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UpdatesWindow</class>
- <widget class="QDialog" name="UpdatesWindow">
+ <class>ExamplesView</class>
+ <widget class="QWidget" name="ExamplesView">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>112</height>
+    <width>313</width>
+    <height>111</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Check For Updates</string>
+   <string>QuickCut Examples</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>50</x>
      <y>20</y>
      <width>201</width>
      <height>71</height>

@@ -1,15 +1,17 @@
 
-#include "pch.h"
-#include "ActionWindow.h"
-#include "Models/Action.h"
+#include "QuickCutShared/QuickCutPCH.h"
+#include "ActionView.h"
+
 #include "Widgets/QShortcutInput.h"
+
+#include "QuickCutShared/Models/Action.h"
 
 #include <QFileDialog>
 //#include <QKeySequenceEdit>
 
-ActionWindow::ActionWindow(QWidget * parent, EditMode editMode)
+ActionView::ActionView(QWidget * parent, EditMode editMode)
     : QDialog(parent)
-    , ui(new Ui::ActionWindow())
+    , ui(new Ui::ActionView())
     , m_EditMode(editMode)
 {
     ui->setupUi(this);
@@ -20,16 +22,16 @@ ActionWindow::ActionWindow(QWidget * parent, EditMode editMode)
     connectSlots();
 }
 
-ActionWindow::ActionWindow(QWidget * parent)
-    : ActionWindow(parent, ActionCreate)
+ActionView::ActionView(QWidget * parent)
+    : ActionView(parent, ActionCreate)
 {
     m_Action = new Action();
     ui->btnSave->setText("Create");
     onTypeSelChange(0);
 }
 
-ActionWindow::ActionWindow(QWidget * parent, Action * action)
-    : ActionWindow(parent, ActionEdit)
+ActionView::ActionView(QWidget * parent, Action * action)
+    : ActionView(parent, ActionEdit)
 {
     m_Action = action;
     ui->btnSave->setText("Save");
@@ -37,16 +39,16 @@ ActionWindow::ActionWindow(QWidget * parent, Action * action)
     fillEntries();
 }
 
-ActionWindow::~ActionWindow() {}
+ActionView::~ActionView() {}
 
-void ActionWindow::fillActionTypes()
+void ActionView::fillActionTypes()
 {
     ui->cbxType->addItem("Key Mapping");
     ui->cbxType->addItem("Application Launch");
     ui->cbxType->addItem("Directory Launch");
 }
 
-void ActionWindow::fillEntries()
+void ActionView::fillEntries()
 {
     int typeIndex = static_cast<int>(m_Action->getType());
 
@@ -57,20 +59,20 @@ void ActionWindow::fillEntries()
     onTypeSelChange(typeIndex);
 }
 
-void ActionWindow::connectSlots()
+void ActionView::connectSlots()
 {
     connect(ui->cbxType, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
-            &ActionWindow::onTypeSelChange);
+            &ActionView::onTypeSelChange);
     connect(ui->btnSrcKeyPlay, &QPushButton::clicked, this,
             [this] { onBtnKeyPlay(ui->tbxSrcKey, ui->btnSrcKeyPlay); });
     connect(ui->btnDstKeyPlay, &QPushButton::clicked, this,
             [this] { onBtnKeyPlay(ui->tbxDstKey, ui->btnDstKeyPlay); });
-    connect(ui->btnPicker, &QPushButton::clicked, this, &ActionWindow::onBtnFilePicker);
-    connect(ui->btnCancel, &QPushButton::clicked, this, &ActionWindow::onBtnCancel);
-    connect(ui->btnSave, &QPushButton::clicked, this, &ActionWindow::onBtnSave);
+    connect(ui->btnPicker, &QPushButton::clicked, this, &ActionView::onBtnFilePicker);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &ActionView::onBtnCancel);
+    connect(ui->btnSave, &QPushButton::clicked, this, &ActionView::onBtnSave);
 }
 
-void ActionWindow::updateVisibility(Action::ActionType type)
+void ActionView::updateVisibility(Action::ActionType type)
 {
     switch (type)
     {
@@ -114,12 +116,12 @@ void ActionWindow::updateVisibility(Action::ActionType type)
     }
 }
 
-EditMode ActionWindow::getEditMode()
+EditMode ActionView::getEditMode()
 {
     return m_EditMode;
 }
 
-void ActionWindow::onTypeSelChange(int index)
+void ActionView::onTypeSelChange(int index)
 {
     Action::ActionType type = static_cast<Action::ActionType>(index);
     m_Action->setType(type);
@@ -152,8 +154,8 @@ void ActionWindow::onTypeSelChange(int index)
     }
 }
 
-// void ActionWindow::onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * button)
-void ActionWindow::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
+// void ActionView::onBtnKeyPlay(QKeySequenceEdit * input, QPushButton * button)
+void ActionView::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
 {
     if (input->isEnabled())
     {
@@ -179,13 +181,14 @@ void ActionWindow::onBtnKeyPlay(QShortcutInput * input, QPushButton * button)
     }
 }
 
-void ActionWindow::onBtnFilePicker()
+void ActionView::onBtnFilePicker()
 {
     QString homeDir = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first();
 
     QString filePath;
     if (m_Action->getType() == Action::ActionAppLaunch)
-        filePath = QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
+        filePath =
+            QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
     else if (m_Action->getType() == Action::ActionDirLaunch)
         filePath = QFileDialog::getExistingDirectory(this, "Get Target Directory", homeDir);
 
@@ -194,7 +197,7 @@ void ActionWindow::onBtnFilePicker()
     ui->tbxTargetPath->setText(filePath);
 }
 
-void ActionWindow::onBtnCancel()
+void ActionView::onBtnCancel()
 {
     if (m_EditMode == ActionCreate)
     {
@@ -205,7 +208,7 @@ void ActionWindow::onBtnCancel()
     close();
 }
 
-void ActionWindow::onBtnSave()
+void ActionView::onBtnSave()
 {
     if (ui->tbxName->text().isEmpty())
     {

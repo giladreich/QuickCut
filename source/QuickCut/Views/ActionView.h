@@ -1,9 +1,10 @@
 
 #pragma once
 
+#include "QuickCutShared/Models/Action.h"
+
 #include <QDialog>
-#include "Models/Action.h"
-#include "ui_ActionWindow.h"
+#include "ui_ActionView.h"
 
 class QShortcutInput;
 
@@ -13,17 +14,17 @@ enum EditMode
     ActionCreate = 2
 };
 
-class ActionWindow : public QDialog
+class ActionView : public QDialog
 {
     Q_OBJECT
 
 private:
-    ActionWindow(QWidget * parent, EditMode EditMode);
+    ActionView(QWidget * parent, EditMode EditMode);
 
 public:
-    ActionWindow(QWidget * parent);
-    ActionWindow(QWidget * parent, Action * action);
-    ~ActionWindow();
+    ActionView(QWidget * parent);
+    ActionView(QWidget * parent, Action * action);
+    ~ActionView();
 
     EditMode getEditMode();
 
@@ -49,7 +50,7 @@ public slots:
     void onBtnSave();
 
 private:
-    Ui::ActionWindow * ui;
+    Ui::ActionView * ui;
 
     Action * m_Action;
 

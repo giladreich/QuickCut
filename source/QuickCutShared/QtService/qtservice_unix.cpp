@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "qtservice.h"
 #include "qtservice_p.h"
 #include "qtunixsocket.h"

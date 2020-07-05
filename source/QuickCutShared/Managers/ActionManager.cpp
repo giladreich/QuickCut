@@ -1,5 +1,5 @@
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "ActionManager.h"
 
 ActionManager::ActionManager() noexcept

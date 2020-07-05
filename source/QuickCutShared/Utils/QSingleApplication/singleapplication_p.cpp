@@ -29,7 +29,7 @@
 // version without notice, or may even be removed.
 //
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include <cstdlib>
 #include <cstddef>
 

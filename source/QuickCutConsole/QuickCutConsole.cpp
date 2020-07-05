@@ -1,7 +1,8 @@
 
-#include "pch.h"
+#include "QuickCutShared/QuickCutPCH.h"
 #include "QuickCutConsole.h"
-#include "Managers/ProfileManager.h"
+
+#include "QuickCutShared/Managers/ProfileManager.h"
 
 QuickCutConsole * QuickCutConsole::s_Instance    = nullptr;
 QLocalServer *    QuickCutConsole::s_LocalSocket = nullptr;

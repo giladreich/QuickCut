@@ -2,7 +2,8 @@
 #pragma once
 
 #include "BaseParser.h"
-#include "Models/Preference.h"
+
+#include "QuickCutShared/Models/Preference.h"
 
 class PreferenceParser : public BaseParser<Preference>
 {
