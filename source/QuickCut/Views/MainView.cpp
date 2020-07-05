@@ -7,7 +7,7 @@
 #include "UpdatesView.h"
 #include "ExamplesView.h"
 
-#include "QuickCutShared/QtService/QtService.h"
+#include "QuickCutShared/QtService/qtservice.h"
 
 #include <QThread>
 #include <QTimer>
@@ -478,8 +478,8 @@ void MainView::onActionSelChange()
             auto cell   = ui->actions->item(row, col);
             if (!action || !cell) continue;
 
-            cell->setBackgroundColor(action->isEnabled() ? QColor(255, 255, 255, 30)
-                                                         : QColor(178, 173, 173, 180));
+            cell->setBackground(action->isEnabled() ? QColor(255, 255, 255, 30)
+                                                    : QColor(178, 173, 173, 180));
         }
     }
 }
