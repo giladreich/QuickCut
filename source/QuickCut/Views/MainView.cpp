@@ -356,8 +356,11 @@ void MainView::onProfileSelChange(int index)
     {
         ui->btnSetActive->setEnabled(false);
         ui->btnDeleteProfile->setEnabled(false);
+
         ui->btnActionCreate->setEnabled(false);
+        ui->btnActionEdit->setEnabled(false);
         ui->btnActionDelete->setEnabled(false);
+        ui->btnActionToggleEnabled->setEnabled(false);
         ui->btnActionDuplicate->setEnabled(false);
         return;
     }
@@ -438,8 +441,10 @@ std::shared_ptr<Profile> MainView::onBtnCreateProfile()
 
 void MainView::onActionSelChange()
 {
-    bool enabled = ui->actions->rowCount() >= 0;
+    bool enabled = ui->actions->rowCount() > 0;
+    ui->btnActionEdit->setEnabled(enabled);
     ui->btnActionDelete->setEnabled(enabled);
+    ui->btnActionToggleEnabled->setEnabled(enabled);
     ui->btnActionDuplicate->setEnabled(enabled);
 
     ui->btnActionMoveUp->setEnabled(enabled);
