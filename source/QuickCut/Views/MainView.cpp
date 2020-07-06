@@ -589,8 +589,8 @@ void MainView::moveItemUp(bool moveUp)
             QTableWidgetItem * item      = actions->takeItem(currIndex, col);
             actions->setItem(currIndex - 1, col, item);
             actions->setItem(currIndex, col, itemAbove);
-            actions->selectRow(currIndex - 1);
         }
+        actions->selectRow(currIndex - 1);
     }
     else
     {
@@ -602,8 +602,8 @@ void MainView::moveItemUp(bool moveUp)
             QTableWidgetItem * item      = actions->takeItem(currIndex, col);
             actions->setItem(currIndex + 1, col, item);
             actions->setItem(currIndex, col, itemBelow);
-            actions->selectRow(currIndex + 1);
         }
+        actions->selectRow(currIndex + 1);
     }
 }
 
