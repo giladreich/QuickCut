@@ -410,24 +410,30 @@ void MainView::onBtnDeleteProfile()
 
 std::shared_ptr<Profile> MainView::onBtnCreateProfile()
 {
-    bool    ok;
-    QString profileName = QInputDialog::getText(
-        this, tr("Create Profile"), tr("Profile Name:"), QLineEdit::Normal,
-        QDir::home().dirName(), &ok,
-        Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
-
-    if (!ok && profileName.isEmpty()) return nullptr;
-
-    Profile * profile = m_Profiles.getByName(profileName);
-    if (profile)
+    QString profileName = "";
+    do
     {
-        QMessageBox::information(this, "Already Exists",
-                                 "The given profile name already exists.",
-                                 QMessageBox::StandardButton::Ok);
-        return nullptr;
-    }
+        bool ok;
+        profileName = QInputDialog::getText(this, tr("Create Profile"), tr("Profile Name:"),
+                                            QLineEdit::Normal, QDir::home().dirName(), &ok,
+                                            Qt::WindowTitleHint | Qt::CustomizeWindowHint |
+                                                Qt::WindowCloseButtonHint);
+        // Cancel button clicked
+        if (!ok) return nullptr;
 
-    profile = std::make_shared<Profile>();
+        if (profileName.isEmpty()) continue;
+
+        if (m_Profiles.getByName(profileName))
+        {
+            QMessageBox::information(this, "Already Exists",
+                                     "The given profile name already exists.",
+                                     QMessageBox::StandardButton::Ok);
+            profileName.clear();
+            continue;
+        }
+    } while (profileName.isEmpty());
+
+    auto profile = std::make_shared<Profile>();
     profile->setName(profileName);
     if (m_Profiles.empty()) profile->setActive(true);
     m_Profiles.add(profile);
