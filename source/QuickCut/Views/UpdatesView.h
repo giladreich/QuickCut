@@ -13,5 +13,5 @@ public:
     ~UpdatesView();
 
 private:
-    Ui::UpdatesView * ui;
+    std::unique_ptr<Ui::UpdatesView> ui;
 };

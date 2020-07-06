@@ -50,10 +50,10 @@ public:
 
 public slots:
 
-    void      onProfileSelChange(int index);
-    void      onBtnSetActiveProfile();
-    void      onBtnDeleteProfile();
-    Profile * onBtnCreateProfile();
+    void                     onProfileSelChange(int index);
+    void                     onBtnSetActiveProfile();
+    void                     onBtnDeleteProfile();
+    std::shared_ptr<Profile> onBtnCreateProfile();
 
     void onActionSelChange();
     void onActionDoubleClick(QTableWidgetItem * item);
@@ -90,7 +90,7 @@ public slots:
     void onLoadCustomStylesheet();
 
 private:
-    Ui::MainView * ui;
+    std::unique_ptr<Ui::MainView> ui;
 
     QPointer<ActionView>   m_ActionView;
     QPointer<AboutView>    m_AboutView;
@@ -102,7 +102,7 @@ private:
     ProfileManager    m_Profiles;
     PreferenceManager m_Preference;
 
-    QLocalSocket * m_LocalSocket;
-    QDataStream    m_SocketStreamIn;
-    int            m_SocketBlockSize;
+    QPointer<QLocalSocket> m_LocalSocket;
+    QDataStream            m_SocketStreamIn;
+    int                    m_SocketBlockSize;
 };

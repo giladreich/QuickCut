@@ -16,7 +16,6 @@ BaseManager<T>::BaseManager() noexcept
 template <typename T>
 BaseManager<T>::~BaseManager()
 {
-    for (auto && item : m_Data) delete item;
     m_Data.clear();
 }
 
@@ -35,7 +34,6 @@ bool BaseManager<T>::empty() const
 template <typename T>
 void BaseManager<T>::clear()
 {
-    for (auto && item : m_Data) delete item;
     m_Data.clear();
 }
 
@@ -48,7 +46,7 @@ void BaseManager<T>::setCapacity(int capacity)
 }
 
 template <typename T>
-T * BaseManager<T>::getById(const QString & uuid) const
+std::shared_ptr<T> BaseManager<T>::getById(const QString & uuid) const
 {
     if (uuid.isEmpty()) return nullptr;
 
@@ -60,7 +58,7 @@ T * BaseManager<T>::getById(const QString & uuid) const
 }
 
 template <typename T>
-T * BaseManager<T>::getByName(const QString & name) const
+std::shared_ptr<T> BaseManager<T>::getByName(const QString & name) const
 {
     if (name.isEmpty()) return nullptr;
 
@@ -72,7 +70,7 @@ T * BaseManager<T>::getByName(const QString & name) const
 }
 
 template <typename T>
-T * BaseManager<T>::getByIndex(int index) const
+std::shared_ptr<T> BaseManager<T>::getByIndex(int index) const
 {
     if (index < 0 || index >= count()) return nullptr;
 
@@ -80,27 +78,26 @@ T * BaseManager<T>::getByIndex(int index) const
 }
 
 template <typename T>
-T * BaseManager<T>::create()
+std::shared_ptr<T> BaseManager<T>::create()
 {
-    T * item = new T();
+    std::shared_ptr<T> item = std::make_shared<T>();
     m_Data.emplace_back(item);
     return item;
 }
 
 template <typename T>
-T * BaseManager<T>::duplicate(int index)
+std::shared_ptr<T> BaseManager<T>::duplicate(int index)
 {
     if (index < 0 || index >= count()) return nullptr;
 
-    auto itr = m_Data.begin();
-    std::advance(itr, index);
-    T * copy = new T(**itr);
+    auto               itr  = std::next(m_Data.begin(), index);
+    std::shared_ptr<T> copy = std::make_shared<T>(**itr);
     m_Data.emplace_back(copy);
     return copy;
 }
 
 template <typename T>
-bool BaseManager<T>::add(T * item)
+bool BaseManager<T>::add(std::shared_ptr<T> item)
 {
     if (!item) return false;
 
@@ -109,12 +106,11 @@ bool BaseManager<T>::add(T * item)
 }
 
 template <typename T>
-bool BaseManager<T>::insert(int index, T * item)
+bool BaseManager<T>::insert(int index, std::shared_ptr<T> item)
 {
     if (index < 0 || index >= count() || !item) return false;
 
-    auto itr = m_Data.begin();
-    std::advance(itr, index + 1);
+    auto itr = std::next(m_Data.begin(), index + 1);
     m_Data.insert(itr, item);
     return true;
 }
@@ -124,22 +120,19 @@ bool BaseManager<T>::remove(int index)
 {
     if (index < 0 || index >= count()) return false;
 
-    auto itr = m_Data.begin();
-    std::advance(itr, index);
-    delete *itr;
+    auto itr = std::next(m_Data.begin(), index);
     m_Data.erase(itr);
     return true;
 }
 
 template <typename T>
-bool BaseManager<T>::remove(T *& item)
+bool BaseManager<T>::remove(std::shared_ptr<T> & item)
 {
     if (!item) return false;
 
     auto itr = std::find(m_Data.begin(), m_Data.end(), item);
     if (itr == m_Data.end()) return false;
 
-    delete item;
     item = nullptr;
     m_Data.erase(itr);
     return true;
@@ -164,7 +157,7 @@ bool BaseManager<T>::moveDown(int index)
 }
 
 template <typename T>
-T * BaseManager<T>::operator[](int index)
+std::shared_ptr<T> BaseManager<T>::operator[](int index)
 {
     if (index < 0 || index >= count()) return nullptr;
 
@@ -172,7 +165,7 @@ T * BaseManager<T>::operator[](int index)
 }
 
 template <typename T>
-const T * const BaseManager<T>::operator[](int index) const
+const std::shared_ptr<T> BaseManager<T>::operator[](int index) const
 {
     if (index < 0 || index >= count()) return nullptr;
 

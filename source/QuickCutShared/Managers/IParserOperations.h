@@ -5,8 +5,8 @@
 
 QCInterface IParserOperations
 {
-    virtual bool load() = 0;
     virtual bool save() = 0;
+    virtual bool load() = 0;
 
     virtual bool            isLoadSucceed()     = 0;
     virtual const QString & getConfigFilePath() = 0;

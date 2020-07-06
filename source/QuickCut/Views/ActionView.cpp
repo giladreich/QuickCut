@@ -10,11 +10,10 @@
 
 ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
     : QDialog(parent)
-    , ui(new Ui::ActionView())
+    , ui(std::make_unique<Ui::ActionView>())
     , m_WindowMode(windowMode)
 {
     ui->setupUi(this);
-
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->cbxType->addItem("Key Mapping");
@@ -27,12 +26,12 @@ ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
 ActionView::ActionView(QWidget * parent)
     : ActionView(parent, ActionCreate)
 {
-    m_Action = new Action();
+    m_Action = std::make_shared<Action>();
     ui->btnSave->setText("Create");
     onTypeSelChange(0);
 }
 
-ActionView::ActionView(QWidget * parent, Action * action)
+ActionView::ActionView(QWidget * parent, std::shared_ptr<Action> action)
     : ActionView(parent, ActionEdit)
 {
     Q_CHECK_PTR(action);
@@ -47,10 +46,7 @@ ActionView::ActionView(QWidget * parent, Action * action)
     onTypeSelChange(typeIndex);
 }
 
-ActionView::~ActionView()
-{
-    if (m_WindowMode == ActionView::ActionCreate) delete m_Action;
-}
+ActionView::~ActionView() = default;
 
 void ActionView::connectSlots()
 {

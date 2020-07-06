@@ -12,12 +12,13 @@ ProfileParser::ProfileParser(const QString & path)
 {
 }
 
-bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
+bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
 {
     QString activeProfileId = "";
-    auto    profileItr = std::find_if(data.begin(), data.end(), [&](const Profile * profile) {
-        return profile->isActive();
-    });
+    auto    profileItr =
+        std::find_if(data.begin(), data.end(), [&](const std::shared_ptr<Profile> profile) {
+            return profile->isActive();
+        });
     if (profileItr != data.end()) activeProfileId = (*profileItr)->getId();
 
     bpt::put(m_Content, "activeProfile", activeProfileId);
@@ -77,13 +78,9 @@ bool ProfileParser::saveImpl(const std::vector<Profile *> & data)
     return true;
 }
 
-bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
+bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
 {
-    if (!outData->empty())
-    {
-        for (auto && profile : *outData) delete profile;
-        outData->clear();
-    }
+    if (!outData->empty()) { outData->clear(); }
 
     QString activeProfileId = bpt::get(m_Content, "activeProfile", "");
     int     profileCount    = m_Content.get<int>("profileCount", 0);
@@ -97,8 +94,9 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
         QString lastModified = bpt::get(profileJson.second, "lastModified", "");
         int     actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
-        Profile * profile = new Profile(std::move(profileId), std::move(profileName),
-                                        std::move(lastModified), activeProfileId == profileId);
+        std::shared_ptr<Profile> profile =
+            std::make_shared<Profile>(std::move(profileId), std::move(profileName),
+                                      std::move(lastModified), activeProfileId == profileId);
         profile->getActionManager().setCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
@@ -133,10 +131,10 @@ bool ProfileParser::parseImpl(std::vector<Profile *> * outData)
                 dstKeys.push_back(KeyData(keyName, keyCode));
             }
 
-            profile->getActionManager().add(
-                new Action(actionId, actionName, lastModified,
-                           QuickCut::fromValue<Action::ActionType>(actionType), srcKeys,
-                           dstKeys, targetPath, appArgs, createdDate, enabled));
+            profile->getActionManager().add(std::make_shared<Action>(
+                actionId, actionName, lastModified,
+                QuickCut::fromValue<Action::ActionType>(actionType), srcKeys, dstKeys,
+                targetPath, appArgs, createdDate, enabled));
         }
 
         outData->emplace_back(profile);

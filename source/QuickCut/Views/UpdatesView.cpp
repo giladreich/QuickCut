@@ -4,9 +4,9 @@
 
 UpdatesView::UpdatesView(QWidget * parent)
     : QDialog(parent)
-    , ui(new Ui::UpdatesView())
+    , ui(std::make_unique<Ui::UpdatesView>())
 {
     ui->setupUi(this);
 }
 
-UpdatesView::~UpdatesView() {}
+UpdatesView::~UpdatesView() = default;

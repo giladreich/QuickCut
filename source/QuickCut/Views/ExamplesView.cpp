@@ -4,9 +4,9 @@
 
 ExamplesView::ExamplesView(QWidget * parent)
     : QDialog(parent)
-    , ui(new Ui::ExamplesView())
+    , ui(std::make_unique<Ui::ExamplesView>())
 {
     ui->setupUi(this);
 }
 
-ExamplesView::~ExamplesView() {}
+ExamplesView::~ExamplesView() = default;

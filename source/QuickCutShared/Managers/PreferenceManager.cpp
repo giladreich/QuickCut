@@ -22,15 +22,15 @@ PreferenceManager::PreferenceManager(QString && filePath) noexcept
 
 PreferenceManager::~PreferenceManager() = default;
 
+bool PreferenceManager::save()
+{
+    return m_Parser.save(m_Preference);
+}
+
 bool PreferenceManager::load()
 {
     m_LoadSucceed = m_Parser.parse(&m_Preference);
     return m_LoadSucceed;
-}
-
-bool PreferenceManager::save()
-{
-    return m_Parser.save(m_Preference);
 }
 
 bool PreferenceManager::isLoadSucceed()

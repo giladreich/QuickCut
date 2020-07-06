@@ -4,7 +4,7 @@
 
 AboutView::AboutView(QWidget * parent)
     : QDialog(parent)
-    , ui(new Ui::AboutView())
+    , ui(std::make_unique<Ui::AboutView>())
 {
     ui->setupUi(this);
     setWindowFlags((windowFlags() & ~Qt::WindowContextHelpButtonHint) |
@@ -13,4 +13,4 @@ AboutView::AboutView(QWidget * parent)
     connect(ui->btnClose, &QPushButton::clicked, this, [this] { close(); });
 }
 
-AboutView::~AboutView() {}
+AboutView::~AboutView() = default;

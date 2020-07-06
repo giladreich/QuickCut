@@ -10,7 +10,7 @@ ActionManager::ActionManager() noexcept
 ActionManager::ActionManager(const ActionManager & other)
 {
     m_Data.reserve(other.count());
-    for (auto && action : other) m_Data.emplace_back(new Action(*action));
+    for (auto && action : other) m_Data.emplace_back(std::make_shared<Action>(*action));
 }
 
 ActionManager::~ActionManager() = default;
@@ -19,9 +19,10 @@ ActionManager & ActionManager::operator=(const ActionManager & other)
 {
     if (this != &other)
     {
-        std::vector<Action *> tmpActions;
+        std::vector<std::shared_ptr<Action>> tmpActions;
         tmpActions.reserve(other.count());
-        for (auto && action : other) tmpActions.emplace_back(new Action(*action));
+        for (auto && action : other)
+            tmpActions.emplace_back(std::make_shared<Action>(*action));
 
         clear();
         m_Data = tmpActions;

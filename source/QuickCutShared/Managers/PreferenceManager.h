@@ -12,8 +12,8 @@ public:
     PreferenceManager(QString && filePath) noexcept;
     ~PreferenceManager();
 
-    bool load() override;
     bool save() override;
+    bool load() override;
 
     bool            isLoadSucceed() override;
     const QString & getConfigFilePath() override;

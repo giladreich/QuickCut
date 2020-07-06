@@ -5,7 +5,7 @@
 
 #include "QuickCutShared/Models/Profile.h"
 
-class ProfileParser : public BaseParser<std::vector<Profile *>>
+class ProfileParser : public BaseParser<std::vector<std::shared_ptr<Profile>>>
 {
 public:
     ProfileParser(QString && path);
@@ -13,6 +13,6 @@ public:
     virtual ~ProfileParser() = default;
 
 private:
-    bool saveImpl(const std::vector<Profile *> & data) override;
-    bool parseImpl(std::vector<Profile *> * outData) override;
+    bool saveImpl(const std::vector<std::shared_ptr<Profile>> & data) override;
+    bool parseImpl(std::vector<std::shared_ptr<Profile>> * outData) override;
 };

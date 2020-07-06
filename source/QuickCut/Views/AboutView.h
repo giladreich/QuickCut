@@ -13,5 +13,5 @@ public:
     ~AboutView();
 
 private:
-    Ui::AboutView * ui;
+    std::unique_ptr<Ui::AboutView> ui;
 };

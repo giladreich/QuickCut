@@ -9,9 +9,9 @@ class ExamplesView : public QDialog
     Q_OBJECT
 
 public:
-    ExamplesView(QWidget * parent = Q_NULLPTR);
+    ExamplesView(QWidget * parent = nullptr);
     ~ExamplesView();
 
 private:
-    Ui::ExamplesView * ui;
+    std::unique_ptr<Ui::ExamplesView> ui;
 };

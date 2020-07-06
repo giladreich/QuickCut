@@ -35,8 +35,8 @@ public slots:
 protected:
     static QuickCutConsole * s_Instance;
 
-    Profile *      m_Profile;
-    ProfileManager m_ProfileManager;
+    std::shared_ptr<Profile> m_Profile;
+    ProfileManager           m_ProfileManager;
 
     // Will be used for signaling when the GUI updates the profiles.json file, the server will
     // reload the profiles in order to get things synchronized.

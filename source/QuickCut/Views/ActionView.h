@@ -24,7 +24,7 @@ private:
 
 public:
     ActionView(QWidget * parent);
-    ActionView(QWidget * parent, Action * action);
+    ActionView(QWidget * parent, std::shared_ptr<Action> action);
     ~ActionView();
 
     WindowMode getWindowMode();
@@ -48,9 +48,9 @@ public slots:
     void onBtnSave();
 
 private:
-    Ui::ActionView * ui;
+    std::unique_ptr<Ui::ActionView> ui;
 
-    Action * m_Action;
+    std::shared_ptr<Action> m_Action;
 
     WindowMode m_WindowMode;
 };

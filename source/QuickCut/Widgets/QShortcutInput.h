@@ -26,7 +26,7 @@ public slots:
     void onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey);
 
 public:
-    std::shared_ptr<KeyboardKeys> m_CurrentKeys;
+    std::unique_ptr<KeyboardKeys> m_CurrentKeys;
 
 private:
     QPointer<KeyboardHook> m_Hook;

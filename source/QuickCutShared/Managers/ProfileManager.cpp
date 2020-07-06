@@ -46,7 +46,7 @@ const QString & ProfileManager::getConfigFilePath()
     return m_Parser.getFilePath();
 }
 
-Profile * ProfileManager::getActiveProfile()
+std::shared_ptr<Profile> ProfileManager::getActiveProfile()
 {
     auto activeProfile = std::find_if(m_Data.begin(), m_Data.end(),
                                       [](auto profile) { return profile->isActive(); });
@@ -55,7 +55,7 @@ Profile * ProfileManager::getActiveProfile()
     return *activeProfile;
 }
 
-const Profile * const ProfileManager::getActiveProfile() const
+const std::shared_ptr<Profile> ProfileManager::getActiveProfile() const
 {
     auto activeProfile = std::find_if(m_Data.begin(), m_Data.end(),
                                       [](auto profile) { return profile->isActive(); });
@@ -75,7 +75,7 @@ void ProfileManager::setActiveProfile(int index)
     profile->setActive(true);
 }
 
-void ProfileManager::setActiveProfile(Profile * profile)
+void ProfileManager::setActiveProfile(std::shared_ptr<Profile> profile)
 {
     if (!profile) return;
 

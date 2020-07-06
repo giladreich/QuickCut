@@ -18,7 +18,7 @@
 
 MainView::MainView(QWidget * parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainView)
+    , ui(std::make_unique<Ui::MainView>())
     , m_ActionView(nullptr)
     , m_AboutView(nullptr)
     , m_UpdatesView(nullptr)
@@ -229,7 +229,7 @@ void MainView::initProfiles()
 
     if (!m_Profiles.load() || m_Profiles.empty())
     {
-        Profile * profile = onBtnCreateProfile();
+        auto profile = onBtnCreateProfile();
         if (profile)
             m_Profiles.setActiveProfile(profile);
         else
@@ -242,7 +242,7 @@ void MainView::initProfiles()
     {
         for (auto && profile : m_Profiles) ui->cbxProfile->addItem(profile->getName());
 
-        Profile * profile = m_Profiles.getActiveProfile();
+        auto profile = m_Profiles.getActiveProfile();
         if (profile)
         {
             ui->cbxProfile->setCurrentText(profile->getName());
@@ -265,7 +265,7 @@ void MainView::populateActionEntries(const ActionManager & actions)
     ui->actions->setRowCount(actions.count());
     for (int row = 0; row < actions.count(); ++row)
     {
-        Action * action = actions.getByIndex(row);
+        auto action = actions.getByIndex(row);
         ui->actions->setItem(row, ActionsTable::ColumnName,
                              new QTableWidgetItem(action->getName()));
         if (action->getType() == Action::ActionKeyMap)
@@ -352,7 +352,7 @@ void MainView::onReloadProfilesResponse()
 void MainView::onProfileSelChange(int index)
 {
     ui->actions->clearContents();
-    Profile * profile = m_Profiles[index];
+    auto profile = m_Profiles[index];
     if (!profile)
     {
         ui->btnSetActive->setEnabled(false);
@@ -373,7 +373,7 @@ void MainView::onProfileSelChange(int index)
 
 void MainView::onBtnSetActiveProfile()
 {
-    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     if (!profile) return;
 
     m_Profiles.setActiveProfile(profile);
@@ -384,7 +384,7 @@ void MainView::onBtnSetActiveProfile()
 void MainView::onBtnDeleteProfile()
 {
     const int currIndex = ui->cbxProfile->currentIndex();
-    Profile * profile   = m_Profiles[currIndex];
+    auto      profile   = m_Profiles[currIndex];
 
     auto answer =
         QMessageBox::warning(this, "Warning",
@@ -406,7 +406,7 @@ void MainView::onBtnDeleteProfile()
     reloadProfiles();
 }
 
-Profile * MainView::onBtnCreateProfile()
+std::shared_ptr<Profile> MainView::onBtnCreateProfile()
 {
     bool    ok;
     QString profileName = QInputDialog::getText(
@@ -425,7 +425,7 @@ Profile * MainView::onBtnCreateProfile()
         return nullptr;
     }
 
-    profile = new Profile();
+    profile = std::make_shared<Profile>();
     profile->setName(profileName);
     if (m_Profiles.empty()) profile->setActive(true);
     m_Profiles.add(profile);
@@ -486,8 +486,8 @@ void MainView::onActionSelChange()
 
 void MainView::onActionDoubleClick(QTableWidgetItem * item)
 {
-    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action  = profile->getActionManager().getByIndex(item->row());
+    auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto action  = profile->getActionManager().getByIndex(item->row());
 
     m_ActionView = new ActionView(this, action);
     connect(m_ActionView, &ActionView::onSaved, this, &MainView::onActionSave);
@@ -509,7 +509,7 @@ void MainView::onBtnActionEdit()
 void MainView::onBtnActionDelete()
 {
     const int currIndex = ui->actions->currentRow();
-    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto      profile   = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().remove(currIndex);
 
     saveProfiles();
@@ -520,12 +520,12 @@ void MainView::onBtnActionDelete()
 void MainView::onBtnActionDuplicate()
 {
     const int currIndex = ui->actions->currentRow();
-    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action    = profile->getActionManager().getByIndex(currIndex);
+    auto      profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto      action    = profile->getActionManager().getByIndex(currIndex);
 
-    Action * newAction =
-        new Action(action->getName(), action->getType(), action->getSrcKeys(),
-                   action->getDstKeys(), action->getTargetPath(), action->getAppArgs());
+    auto newAction = std::make_shared<Action>(action->getName(), action->getType(),
+                                              action->getSrcKeys(), action->getDstKeys(),
+                                              action->getTargetPath(), action->getAppArgs());
 
     profile->getActionManager().insert(currIndex, newAction);
 
@@ -537,8 +537,8 @@ void MainView::onBtnActionDuplicate()
 void MainView::onActionToggleEnable()
 {
     const int currIndex = ui->actions->currentRow();
-    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    Action *  action    = profile->getActionManager().getByIndex(currIndex);
+    auto      profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto      action    = profile->getActionManager().getByIndex(currIndex);
 
     action->setEnabled(!action->isEnabled());
     saveProfiles();
@@ -547,7 +547,7 @@ void MainView::onActionToggleEnable()
 
 void MainView::onBtnActionMoveDown()
 {
-    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveDown(ui->actions->currentRow());
 
     moveItemUp(false);
@@ -556,7 +556,7 @@ void MainView::onBtnActionMoveDown()
 
 void MainView::onBtnActionMoveUp()
 {
-    Profile * profile = m_Profiles[ui->cbxProfile->currentIndex()];
+    auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveUp(ui->actions->currentRow());
 
     moveItemUp(true);
@@ -608,8 +608,8 @@ void MainView::onActionSave()
 void MainView::onActionCreate(const Action & action)
 {
     const int currIndex = ui->actions->currentRow();
-    Profile * profile   = m_Profiles[ui->cbxProfile->currentIndex()];
-    profile->getActionManager().add(new Action(action));
+    auto      profile   = m_Profiles[ui->cbxProfile->currentIndex()];
+    profile->getActionManager().add(std::make_shared<Action>(action));
     saveProfiles();
     reloadProfiles();
     ui->actions->selectRow((currIndex >= 0) ? (currIndex + 1) : 0);

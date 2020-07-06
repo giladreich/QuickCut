@@ -24,10 +24,10 @@ public:
     bool            isLoadSucceed() override;
     const QString & getConfigFilePath() override;
 
-    Profile *             getActiveProfile();
-    const Profile * const getActiveProfile() const;
-    void                  setActiveProfile(int index);
-    void                  setActiveProfile(Profile * profile);
+    std::shared_ptr<Profile>       getActiveProfile();
+    const std::shared_ptr<Profile> getActiveProfile() const;
+    void                           setActiveProfile(int index);
+    void                           setActiveProfile(std::shared_ptr<Profile> profile);
 
     ProfileManager & operator=(const ProfileManager & other) = delete;
     ProfileManager & operator=(ProfileManager && other) = default;
