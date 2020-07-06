@@ -224,7 +224,7 @@ void MainView::initPreference()
 
 void MainView::initProfiles()
 {
-    ui->actions->clearContents();
+    ui->actions->setRowCount(0);
     ui->cbxProfile->clear();
 
     if (!m_Profiles.load() || m_Profiles.empty())
@@ -261,7 +261,6 @@ void MainView::populateActionEntries(const ActionManager & actions)
     disconnect(ui->actions, &QTableWidget::itemSelectionChanged, this,
                &MainView::onActionSelChange);
 
-    ui->actions->clearContents();
     ui->actions->setRowCount(actions.count());
     for (int row = 0; row < actions.count(); ++row)
     {
@@ -351,7 +350,7 @@ void MainView::onReloadProfilesResponse()
 
 void MainView::onProfileSelChange(int index)
 {
-    ui->actions->clearContents();
+    ui->actions->setRowCount(0);
     auto profile = m_Profiles[index];
     if (!profile)
     {
