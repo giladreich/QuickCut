@@ -358,6 +358,8 @@ void MainView::onProfileSelChange(int index)
         ui->btnSetActive->setEnabled(false);
         ui->btnDeleteProfile->setEnabled(false);
 
+        ui->btnActionMoveUp->setEnabled(false);
+        ui->btnActionMoveDown->setEnabled(false);
         ui->btnActionCreate->setEnabled(false);
         ui->btnActionEdit->setEnabled(false);
         ui->btnActionDelete->setEnabled(false);
