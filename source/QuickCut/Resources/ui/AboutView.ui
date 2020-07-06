@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>242</height>
+    <width>455</width>
+    <height>241</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,114 +18,130 @@
     <activeon>:/logo.png</activeon>
    </iconset>
   </property>
-  <widget class="QPushButton" name="btnClose">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>200</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblIcon">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>141</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="../QuickCut.qrc">:/logo.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>20</y>
-     <width>291</width>
-     <height>171</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="vLayoutFont">
-    <item>
-     <widget class="QLabel" name="lblAppName">
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>QuickCut</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblVersion">
-      <property name="text">
-       <string>Version 1.0.2</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblDescription">
-      <property name="text">
-       <string>QuickCut is a shortcut keyboard manager that allows you to map keys and activate specified processes.</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblCopyRight">
-      <property name="text">
-       <string>Copyright (C) 2019 Gilad Reich</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblCopyRight_2">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>&lt;a href=&quot;https://github.com/giladreich&quot;&gt;GitHub Page&lt;/a&gt;</string>
-      </property>
-      <property name="openExternalLinks">
-       <bool>true</bool>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::TextBrowserInteraction</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="6" column="1" colspan="2">
+    <widget class="QLabel" name="lblGitHub">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Link to the &lt;a href=&quot;https://github.com/giladreich/QuickCut/releases&quot;&gt;GitHub Page&lt;/a&gt;</string>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextBrowserInteraction</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QPushButton" name="btnClose">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
+     <property name="text">
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QLabel" name="lblAppName">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>QuickCut</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLabel" name="lblDescription">
+     <property name="text">
+      <string>QuickCut is a shortcut keyboard manager that allows you to map keys and activate specified processes.</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="QLabel" name="lblCopyRight">
+     <property name="text">
+      <string>Copyright (C) 2019 - XXYEARXX Gilad Reich</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QLabel" name="lblVersion">
+     <property name="text">
+      <string>Version XXVERSIONXX</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" rowspan="3">
+    <widget class="QLabel" name="lblIcon">
+     <property name="maximumSize">
+      <size>
+       <width>128</width>
+       <height>128</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../QuickCut.qrc">:/logo.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
