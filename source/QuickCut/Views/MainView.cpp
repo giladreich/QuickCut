@@ -476,14 +476,20 @@ void MainView::onActionSelChange()
 
     for (int row = 0; row < ui->actions->rowCount(); ++row)
     {
+        auto action = actions.getByIndex(row);
+
         for (int col = 0; col < ui->actions->columnCount(); ++col)
         {
-            auto action = actions.getByIndex(row);
-            auto cell   = ui->actions->item(row, col);
+            auto cell = ui->actions->item(row, col);
             if (!action || !cell) continue;
 
-            cell->setBackground(action->isEnabled() ? QColor(255, 255, 255, 30)
-                                                    : QColor(178, 173, 173, 180));
+            auto font = cell->font();
+            font.setStrikeOut(!action->isEnabled());
+            font.setBold(action->isEnabled());
+            cell->setFont(font);
+
+            // cell->setBackground(action->isEnabled() ? QColor(255, 255, 255, 30)
+            //                                        : QColor(178, 173, 173, 180));
         }
     }
 }
