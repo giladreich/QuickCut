@@ -44,8 +44,6 @@ public:
     bool saveProfiles();
     bool sendReloadProfiles();
 
-    void moveItemUp(bool moveUp);
-
     void showEvent(QShowEvent * event) override;
 
 public slots:

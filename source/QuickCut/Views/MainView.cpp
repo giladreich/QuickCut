@@ -7,6 +7,7 @@
 #include "UpdatesView.h"
 #include "ExamplesView.h"
 
+#include "QuickCutShared/Utils/UtilityUI.h"
 #include "QuickCutShared/QtService/qtservice.h"
 
 #include <QThread>
@@ -566,7 +567,7 @@ void MainView::onBtnActionMoveDown()
     auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveDown(ui->actions->currentRow());
 
-    moveItemUp(false);
+    QuickCut::moveItemUp(ui->actions, false);
     saveProfiles();
 }
 
@@ -575,42 +576,8 @@ void MainView::onBtnActionMoveUp()
     auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveUp(ui->actions->currentRow());
 
-    moveItemUp(true);
+    QuickCut::moveItemUp(ui->actions);
     saveProfiles();
-}
-
-void MainView::moveItemUp(bool moveUp)
-{
-    auto      actions   = ui->actions;
-    const int currIndex = actions->currentRow();
-    if (currIndex == -1) return;
-
-    if (moveUp)
-    {
-        if (currIndex < 1) return;
-
-        for (int col = 0; col < ActionsTable::ColumnCount; ++col)
-        {
-            QTableWidgetItem * itemAbove = actions->takeItem(currIndex - 1, col);
-            QTableWidgetItem * item      = actions->takeItem(currIndex, col);
-            actions->setItem(currIndex - 1, col, item);
-            actions->setItem(currIndex, col, itemAbove);
-        }
-        actions->selectRow(currIndex - 1);
-    }
-    else
-    {
-        if (currIndex >= actions->rowCount() - 1) return;
-
-        for (int col = 0; col < ActionsTable::ColumnCount; ++col)
-        {
-            QTableWidgetItem * itemBelow = actions->takeItem(currIndex + 1, col);
-            QTableWidgetItem * item      = actions->takeItem(currIndex, col);
-            actions->setItem(currIndex + 1, col, item);
-            actions->setItem(currIndex, col, itemBelow);
-        }
-        actions->selectRow(currIndex + 1);
-    }
 }
 
 void MainView::onActionSave()
