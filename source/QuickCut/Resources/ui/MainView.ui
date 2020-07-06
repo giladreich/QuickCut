@@ -362,8 +362,8 @@
 
 QTableView::item:selected {
 	font-weight: bold;
-	selection-background-color: rgba(250, 201, 40, 0.7);
-	selection-color: rgb(68, 60, 33, 0.95);
+	selection-background-color: rgba(250, 201, 40, 0.5);
+	selection-color: rgba(34, 32, 26, 0.95);
 }
 
 QHeaderView::section {

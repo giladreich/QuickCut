@@ -7,6 +7,7 @@ ExamplesView::ExamplesView(QWidget * parent)
     , ui(std::make_unique<Ui::ExamplesView>())
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 ExamplesView::~ExamplesView() = default;

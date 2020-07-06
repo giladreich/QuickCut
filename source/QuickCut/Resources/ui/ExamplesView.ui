@@ -16,21 +16,14 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>20</y>
-     <width>201</width>
-     <height>71</height>
+     <x>20</x>
+     <y>10</y>
+     <width>221</width>
+     <height>51</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="text">
-    <string>What you doing here? ;)</string>
+    <string>TODO: Add examples</string>
    </property>
   </widget>
  </widget>
