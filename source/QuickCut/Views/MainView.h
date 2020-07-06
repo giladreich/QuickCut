@@ -41,7 +41,7 @@ public:
 
     bool loadProfiles();
     bool reloadProfiles();
-    bool saveProfiles();
+    bool saveProfiles(bool reloadSignal = true);
     bool sendReloadProfiles();
 
     void showEvent(QShowEvent * event) override;

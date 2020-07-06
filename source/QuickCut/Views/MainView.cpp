@@ -317,10 +317,10 @@ bool MainView::loadProfiles()
     return m_Profiles.load();
 }
 
-bool MainView::saveProfiles()
+bool MainView::saveProfiles(bool reloadSignal /* = true*/)
 {
     bool result = m_Profiles.save();
-    if (result) sendReloadProfiles();
+    if (result && reloadSignal) sendReloadProfiles();
     return result;
 }
 
@@ -568,16 +568,15 @@ void MainView::onBtnActionMoveDown()
     profile->getActionManager().moveDown(ui->actions->currentRow());
 
     QuickCut::moveItemUp(ui->actions, false);
-    saveProfiles();
+    saveProfiles(false);
 }
 
 void MainView::onBtnActionMoveUp()
 {
     auto profile = m_Profiles[ui->cbxProfile->currentIndex()];
     profile->getActionManager().moveUp(ui->actions->currentRow());
-
     QuickCut::moveItemUp(ui->actions);
-    saveProfiles();
+    saveProfiles(false);
 }
 
 void MainView::onActionSave()
