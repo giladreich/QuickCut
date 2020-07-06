@@ -18,7 +18,7 @@ public:
     bool deactivateHook() override;
 
 private:
-    static LRESULT CALLBACK SysKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
     static KeyboardKeys     getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys);
     static QString          mapMissingKeyName(const int key);
 

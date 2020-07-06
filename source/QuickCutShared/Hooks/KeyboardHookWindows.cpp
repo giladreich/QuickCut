@@ -44,7 +44,7 @@ bool KeyboardHookWindows::activateHook()
     if (!s_Hook)
     {
         qDebug() << "[KeyboardHookWindows::activateHook] - Hooking...";
-        s_Hook = SetWindowsHookEx(WH_KEYBOARD_LL, SysKeyboardProc, nullptr, 0);
+        s_Hook = SetWindowsHookEx(WH_KEYBOARD_LL, GlobalKeyboardProc, nullptr, 0);
         if (!s_Hook)
         {
             qDebug()
@@ -75,7 +75,9 @@ bool KeyboardHookWindows::deactivateHook()
     return true;
 }
 
-LRESULT CALLBACK KeyboardHookWindows::SysKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK KeyboardHookWindows::GlobalKeyboardProc(int    nCode,
+                                                         WPARAM wParam,
+                                                         LPARAM lParam)
 {
     if (nCode < 0 || !s_Instance) return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
