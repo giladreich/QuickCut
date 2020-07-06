@@ -1,0 +1,6 @@
+[submodule "thirdparty/Catch2"]
+	path = thirdparty/Catch2
+	url = https://github.com/catchorg/Catch2.git
+[submodule "thirdparty/spdlog"]
+	path = thirdparty/spdlog
+	url = https://github.com/gabime/spdlog.git
