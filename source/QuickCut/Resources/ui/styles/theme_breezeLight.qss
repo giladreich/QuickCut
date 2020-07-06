@@ -54,11 +54,11 @@ QWidget
     outline: 0;
 }
 
-QWidget:item:hover
+/*QWidget:item:hover
 {
     background-color: #33A4DF;
     color: #31363B;
-}
+}*/
 
 QWidget:item:selected
 {
