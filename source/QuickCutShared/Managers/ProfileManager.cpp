@@ -71,7 +71,7 @@ void ProfileManager::setActiveProfile(int index)
     auto profile = m_Data[index];
     if (!profile) return;
 
-    for (auto && profile : m_Data) profile->setActive(false);
+    for (auto && p : m_Data) p->setActive(false);
     profile->setActive(true);
 }
 
@@ -82,6 +82,6 @@ void ProfileManager::setActiveProfile(std::shared_ptr<Profile> profile)
     auto itr = std::find(m_Data.begin(), m_Data.end(), profile);
     if (itr == m_Data.end()) return;
 
-    for (auto && profile : m_Data) profile->setActive(false);
+    for (auto && p : m_Data) p->setActive(false);
     (*itr)->setActive(true);
 }

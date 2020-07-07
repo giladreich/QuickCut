@@ -67,6 +67,7 @@ public:
     Action(Action && action)      = default;
 
     ActionType getType() const;
+    QString    getTypeName() const;
     void       setType(const ActionType type);
 
     const QString & getTargetPath() const;

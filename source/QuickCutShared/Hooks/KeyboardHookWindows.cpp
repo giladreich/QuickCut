@@ -108,13 +108,8 @@ LRESULT CALLBACK KeyboardHookWindows::GlobalKeyboardProc(int    nCode,
         {
             KBDLLHOOKSTRUCT kbdCopy;
             memcpy(&kbdCopy, kbd, sizeof(KBDLLHOOKSTRUCT));
-
-            if (s_Instance->isMultiShortcutsEnabled()) { kbds.push_back(kbdCopy); }
-            else
-            {
-                kbds.clear();
-                kbds.push_back(kbdCopy);
-            }
+            if (!s_Instance->isMultiShortcutsEnabled()) kbds.clear();
+            kbds.push_back(kbdCopy);
 
             bool swallowKey = false;
             s_Instance->keysPressed(getKeysData(kbds), &swallowKey);

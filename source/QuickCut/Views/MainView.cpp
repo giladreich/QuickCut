@@ -214,13 +214,12 @@ void MainView::initPreference()
 {
     if (!m_Preference.load()) m_Preference.save();
 
-    auto currTheme = m_Preference.get().theme().get();
-    onActionLoadTheme(currTheme);
-
-    ui->actionViewToolBar->setChecked(m_Preference.get().isToolBarVisible());
-    ui->actionViewStatusBar->setChecked(m_Preference.get().isStatusBarVisible());
-    ui->toolBar->setVisible(m_Preference.get().isToolBarVisible());
-    ui->statusBar->setVisible(m_Preference.get().isStatusBarVisible());
+    auto prefs = m_Preference.get();
+    onActionLoadTheme(prefs.theme().get());
+    ui->actionViewToolBar->setChecked(prefs.isToolBarVisible());
+    ui->actionViewStatusBar->setChecked(prefs.isStatusBarVisible());
+    ui->toolBar->setVisible(prefs.isToolBarVisible());
+    ui->statusBar->setVisible(prefs.isStatusBarVisible());
 }
 
 void MainView::initProfiles()
@@ -266,30 +265,22 @@ void MainView::populateActionEntries(const ActionManager & actions)
     for (int row = 0; row < actions.count(); ++row)
     {
         auto action = actions.getByIndex(row);
+
+        // column 0
         ui->actions->setItem(row, ActionsTable::ColumnName,
                              new QTableWidgetItem(action->getName()));
-        if (action->getType() == Action::ActionKeyMap)
-        {
-            QString text = QString("[%1] ~ [%2]")
-                               .arg(action->getSrcKeysName())
-                               .arg(action->getDstKeysName());
-            ui->actions->setItem(row, ActionsTable::ColumnKeys, new QTableWidgetItem(text));
-        }
-        else
-        {
-            QString text = QString("[%1]").arg(action->getSrcKeysName());
-            ui->actions->setItem(row, ActionsTable::ColumnKeys, new QTableWidgetItem(text));
-        }
 
-        QString typeName;
-        if (action->getType() == Action::ActionKeyMap)
-            typeName = "Key Mapping";
-        else if (action->getType() == Action::ActionAppLaunch)
-            typeName = "Open Application";
-        else if (action->getType() == Action::ActionDirLaunch)
-            typeName = "Open Directory";
+        // column 1
+        QString text = action->getType() == Action::ActionKeyMap
+                           ? QString("[%1] ~ [%2]")
+                                 .arg(action->getSrcKeysName())
+                                 .arg(action->getDstKeysName())
+                           : QString("[%1]").arg(action->getSrcKeysName());
+        ui->actions->setItem(row, ActionsTable::ColumnKeys, new QTableWidgetItem(text));
 
-        ui->actions->setItem(row, ActionsTable::ColumnAction, new QTableWidgetItem(typeName));
+        // column 2
+        ui->actions->setItem(row, ActionsTable::ColumnAction,
+                             new QTableWidgetItem(action->getTypeName()));
     }
     int padding = 20;
     ui->actions->resizeColumnsToContents();

@@ -99,6 +99,18 @@ Action::ActionType Action::getType() const
     return m_Type;
 }
 
+QString Action::getTypeName() const
+{
+    if (m_Type == Action::ActionKeyMap)
+        return "Key Mapping";
+    else if (m_Type == Action::ActionAppLaunch)
+        return "Open Application";
+    else if (m_Type == Action::ActionDirLaunch)
+        return "Open Directory";
+
+    return {};
+}
+
 void Action::setType(ActionType type)
 {
     if (type != Action::ActionInvalid)
