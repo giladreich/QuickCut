@@ -6,8 +6,6 @@
 
 #include <TlHelp32.h>
 
-#undef UNICODE
-
 QuickCutServiceWindows * QuickCutServiceWindows::s_Instance = nullptr;
 
 QuickCutServiceWindows::QuickCutServiceWindows(int argc, char * argv[])
