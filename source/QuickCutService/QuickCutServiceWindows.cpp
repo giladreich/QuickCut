@@ -114,12 +114,14 @@ bool QuickCutServiceWindows::RunProcessAsUserA(const std::string & process)
     memset(&startInfo, 0, sizeof(startInfo));
     memset(&procInfo, 0, sizeof(procInfo));
 
-    char siDesktop[]    = "winsta0\\default";
-    startInfo.cb        = sizeof(STARTUPINFOA);
-    startInfo.lpDesktop = siDesktop;
+    char siDesktop[]      = "winsta0\\default";
+    startInfo.cb          = sizeof(STARTUPINFOA);
+    startInfo.lpDesktop   = siDesktop;
+    startInfo.wShowWindow = SW_HIDE;
 
-    bool succeed = CreateProcessAsUserA(token, process.c_str(), nullptr, nullptr, nullptr,
-                                        false, 0, nullptr, nullptr, &startInfo, &procInfo);
+    bool succeed =
+        CreateProcessAsUserA(token, process.c_str(), nullptr, nullptr, nullptr, false,
+                             CREATE_NO_WINDOW, nullptr, nullptr, &startInfo, &procInfo);
 
     if (succeed)
     {
@@ -153,13 +155,14 @@ bool QuickCutServiceWindows::RunProcessAsUserW(const std::wstring & process)
     memset(&startInfo, 0, sizeof(STARTUPINFO));
     memset(&procInfo, 0, sizeof(PROCESS_INFORMATION));
 
-    wchar_t siDesktop[] = L"winsta0\\default";
-    startInfo.cb        = sizeof(STARTUPINFO);
-    startInfo.lpDesktop = siDesktop;
+    wchar_t siDesktop[]   = L"winsta0\\default";
+    startInfo.cb          = sizeof(STARTUPINFO);
+    startInfo.lpDesktop   = siDesktop;
+    startInfo.wShowWindow = SW_HIDE;
 
     bool succeed =
         CreateProcessAsUser(token, process.c_str(), nullptr, nullptr, nullptr, false,
-                            NORMAL_PRIORITY_CLASS, nullptr, nullptr, &startInfo, &procInfo);
+                            CREATE_NO_WINDOW, nullptr, nullptr, &startInfo, &procInfo);
     if (succeed)
     {
         qDebug() << "[QuickCutServiceWindows::RunProcessAsUserW] - Successfully created "
