@@ -3,18 +3,28 @@
 
 #include "QuickCutShared/QtService/QtService"
 
-class QuickCutService : public QtService<QCoreApplication>
+#include <QObject>
+
+class QuickCutService : public QObject, public QtService<QCoreApplication>
 {
+    Q_OBJECT
+
 public:
     QuickCutService(int argc, char * argv[]);
     virtual ~QuickCutService();
 
     virtual void start() override;
+    virtual void stop() override;
     virtual void pause() override;
     virtual void resume() override;
-    virtual void stop() override;
 
-    virtual bool isProcessRunning(const QString & process);
+    virtual bool startHook()     = 0;
+    virtual bool isHookRunning() = 0;
 
-public:
+public slots:
+    void verifyHookRunning();
+
+protected:
+    QTimer m_Timer;
+    int    m_CheckInterval;
 };

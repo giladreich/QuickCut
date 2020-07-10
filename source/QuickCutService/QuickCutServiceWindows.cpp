@@ -23,9 +23,14 @@ void QuickCutServiceWindows::start()
 {
     QuickCutService::start();
 
-    std::wstring process =
-        (QCoreApplication::applicationDirPath() + "/" + QUICKCUTCONSOLE_BIN).toStdWString();
-    RunProcessAsUserW(process);
+    startHook();
+}
+
+void QuickCutServiceWindows::stop()
+{
+    QuickCutService::stop();
+
+    killHookIfRunning();
 }
 
 void QuickCutServiceWindows::pause()
@@ -42,22 +47,22 @@ void QuickCutServiceWindows::resume()
     start();
 }
 
-void QuickCutServiceWindows::stop()
+bool QuickCutServiceWindows::startHook()
 {
-    QuickCutService::stop();
+    QString      appPath = QCoreApplication::applicationDirPath();
+    std::wstring process = QDir(appPath).filePath(QUICKCUTCONSOLE_BIN).toStdWString();
 
-    killHookIfRunning();
+    return RunProcessAsUserW(process);
 }
 
-bool QuickCutServiceWindows::killHookIfRunning()
+bool QuickCutServiceWindows::isHookRunning()
 {
-    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
-    {
-        WinExec("taskkill /f /t /im " QUICKCUTCONSOLE_BIN, SW_HIDE);
-        return true;
-    }
+    return isProcessRunning(QUICKCUTCONSOLE_BIN);
+}
 
-    return false;
+void QuickCutServiceWindows::killHookIfRunning()
+{
+    if (isHookRunning()) WinExec("taskkill /f /t /im " QUICKCUTCONSOLE_BIN, SW_HIDE);
 }
 
 bool QuickCutServiceWindows::isProcessRunning(const QString & process)

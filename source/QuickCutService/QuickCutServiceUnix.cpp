@@ -9,16 +9,21 @@ QuickCutServiceUnix::QuickCutServiceUnix(int argc, char * argv[])
 
 QuickCutServiceUnix::~QuickCutServiceUnix()
 {
-    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
-        QProcess::execute("killall", QStringList("-9 " QUICKCUTCONSOLE_BIN));
+    killHookIfRunning();
 }
 
 void QuickCutServiceUnix::start()
 {
     QuickCutService::start();
 
-    QString process = QCoreApplication::applicationDirPath() + QUICKCUTCONSOLE_BIN;
-    QProcess::execute(process, QStringList());
+    startHook();
+}
+
+void QuickCutServiceUnix::stop()
+{
+    QuickCutService::stop();
+
+    killHookIfRunning();
 }
 
 void QuickCutServiceUnix::pause()
@@ -35,15 +40,21 @@ void QuickCutServiceUnix::resume()
     start();
 }
 
-void QuickCutServiceUnix::stop()
+bool QuickCutServiceUnix::startHook()
 {
-    QuickCutService::stop();
-    if (isProcessRunning(QUICKCUTCONSOLE_BIN))
-        QProcess::execute("killall", QStringList("-9 " QUICKCUTCONSOLE_BIN));
+    QString appPath = QCoreApplication::applicationDirPath();
+    QString process = QDir(appPath).filePath(QUICKCUTCONSOLE_BIN);
+    QProcess::execute(process, QStringList());
+    return true;
 }
 
-bool QuickCutServiceUnix::isProcessRunning(const QString & process)
+bool QuickCutServiceUnix::isHookRunning()
 {
-    Q_UNUSED(process);
-    return false;
+    // TODO(Gilad): Implement.
+    return true;
+}
+
+void QuickCutServiceUnix::killHookIfRunning()
+{
+    if (isHookRunning()) QProcess::execute("killall", QStringList("-9 " QUICKCUTCONSOLE_BIN));
 }

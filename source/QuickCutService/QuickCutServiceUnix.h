@@ -10,11 +10,15 @@ public:
     ~QuickCutServiceUnix();
 
     void start() override;
+    void stop() override;
     void pause() override;
     void resume() override;
-    void stop() override;
 
-    bool isProcessRunning(const QString & process) override;
+    bool startHook() override;
+    bool isHookRunning() override;
+
+private:
+    void killHookIfRunning();
 
 public:
 };
