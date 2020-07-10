@@ -16,6 +16,7 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     , m_Hook(new KeyboardHookUnix(true, this))
 #endif
 {
+    QDir::setCurrent(QCoreApplication::applicationDirPath());
     s_Instance = this;
 
     // Intercept changes coming from GUI locally

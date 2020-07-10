@@ -30,6 +30,7 @@ MainView::MainView(QWidget * parent)
     , m_SocketBlockSize(0)
 {
     ui->setupUi(this);
+    QDir::setCurrent(QCoreApplication::applicationDirPath());
 
     m_SocketStreamIn.setDevice(m_LocalSocket);
     m_SocketStreamIn.setVersion(QDataStream::Qt_5_15);
