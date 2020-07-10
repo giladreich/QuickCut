@@ -118,12 +118,14 @@ void MainView::connectSlots()
     connect(ui->btnActionMoveUp, &QPushButton::clicked, this, &MainView::onBtnActionMoveUp);
 }
 
-// TODO(Gilad): Consider moving everything to QuickCutShared/Utils/HookHelper class.
 void MainView::activateHook()
 {
+    bool firstInstall = false;
+
     QtServiceController service(QUICKCUTSERVICE_NAME);
     if (!service.isInstalled())
     {
+        firstInstall = true;
         if (service.install(QUICKCUTSERVICE_BIN))
             qDebug() << "[MainView::activateHook]: Successfully installed the service.";
         else
@@ -133,52 +135,31 @@ void MainView::activateHook()
     if (!service.isRunning())
     {
         if (service.start())
-        {
             qDebug() << "[MainView::activateHook]: Successfully started the service.";
-            statusBar()->showMessage("Successfully started the service.");
-        }
         else
-        {
             qDebug() << "[MainView::activateHook]: Failed to start the service.";
-            statusBar()->showMessage("Failed to start the service.");
-        }
     }
 
 #if defined(Q_OS_WIN)
-    // TODO: Configure from installer.
-    // Don't start the service right when the system boots, so it gives the startup application
-    // to start the hook before the service tries.
-    QString command =
-        QString(R"(sc config "%1" start=delayed-auto)").arg(QUICKCUTSERVICE_NAME);
-    WinExec(qPrintable(command), SW_HIDE);
-    command =
-        QString(
-            R"(sc failure "%1" actions=restart/60000ms/restart/60000ms/restart/60000ms// reset=86400)")
-            .arg(QUICKCUTSERVICE_NAME);
-    WinExec(qPrintable(command), SW_HIDE);
-
-    QDir    qccDir(qApp->applicationDirPath());
-    QString qcc = qccDir.filePath(QUICKCUTCONSOLE_BIN);
-
-    // Approach 1:
-    // command =
-    //    QString(R"(schtasks /Create /TN "%1" /SC ONLOGON /TR "%2")").arg(QUICKCUT_NAME, qcc);
-    // WinExec(qPrintable(command), SW_HIDE);
-
-    // Approach 2:
-    // QSettings
-    // settings(R"(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)",
-    //                   QSettings::NativeFormat);
-    // QString   value(settings.value(QUICKCUTCONSOLE_BIN, QString()).toString());
-    // if (value.isEmpty() || value != qcc) settings.setValue(QUICKCUTCONSOLE_BIN, qcc);
-
-    // Approach 3: <- Simple and works.
-    QString appsPath = QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "Startup",
-                                              QStandardPaths::LocateDirectory);
-    if (!appsPath.isEmpty())
+    // In case people use the portable package instead of the installer.
+    if (firstInstall)
     {
-        QDir appsDir(appsPath);
-        QFile::link(qcc, appsDir.filePath(QUICKCUTCONSOLE_NAME ".lnk"));
+        QString appDir      = qApp->applicationDirPath();
+        QString confService = QDir(appDir).filePath("scripts/ConfigureService.bat");
+        WinExec(qPrintable(confService), SW_HIDE);
+
+        // C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+        QString appsPath = QStandardPaths::locate(
+            QStandardPaths::GenericDataLocation,
+            "Microsoft/Windows/Start Menu/Programs/StartUp", QStandardPaths::LocateDirectory);
+        if (!appsPath.isEmpty())
+        {
+            QString src = QDir(appDir).filePath(QUICKCUTCONSOLE_BIN);
+            QString dst = QDir(appsPath).filePath(QUICKCUTCONSOLE_NAME ".lnk");
+            qDebug() << "[MainView::activateHook]: Creating startup app link:\n"
+                     << src << " <-> " << dst;
+            QFile::link(src, dst);
+        }
     }
 
     // Windows service starts the console hook as the default user using the winsta0\\default
