@@ -15,49 +15,49 @@ jobs:
     strategy:
       matrix:
         config:
-        - {
-            name: "Ubuntu Latest",
-            os: "ubuntu-latest",
-            artifact: "Ubuntu",
-            build_type: "Release",
-            cmake_generator: "-G \"Unix Makefiles\"",
-            cmake_build_args: "-j",
-          }
+          - {
+              name: "Ubuntu Latest",
+              os: "ubuntu-latest",
+              artifact: "Ubuntu",
+              build_type: "Release",
+              cmake_generator: '-G "Unix Makefiles"',
+              cmake_build_args: "-j",
+            }
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Install conan Packge-Manager
-      id: install_pm
-      run: |
-        export PATH="$HOME/.local/bin:$PATH"
-        pip install wheel
-        pip install conan
-        conan -v
-        conan profile new default --detect --force
+      - name: Install conan Packge-Manager
+        id: install_pm
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          pip install wheel
+          pip install conan
+          conan -v
+          conan profile new default --detect --force
 
-    - name: Download Qt modules
-      id: qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: "${{ env.QT_VERSION }}"
-        modules: core gui widgets network
+      - name: Download Qt modules
+        id: qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: "${{ env.QT_VERSION }}"
+          modules: core gui widgets network
 
-    - name: CMake configure
-      id: cmake_configure
-      run: |
-        export PATH="$HOME/.local/bin:$PATH"
-        mkdir build && cd build
-        cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
+      - name: CMake configure
+        id: cmake_configure
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          mkdir build && cd build
+          cmake .. ${{ matrix.config.cmake_generator }} -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
 
-    - name: CMake build
-      id: cmake_build
-      run: |
-        cd build
-        cmake --build . --config ${{ matrix.config.build_type }} -- ${{ matrix.config.cmake_build_args }}
+      - name: CMake build
+        id: cmake_build
+        run: |
+          cd build
+          cmake --build . --config ${{ matrix.config.build_type }} -- ${{ matrix.config.cmake_build_args }}
 
-    - uses: actions/upload-artifact@v2
-      id: upload_artifact
-      with:
-        name: ${{ env.PROJECT_NAME }}-${{ matrix.config.artifact }}
-        path: ./build/bin/
+      - uses: actions/upload-artifact@v2
+        id: upload_artifact
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ matrix.config.artifact }}
+          path: ./build/bin/
