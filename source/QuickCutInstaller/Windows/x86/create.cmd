@@ -1,1 +1,0 @@
-binarycreator --offline-only -c config/config.xml -p packages QuickCut_x86_1.0.2_installer
