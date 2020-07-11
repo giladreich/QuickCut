@@ -5,6 +5,7 @@ on:
   pull_request: {}
 
 env:
+  VERSION: 2.0.0
   PROJECT_NAME: "QuickCut"
   QT_VERSION: 5.15.0
   MSC_VERSION: "vc142"
@@ -92,14 +93,35 @@ jobs:
           cd build
           cmake --build . --config ${{ matrix.config.build_type }} -- ${{ matrix.config.cmake_build_args }}
 
-      - name: Prepare deployment
-        id: prepare
-        if: ${{ matrix.config.os }} == 'windows-latest'
+      - name: Prepare standalone deployment
+        id: prepare_standalone
         run: |
           windeployqt ./build/bin/
 
-      - uses: actions/upload-artifact@v2
-        id: upload_artifact
+      - name: Prepare installers deployment
+        id: prepare_installers
+        if: ${{ matrix.config.build_type == 'Release' }}
+        run: |
+          cd source\QuickCutInstaller\Windows\${{ matrix.config.arch }}
+
+          # Download binarycreator, since there is no package for this yet.
+          echo "Downloading Qt's binarycreator..."
+          curl -L "https://drive.google.com/uc?export=download&id=1ubrrAB3NfJ5G9IBe2Ed4_4oWQtmmAuJC" -o .\bin.zip
+          tar -xf .\bin.zip
+
+          .\create.bat
+
+      - name: Upload standalone artifacts
+        id: upload_standalone_artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ env.PROJECT_NAME }}-${{ matrix.config.artifact }}
           path: ./build/bin/
+
+      - name: Upload installer artifacts
+        id: upload_installer_artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ matrix.config.build_type == 'Release' }}
+        with:
+          name: ${{ env.PROJECT_NAME }}Setup_${{ matrix.config.arch }}_${{ env.VERSION }}
+          path: ./source/QuickCutInstaller/Windows/${{ matrix.config.arch }}/${{ env.PROJECT_NAME }}Setup_${{ matrix.config.arch }}_${{ env.VERSION }}.exe
