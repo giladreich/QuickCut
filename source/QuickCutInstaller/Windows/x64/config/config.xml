@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>QuickCut</Name>
+    <Version>2.0.0</Version>
+    <Title>QuickCut</Title>
+    <Publisher>Gilad Reich</Publisher>
+    <ProductUrl>https://greich.com</ProductUrl>
+
+    <WizardStyle>Modern</WizardStyle>
+    <!-- <StyleSheet>theme_ubuntu.qss</StyleSheet> -->
+    <InstallerWindowIcon>img_InstallerWindowIcon.png</InstallerWindowIcon>
+    <InstallerApplicationIcon>img_InstallerApplicationIcon.ico</InstallerApplicationIcon>
+    <!-- <Logo>img_Logo.png</Logo> -->
+    <Watermark>img_Watermark.png</Watermark>
+    <Background>img_Background.png</Background>
+
+    <RunProgram>@TargetDir@/QuickCut.exe</RunProgram>
+    <RunProgramDescription>Would you like to run QuickCut after finish?</RunProgramDescription>
+    <StartMenuDir>QuickCut</StartMenuDir>
+    <MaintenanceToolName>Uninstaller</MaintenanceToolName>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+
+    <TargetDir>@ApplicationsDirX64@/QuickCut</TargetDir>
+    <AllowSpaceInPath>true</AllowSpaceInPath>
+    <ControlScript>Controller.qs</ControlScript>
+
+    <!-- <UserInterfaces>
+        <UserInterface>WelcomePage.ui</UserInterface>
+    </UserInterfaces> -->
+</Installer>
