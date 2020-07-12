@@ -11,9 +11,9 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     , m_Profile(nullptr)
     , m_LocalSocket(new QLocalServer(this))
 #if defined(Q_OS_WINDOWS)
-    , m_Hook(new KeyboardHookWindows(true, this))
+    , m_Hook(new KeyboardHookWindows(true, false, this))
 #else
-    , m_Hook(new KeyboardHookUnix(true, this))
+    , m_Hook(new KeyboardHookUnix(true, false, this))
 #endif
 {
     QDir::setCurrent(QCoreApplication::applicationDirPath());
@@ -27,7 +27,8 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     }
 
     connect(m_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
-    connect(m_Hook, &KeyboardHook::keysPressed, this, &QuickCutConsole::onKeysPress);
+    connect(m_Hook, &KeyboardHook::keysDown, this, &QuickCutConsole::onKeysDown);
+    connect(m_Hook, &KeyboardHook::keyUp, this, &QuickCutConsole::onKeyUp);
 }
 
 QuickCutConsole::~QuickCutConsole() = default;
@@ -86,27 +87,31 @@ bool QuickCutConsole::notifyStatusToClient(const QString & message)
     return succeed;
 }
 
-void QuickCutConsole::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey)
+void QuickCutConsole::onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey)
 {
     if (!m_Profile || m_Profile->getActionManager().empty() || keys.isEmpty()) return;
 
-    QString pressedKeyCodes = Action::getKeysCode(keys);
+    QString downKeyCodes = Action::getKeysCode(keys);
     for (auto && action : m_Profile->getActionManager())
     {
         if (!action->isEnabled()) continue;
 
         QString srcKeyCodes = action->getSrcKeysCode();
-        if (pressedKeyCodes == srcKeyCodes)
+        if (downKeyCodes == srcKeyCodes)
         {
-            qDebug() << "Found match: " << pressedKeyCodes;
             Action::ActionType actionType = action->getType();
             if (actionType == Action::ActionKeyMap)
             {
-                qDebug() << "Mapped keys -> " << qPrintable(pressedKeyCodes) << " ~ "
+                qDebug() << "Mapped keys -> " << qPrintable(downKeyCodes) << " ~ "
                          << qPrintable(action->getDstKeysCode());
 
                 *outSwallowKey = true;
-                sendInput(action->getDstKeys());
+                // Send KeyUp to the current pressed keys before manipulating the fake keys.
+                sendInput(action->getSrcKeys(), KeyboardHook::KeyUp);
+                if (action->getDstKeys().count() > 1)
+                    sendInput(action->getDstKeys(), KeyboardHook::KeyPress);
+                else
+                    sendInput(action->getDstKeys(), KeyboardHook::KeyDown);
             }
             else if (actionType == Action::ActionAppLaunch)
             {
@@ -117,6 +122,34 @@ void QuickCutConsole::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKe
             {
                 qDebug() << "Launch directory -> " << action->getTargetPath();
                 executeProcess(action->getTargetPath(), QString());
+            }
+        }
+    }
+}
+
+void QuickCutConsole::onKeyUp(const KeyData & key, bool * outSwallowKey)
+{
+    if (!m_Profile || m_Profile->getActionManager().empty()) return;
+
+    QString upKeyCode = QString::number(key.getKeyCode(), 16).toUpper();
+    for (auto && action : m_Profile->getActionManager())
+    {
+        // For multiple key mapping, we send a KeyPress event, which end-up sending
+        // KeyDown+KeyUp, but for a singular key mapping, we send a KeyDown event onKeysDown,
+        // in order to fully simulate the original keyboard behavior. Therefore, we only need
+        // to send a KeyUp event when dstKeysCount is 1.
+        if (action->getDstKeys().count() != 1 || !action->isEnabled()) continue;
+
+        QString srcKeyCodes = action->getSrcKeysCode();
+        if (upKeyCode == srcKeyCodes)
+        {
+            if (action->getType() == Action::ActionKeyMap)
+            {
+                qDebug() << "Mapped KeyUp keys -> " << qPrintable(upKeyCode) << " ~ "
+                         << qPrintable(action->getDstKeysCode());
+
+                *outSwallowKey = true;
+                sendInput(action->getDstKeys(), KeyboardHook::KeyUp);
             }
         }
     }

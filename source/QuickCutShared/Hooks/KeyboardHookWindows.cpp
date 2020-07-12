@@ -2,6 +2,8 @@
 #include "QuickCutShared/QuickCutPCH.h"
 #include "KeyboardHookWindows.h"
 
+#include <bitset>
+
 union KeyState
 {
     LPARAM lParam;
@@ -88,51 +90,71 @@ LRESULT CALLBACK KeyboardHookWindows::GlobalKeyboardProc(int    nCode,
     if (!kbd || kbd->dwExtraInfo == s_Instance->getIdentifier() || injectedKeys)
         return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 
-    // Workaround for auto-repeat, since low level hook doesn't provide KF_REPEAT flags in
-    // lParam: (lParam & KF_REPEAT)
-    static DWORD prevVkCode = 0;
-
-    static QVector<KBDLLHOOKSTRUCT> kbds;
-
+    static constexpr int                KEY_COUNT = 256;
+    static std::bitset<KEY_COUNT>       keys;
+    static std::vector<KBDLLHOOKSTRUCT> kbds;
     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
     {
-        bool isRepeatedKeyPress = prevVkCode == kbd->vkCode;
-        if (!s_Instance->isAutoRepeatEnabled() && isRepeatedKeyPress) return -1;
+        bool isRepeatedKeyPress = keys[kbd->vkCode];
+        keys[kbd->vkCode]       = true;
 
-        prevVkCode = kbd->vkCode;
-
-        // Only allow processing user defined shortcuts if it's not auto-repeat key press to
-        // prevent situations where if a shortcut like CTRL+F2 and the user press the CTRL key
-        // too long, it would be CTRL+CTRL...+F2 and would mismatch the desired behavior.
-        if (!isRepeatedKeyPress)
+        static KeyboardKeys keysData;
+        if (!isRepeatedKeyPress || s_Instance->isAutoRepeatEnabled())
         {
             KBDLLHOOKSTRUCT kbdCopy;
             memcpy(&kbdCopy, kbd, sizeof(KBDLLHOOKSTRUCT));
-            if (!s_Instance->isMultiShortcutsEnabled()) kbds.clear();
+            if (!s_Instance->isMultiShortcutsEnabled())
+            {
+                keys.reset();
+                keys[kbd->vkCode] = true;
+                kbds.clear();
+            }
             kbds.push_back(kbdCopy);
-
-            bool swallowKey = false;
-            s_Instance->keysPressed(getKeysData(kbds), &swallowKey);
-            if (swallowKey) return -1;
+            keysData = getKeysData(kbds);
         }
+
+        bool swallowKey = false;
+        s_Instance->keysDown(keysData, &swallowKey);
+        if (swallowKey) return -1;
     }
 
     if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
     {
-        kbds.clear();
+        keys[kbd->vkCode] = false;
 
-        prevVkCode = 0;
+        // Update Keys Down state
+        auto condition = [&](auto k) { return k.vkCode == kbd->vkCode; };
+        if (s_Instance->isAutoRepeatEnabled())
+        {
+            auto begin = std::remove_if(kbds.begin(), kbds.end(), condition);
+            kbds.erase(begin, kbds.end());
+        }
+        else
+        {
+            auto itr = std::find_if(kbds.begin(), kbds.end(), condition);
+            if (itr != kbds.end()) kbds.erase(itr);
+        }
+
+        static std::vector<KBDLLHOOKSTRUCT> kbdsUp(1);
+        KBDLLHOOKSTRUCT                     kbdCopy;
+        memcpy(&kbdCopy, kbd, sizeof(KBDLLHOOKSTRUCT));
+        kbdsUp[0] = kbdCopy;
+
+        bool swallowKey = false;
+        s_Instance->keyUp(getKeysData(kbdsUp).first(), &swallowKey);
+        if (swallowKey) return -1;
     }
 
     return CallNextHookEx(s_Hook, nCode, wParam, lParam);
 }
 
-KeyboardKeys KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys)
+KeyboardKeys KeyboardHookWindows::getKeysData(const std::vector<KBDLLHOOKSTRUCT> & keys)
 {
-    if (pressedKeys.isEmpty()) return {};
+    if (keys.empty()) return {};
 
+    qDebug() << "-------------------------------------------------------";
     KeyboardKeys keysData;
-    for (auto && kbd : pressedKeys)
+    for (auto && kbd : keys)
     {
         KeyState state;
         state.nRepeatCount = 0;
@@ -153,7 +175,8 @@ KeyboardKeys KeyboardHookWindows::getKeysData(const QVector<KBDLLHOOKSTRUCT> & p
 
         QString keyName = QString::fromWCharArray(keyBuff);
         if (keyName.isEmpty()) keyName = mapMissingKeyName(kbd.vkCode);
-        qDebug() << keyName;
+        qDebug() << qPrintable(
+            QString("[0x%1]: %2").arg(QString::number(kbd.vkCode, 16).toUpper()).arg(keyName));
         keysData.push_back(KeyData(keyName, kbd.vkCode));
     }
 
@@ -165,6 +188,9 @@ QString KeyboardHookWindows::mapMissingKeyName(const int key)
     QString result;
     switch (key)
     {
+        case VK_CLEAR:
+            result = "Num =";
+            break;
         case VK_RSHIFT:
             result = "Right Shift";
             break;

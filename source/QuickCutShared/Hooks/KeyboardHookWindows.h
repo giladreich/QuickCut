@@ -19,7 +19,7 @@ public:
 
 private:
     static LRESULT CALLBACK GlobalKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
-    static KeyboardKeys     getKeysData(const QVector<KBDLLHOOKSTRUCT> & pressedKeys);
+    static KeyboardKeys     getKeysData(const std::vector<KBDLLHOOKSTRUCT> & keys);
     static QString          mapMissingKeyName(const int key);
 
 private:

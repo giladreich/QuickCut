@@ -23,14 +23,16 @@ public:
 
     virtual bool start();
     virtual bool stop();
-    virtual void sendInput(const KeyboardKeys & dstKeys)                            = 0;
-    virtual void executeProcess(const QString & process, const QString & arguments) = 0;
+    virtual void sendInput(const KeyboardKeys & dstKeys, KeyboardHook::KeyEvent keyEvent) = 0;
+    virtual void executeProcess(const QString & process, const QString & arguments)       = 0;
 
     bool loadProfiles();
     bool notifyStatusToClient(const QString & message);
 
 public slots:
     void onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey);
+    void onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey);
+    void onKeyUp(const KeyData & key, bool * outSwallowKey);
 
 protected:
     static QuickCutConsole * s_Instance;

@@ -34,18 +34,19 @@ bool QuickCutConsoleWindows::stop()
     return true;
 }
 
-void QuickCutConsoleWindows::sendInput(const KeyboardKeys & dstKeys)
+void QuickCutConsoleWindows::sendInput(const KeyboardKeys &   keys,
+                                       KeyboardHook::KeyEvent keyEvent)
 {
-    if (dstKeys.isEmpty()) return;
+    if (keys.isEmpty()) return;
 
-    int     inputsCount = dstKeys.size();
+    int     inputsCount = keys.size();
     INPUT * inputs      = new INPUT[inputsCount];
     memset(inputs, 0, inputsCount * sizeof(INPUT));
 
     for (int i = 0; i < inputsCount; ++i)
     {
         INPUT & input = inputs[i];
-        switch (dstKeys[i].getKeyCode())
+        switch (keys[i].getKeyCode())
         {
             case VK_LEFT:
             case VK_UP:
@@ -67,22 +68,30 @@ void QuickCutConsoleWindows::sendInput(const KeyboardKeys & dstKeys)
                 input.ki.dwFlags |= KF_EXTENDED;
                 break;
         }
+        if (keyEvent == KeyboardHook::KeyUp) input.ki.dwFlags |= KEYEVENTF_KEYUP;
 
         input.type           = INPUT_KEYBOARD;
-        input.ki.wVk         = dstKeys[i].getKeyCode();
-        input.ki.wScan       = MapVirtualKey(dstKeys[i].getKeyCode(), MAPVK_VK_TO_VSC);
+        input.ki.wVk         = keys[i].getKeyCode();
+        input.ki.wScan       = MapVirtualKey(keys[i].getKeyCode(), MAPVK_VK_TO_VSC);
         input.ki.dwExtraInfo = m_Hook->getIdentifier();
     }
     // BlockInput(true);
-    int successfulSents = SendInput(inputsCount, inputs, sizeof(INPUT));
+    int inputsSentCount = SendInput(inputsCount, inputs, sizeof(INPUT));
     // BlockInput(false);
-    if (successfulSents == 0)
-        qDebug() << "Failed to send inputs.";
-    else
-        qDebug() << "Successfully sent " << successfulSents << " inputs.";
+    if (inputsSentCount != 0)
+        qDebug() << qPrintable(QString("[%1]: Successfully sent %2 inputs -> [%3]: %4")
+                                   .arg(QuickCut::fromKey(keyEvent), 8, QChar(' '))
+                                   .arg(inputsSentCount)
+                                   .arg(Action::getKeysCode(keys))
+                                   .arg(Action::getKeysNames(keys).join('+')));
 
-    for (int i = 0; i < inputsCount; ++i) inputs[i].ki.dwFlags |= KEYEVENTF_KEYUP;
-    SendInput(inputsCount, inputs, sizeof(INPUT));
+    // If it's a KeyPress, then we know the previous simulated keys were a KeyDown, so
+    // we need to simulate a KeyUp right after KeyDown.
+    if (keyEvent == KeyboardHook::KeyPress)
+    {
+        for (int i = 0; i < inputsCount; ++i) inputs[i].ki.dwFlags |= KEYEVENTF_KEYUP;
+        SendInput(inputsCount, inputs, sizeof(INPUT));
+    }
 
     delete[] inputs;
 }

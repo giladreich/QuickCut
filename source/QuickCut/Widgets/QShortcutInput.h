@@ -23,7 +23,7 @@ public:
     void focusOutEvent(QFocusEvent * event) override;
 
 public slots:
-    void onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey);
+    void onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey);
 
 public:
     std::unique_ptr<KeyboardKeys> m_CurrentKeys;

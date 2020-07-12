@@ -19,7 +19,7 @@ QShortcutInput::QShortcutInput(QWidget * parent)
     m_Hook = new KeyboardHookUnix(multiShortcuts, autoRepeatEnabled, this);
 #endif
 
-    connect(m_Hook, &KeyboardHook::keysPressed, this, &QShortcutInput::onKeysPress);
+    connect(m_Hook, &KeyboardHook::keysDown, this, &QShortcutInput::onKeysDown);
 }
 
 QShortcutInput::~QShortcutInput()
@@ -31,6 +31,7 @@ void QShortcutInput::focusInEvent(QFocusEvent * event)
 {
     m_Hook->setInstance(m_Hook);
     m_Hook->setMultiShortcuts(property("multiShortcuts").toBool());
+    m_Hook->setAutoRepeatEnabled(property("autoRepeatEnabled").toBool());
     m_Hook->activateHook();
 }
 
@@ -39,7 +40,7 @@ void QShortcutInput::focusOutEvent(QFocusEvent * event)
     m_Hook->deactivateHook();
 }
 
-void QShortcutInput::onKeysPress(const KeyboardKeys & keys, bool * outSwallowKey)
+void QShortcutInput::onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey)
 {
     if (keys.isEmpty()) return;
 

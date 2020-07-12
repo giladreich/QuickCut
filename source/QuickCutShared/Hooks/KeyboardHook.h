@@ -9,6 +9,14 @@ class KeyboardHook : public QObject
 {
     Q_OBJECT
 public:
+    enum KeyEvent
+    {
+        KeyPress,
+        KeyDown,
+        KeyUp
+    };
+    Q_ENUM(KeyEvent);
+
     virtual bool activateHook();
     virtual bool deactivateHook();
 
@@ -29,6 +37,8 @@ public:
 
 signals:
     void keysPressed(const KeyboardKeys & keys, bool * outSwallowKey);
+    void keysDown(const KeyboardKeys & keys, bool * outSwallowKey);
+    void keyUp(const KeyData & key, bool * outSwallowKey);
 
 protected:
     KeyboardHook(bool multiShortcuts, bool autoRepeatEnabled, QObject * parent = nullptr);

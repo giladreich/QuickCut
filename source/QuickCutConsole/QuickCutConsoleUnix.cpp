@@ -34,7 +34,8 @@ bool QuickCutConsoleUnix::stop()
     return true;
 }
 
-void QuickCutConsoleUnix::sendInput(const KeyboardKeys & dstKeys)
+void QuickCutConsoleUnix::sendInput(const KeyboardKeys &   dstKeys,
+                                    KeyboardHook::KeyEvent keyEvent)
 {
     if (dstKeys.isEmpty()) return;
 
