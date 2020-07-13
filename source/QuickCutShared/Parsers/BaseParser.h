@@ -55,7 +55,7 @@ inline bool BaseParser<T>::save(const T & data)
 
     try
     {
-        bpt::write_jsonEx(qPrintable(m_Path), m_Content);
+        bpt::write_jsonEx(m_Path, m_Content);
     }
     catch (const bpt::ptree_error & e)
     {
@@ -77,7 +77,7 @@ inline bool BaseParser<T>::parse(T * outData)
 
     try
     {
-        bpt::read_json(qPrintable(m_Path), m_Content);
+        bpt::read_jsonEx(m_Path, m_Content);
     }
     catch (const bpt::ptree_error & e)
     {
