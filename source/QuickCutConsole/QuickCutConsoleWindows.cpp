@@ -39,14 +39,13 @@ void QuickCutConsoleWindows::sendInput(const KeyboardKeys &   keys,
 {
     if (keys.isEmpty()) return;
 
-    int     inputsCount = keys.size();
-    INPUT * inputs      = new INPUT[inputsCount];
-    memset(inputs, 0, inputsCount * sizeof(INPUT));
-
-    for (int i = 0; i < inputsCount; ++i)
+    std::vector<INPUT> inputs;
+    inputs.reserve(keys.size());
+    for (auto && key : keys)
     {
-        INPUT & input = inputs[i];
-        switch (keys[i].getKeyCode())
+        INPUT input{};
+        input.ki.dwFlags = KEYEVENTF_UNICODE;
+        switch (key.getKeyCode())
         {
             case VK_LEFT:
             case VK_UP:
@@ -71,12 +70,13 @@ void QuickCutConsoleWindows::sendInput(const KeyboardKeys &   keys,
         if (keyEvent == KeyboardHook::KeyUp) input.ki.dwFlags |= KEYEVENTF_KEYUP;
 
         input.type           = INPUT_KEYBOARD;
-        input.ki.wVk         = keys[i].getKeyCode();
-        input.ki.wScan       = MapVirtualKey(keys[i].getKeyCode(), MAPVK_VK_TO_VSC);
+        input.ki.wVk         = key.getKeyCode();
+        input.ki.wScan       = MapVirtualKey(key.getKeyCode(), MAPVK_VK_TO_VSC);
         input.ki.dwExtraInfo = m_Hook->getIdentifier();
+        inputs.emplace_back(input);
     }
     // BlockInput(true);
-    int inputsSentCount = SendInput(inputsCount, inputs, sizeof(INPUT));
+    int inputsSentCount = SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
     // BlockInput(false);
     if (inputsSentCount != 0)
         qDebug() << qPrintable(QString("[%1]: Successfully sent %2 inputs -> [%3]: %4")
@@ -89,11 +89,9 @@ void QuickCutConsoleWindows::sendInput(const KeyboardKeys &   keys,
     // we need to simulate a KeyUp right after KeyDown.
     if (keyEvent == KeyboardHook::KeyPress)
     {
-        for (int i = 0; i < inputsCount; ++i) inputs[i].ki.dwFlags |= KEYEVENTF_KEYUP;
-        SendInput(inputsCount, inputs, sizeof(INPUT));
+        for (auto & input : inputs) input.ki.dwFlags |= KEYEVENTF_KEYUP;
+        SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
     }
-
-    delete[] inputs;
 }
 
 void QuickCutConsoleWindows::executeProcess(const QString & process, const QString & arguments)
