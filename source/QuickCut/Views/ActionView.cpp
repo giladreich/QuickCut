@@ -55,7 +55,7 @@ void ActionView::connectSlots()
             [this] { onBtnKeyPlay(ui->tbxSrcKey, ui->btnSrcKeyPlay); });
     connect(ui->btnDstKeyPlay, &QPushButton::clicked, this,
             [this] { onBtnKeyPlay(ui->tbxDstKey, ui->btnDstKeyPlay); });
-    connect(ui->btnPicker, &QPushButton::clicked, this, &ActionView::onBtnFilePicker);
+    connect(ui->btnTargetPicker, &QPushButton::clicked, this, &ActionView::onBtnFilePicker);
     connect(ui->btnCancel, &QPushButton::clicked, this, &ActionView::onBtnCancel);
     connect(ui->btnSave, &QPushButton::clicked, this, &ActionView::onBtnSave);
 }
@@ -70,9 +70,9 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblDstKey->setVisible(true);
             ui->tbxDstKey->setVisible(true);
             ui->btnDstKeyPlay->setVisible(true);
-            ui->lblAppStart->setVisible(false);
+            ui->lblTargetStart->setVisible(false);
             ui->tbxTargetPath->setVisible(false);
-            ui->btnPicker->setVisible(false);
+            ui->btnTargetPicker->setVisible(false);
             ui->lblAppArgs->setVisible(false);
             ui->tbxAppArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
@@ -84,9 +84,9 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblDstKey->setVisible(false);
             ui->tbxDstKey->setVisible(false);
             ui->btnDstKeyPlay->setVisible(false);
-            ui->lblAppStart->setVisible(true);
+            ui->lblTargetStart->setVisible(true);
             ui->tbxTargetPath->setVisible(true);
-            ui->btnPicker->setVisible(true);
+            ui->btnTargetPicker->setVisible(true);
             ui->lblAppArgs->setVisible(true);
             ui->tbxAppArgs->setVisible(true);
             ui->tbxAutoText->setVisible(false);
@@ -98,9 +98,9 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblDstKey->setVisible(false);
             ui->tbxDstKey->setVisible(false);
             ui->btnDstKeyPlay->setVisible(false);
-            ui->lblAppStart->setVisible(true);
+            ui->lblTargetStart->setVisible(true);
             ui->tbxTargetPath->setVisible(true);
-            ui->btnPicker->setVisible(true);
+            ui->btnTargetPicker->setVisible(true);
             ui->lblAppArgs->setVisible(false);
             ui->tbxAppArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
@@ -112,9 +112,9 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblDstKey->setVisible(false);
             ui->tbxDstKey->setVisible(false);
             ui->btnDstKeyPlay->setVisible(false);
-            ui->lblAppStart->setVisible(false);
+            ui->lblTargetStart->setVisible(false);
             ui->tbxTargetPath->setVisible(false);
-            ui->btnPicker->setVisible(false);
+            ui->btnTargetPicker->setVisible(false);
             ui->lblAppArgs->setVisible(false);
             ui->tbxAppArgs->setVisible(false);
             ui->tbxAutoText->setVisible(true);

@@ -185,7 +185,7 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QPushButton" name="btnPicker">
+      <widget class="QPushButton" name="btnTargetPicker">
        <property name="maximumSize">
         <size>
          <width>34</width>
@@ -214,7 +214,7 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="lblAppStart">
+      <widget class="QLabel" name="lblTargetStart">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -285,7 +285,7 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
   <tabstop>tbxName</tabstop>
   <tabstop>cbxType</tabstop>
   <tabstop>tbxTargetPath</tabstop>
-  <tabstop>btnPicker</tabstop>
+  <tabstop>btnTargetPicker</tabstop>
   <tabstop>tbxAppArgs</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnCancel</tabstop>
