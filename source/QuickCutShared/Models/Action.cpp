@@ -54,8 +54,8 @@ QString Action::getTypeName(ActionType type)
 {
     if (type == Action::ActionKeyMap)
         return "Key Mapping";
-    else if (type == Action::ActionAppLaunch)
-        return "Open Application";
+    else if (type == Action::ActionFileLaunch)
+        return "Open File";
     else if (type == Action::ActionDirLaunch)
         return "Open Directory";
     else if (type == Action::ActionAutoText)

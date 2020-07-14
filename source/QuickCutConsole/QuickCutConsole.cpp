@@ -125,9 +125,9 @@ void QuickCutConsole::onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey
                 else
                     sendInput(action->getDstKeys(), KeyboardHook::KeyDown);
             }
-            else if (actionType == Action::ActionAppLaunch)
+            else if (actionType == Action::ActionFileLaunch)
             {
-                qDebug() << "Launch process -> " << action->getTargetPath();
+                qDebug() << "Launch file -> " << action->getTargetPath();
                 executeProcess(action->getTargetPath(), action->getAppArgs());
             }
             else if (actionType == Action::ActionDirLaunch)

@@ -12,7 +12,7 @@ public:
     {
         ActionInvalid = -1,
         ActionKeyMap  = 0,
-        ActionAppLaunch,
+        ActionFileLaunch,
         ActionDirLaunch,
         ActionAutoText,
 

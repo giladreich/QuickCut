@@ -79,7 +79,7 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
-        case Action::ActionAppLaunch:
+        case Action::ActionFileLaunch:
         {
             ui->lblDstKey->setVisible(false);
             ui->tbxDstKey->setVisible(false);
@@ -144,7 +144,7 @@ void ActionView::onTypeSelChange(int index)
             ui->tbxAppArgs->clear();
             break;
         }
-        case Action::ActionAppLaunch:
+        case Action::ActionFileLaunch:
         {
             ui->tbxDstKey->clear();
             ui->tbxTargetPath->setText(m_Action->getTargetPath());
@@ -200,7 +200,7 @@ void ActionView::onBtnFilePicker()
     auto    type    = static_cast<Action::ActionType>(ui->cbxType->currentIndex());
 
     QString filePath;
-    if (type == Action::ActionAppLaunch)
+    if (type == Action::ActionFileLaunch)
         filePath =
             QFileDialog::getOpenFileName(this, "Get Target File", homeDir, "All files (*.*)");
     else if (type == Action::ActionDirLaunch)
