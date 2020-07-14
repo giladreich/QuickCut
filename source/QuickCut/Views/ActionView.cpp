@@ -16,9 +16,8 @@ ActionView::ActionView(QWidget * parent, ActionView::WindowMode windowMode)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    ui->cbxType->addItem("Key Mapping");
-    ui->cbxType->addItem("Application Launch");
-    ui->cbxType->addItem("Directory Launch");
+    for (int i = 0; i < Action::ActionCount; ++i)
+        ui->cbxType->addItem(Action::getTypeName((Action::ActionType)i));
 
     connectSlots();
 }
@@ -76,6 +75,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->btnPicker->setVisible(false);
             ui->lblAppArgs->setVisible(false);
             ui->tbxAppArgs->setVisible(false);
+            ui->tbxAutoText->setVisible(false);
+            ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
         case Action::ActionAppLaunch:
@@ -88,6 +89,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->btnPicker->setVisible(true);
             ui->lblAppArgs->setVisible(true);
             ui->tbxAppArgs->setVisible(true);
+            ui->tbxAutoText->setVisible(false);
+            ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
         case Action::ActionDirLaunch:
@@ -100,9 +103,26 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->btnPicker->setVisible(true);
             ui->lblAppArgs->setVisible(false);
             ui->tbxAppArgs->setVisible(false);
+            ui->tbxAutoText->setVisible(false);
+            ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            break;
+        }
+        case Action::ActionAutoText:
+        {
+            ui->lblDstKey->setVisible(false);
+            ui->tbxDstKey->setVisible(false);
+            ui->btnDstKeyPlay->setVisible(false);
+            ui->lblAppStart->setVisible(false);
+            ui->tbxTargetPath->setVisible(false);
+            ui->btnPicker->setVisible(false);
+            ui->lblAppArgs->setVisible(false);
+            ui->tbxAppArgs->setVisible(false);
+            ui->tbxAutoText->setVisible(true);
+            ui->spButtons->changeSize(0, 0, QSizePolicy::Ignored, QSizePolicy::Ignored);
             break;
         }
     }
+    layout()->invalidate();
 }
 
 ActionView::WindowMode ActionView::getWindowMode()
@@ -136,6 +156,13 @@ void ActionView::onTypeSelChange(int index)
             ui->tbxDstKey->clear();
             ui->tbxTargetPath->setText(m_Action->getTargetPath());
             ui->tbxAppArgs->clear();
+            break;
+        }
+        case Action::ActionAutoText:
+        {
+            ui->tbxDstKey->clear();
+            ui->tbxTargetPath->clear();
+            ui->tbxAutoText->setPlainText(m_Action->getAutoText());
             break;
         }
     }
@@ -209,7 +236,9 @@ void ActionView::onBtnSave()
         auto targetPath = ui->tbxTargetPath->text();
         auto appArgs    = ui->tbxAppArgs->text();
 
-        emit onCreated(Action(name, type, srcKeys, dstKeys, targetPath, appArgs));
+        Action action(name, type, srcKeys, dstKeys, targetPath, appArgs);
+        action.setAutoText(ui->tbxAutoText->toPlainText());
+        emit onCreated(action);
     }
     else
     {
@@ -229,6 +258,7 @@ void ActionView::onBtnSave()
 
         m_Action->setTargetPath(ui->tbxTargetPath->text());
         m_Action->setAppArgs(ui->tbxAppArgs->text());
+        m_Action->setAutoText(ui->tbxAutoText->toPlainText());
 
         emit onSaved();
     }

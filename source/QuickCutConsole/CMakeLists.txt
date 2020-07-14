@@ -165,11 +165,13 @@ if(WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC
         Qt5::WinMain
         Qt5::Core
+        Qt5::Gui
         Qt5::Network
     )
 else() # UNIX
     target_link_libraries(${PROJECT_NAME} PUBLIC
         Qt5::Core
+        Qt5::Gui
         Qt5::Network
     )
 endif()

@@ -14,6 +14,7 @@ public:
         ActionKeyMap  = 0,
         ActionAppLaunch,
         ActionDirLaunch,
+        ActionAutoText,
 
         ActionCount,
     };
@@ -66,15 +67,19 @@ public:
     Action(const Action & action) = default;
     Action(Action && action)      = default;
 
-    ActionType getType() const;
-    QString    getTypeName() const;
-    void       setType(const ActionType type);
+    ActionType     getType() const;
+    QString        getTypeName() const;
+    static QString getTypeName(ActionType type);
+    void           setType(const ActionType type);
 
     const QString & getTargetPath() const;
     void            setTargetPath(const QString & path);
 
     const QString & getAppArgs() const;
     void            setAppArgs(const QString & path);
+
+    const QString & getAutoText() const;
+    void            setAutoText(const QString & path);
 
     const QString & getCreatedDate() const;
 
@@ -109,6 +114,7 @@ private:
     KeyboardKeys m_DstKeys;
     QString      m_TargetPath;
     QString      m_AppArgs;
+    QString      m_AutoText;
     QString      m_CreatedDate;
     bool         m_Enabled;
 };

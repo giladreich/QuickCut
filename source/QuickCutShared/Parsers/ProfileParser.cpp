@@ -43,6 +43,8 @@ bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
             bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
             bpt::put(actionJson, "targetPath", action->getTargetPath());
             bpt::put(actionJson, "appArgs", action->getAppArgs());
+            if (action->getType() == Action::ActionAutoText)
+                bpt::put(actionJson, "autoText", action->getAutoText());
             bpt::put(actionJson, "createdDate", action->getCreatedDate());
             bpt::put(actionJson, "lastModified", action->getLastModified());
             actionJson.put<bool>("enabled", action->isEnabled());
@@ -102,11 +104,14 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            QString actionId     = bpt::get(actionJson.second, "id", "");
-            QString actionName   = bpt::get(actionJson.second, "actionName", "");
-            QString actionType   = bpt::get(actionJson.second, "type", "");
-            QString targetPath   = bpt::get(actionJson.second, "targetPath", "");
-            QString appArgs      = bpt::get(actionJson.second, "appArgs", "");
+            QString actionId   = bpt::get(actionJson.second, "id", "");
+            QString actionName = bpt::get(actionJson.second, "actionName", "");
+            QString actionType = bpt::get(actionJson.second, "type", "");
+            QString targetPath = bpt::get(actionJson.second, "targetPath", "");
+            QString appArgs    = bpt::get(actionJson.second, "appArgs", "");
+            QString autoText   = "";
+            if (QuickCut::fromValue<Action::ActionType>(actionType) == Action::ActionAutoText)
+                autoText = bpt::get(actionJson.second, "autoText", "");
             QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             QString lastModified = bpt::get(actionJson.second, "lastModified", "");
             bool    enabled      = actionJson.second.get<bool>("enabled", true);
@@ -131,10 +136,12 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
                 dstKeys.push_back(KeyData(keyName, keyCode));
             }
 
-            profile->getActionManager().add(std::make_shared<Action>(
+            auto action = std::make_shared<Action>(
                 actionId, actionName, lastModified,
                 QuickCut::fromValue<Action::ActionType>(actionType), srcKeys, dstKeys,
-                targetPath, appArgs, createdDate, enabled));
+                targetPath, appArgs, createdDate, enabled);
+            action->setAutoText(autoText);
+            profile->getActionManager().add(action);
         }
 
         outData->emplace_back(profile);

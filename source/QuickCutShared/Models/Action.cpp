@@ -101,12 +101,19 @@ Action::ActionType Action::getType() const
 
 QString Action::getTypeName() const
 {
-    if (m_Type == Action::ActionKeyMap)
+    return Action::getTypeName(m_Type);
+}
+
+QString Action::getTypeName(ActionType type)
+{
+    if (type == Action::ActionKeyMap)
         return "Key Mapping";
-    else if (m_Type == Action::ActionAppLaunch)
+    else if (type == Action::ActionAppLaunch)
         return "Open Application";
-    else if (m_Type == Action::ActionDirLaunch)
+    else if (type == Action::ActionDirLaunch)
         return "Open Directory";
+    else if (type == Action::ActionAutoText)
+        return "Auto Text";
 
     return {};
 }
@@ -139,6 +146,17 @@ const QString & Action::getAppArgs() const
 void Action::setAppArgs(const QString & args)
 {
     m_AppArgs      = args;
+    m_LastModified = QuickCut::getDateTime();
+}
+
+const QString & Action::getAutoText() const
+{
+    return m_AutoText;
+}
+
+void Action::setAutoText(const QString & text)
+{
+    m_AutoText     = text;
     m_LastModified = QuickCut::getDateTime();
 }
 

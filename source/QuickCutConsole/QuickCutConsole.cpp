@@ -4,10 +4,13 @@
 
 #include "QuickCutShared/Managers/ProfileManager.h"
 
+#include <QClipboard>
+#include <QImage>
+
 QuickCutConsole * QuickCutConsole::s_Instance = nullptr;
 
 QuickCutConsole::QuickCutConsole(int argc, char * argv[])
-    : QCoreApplication(argc, argv)
+    : QGuiApplication(argc, argv)
     , m_Profile(nullptr)
     , m_LocalSocket(new QLocalServer(this))
 #if defined(Q_OS_WINDOWS)
@@ -29,6 +32,15 @@ QuickCutConsole::QuickCutConsole(int argc, char * argv[])
     connect(m_LocalSocket, &QLocalServer::newConnection, this, &QuickCutConsole::loadProfiles);
     connect(m_Hook, &KeyboardHook::keysDown, this, &QuickCutConsole::onKeysDown);
     connect(m_Hook, &KeyboardHook::keyUp, this, &QuickCutConsole::onKeyUp);
+
+#if defined(Q_OS_MACOS)
+    // TODO(Gilad): Add CMD + V keys pattern.
+#elif defined(Q_OS_WIN)
+    m_PasteKeys.push_back(KeyData("Ctrl", VK_LCONTROL));
+    m_PasteKeys.push_back(KeyData("V", 0x56));
+#elif defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+    // TODO(Gilad): Add CTRL + V keys pattern.
+#endif
 }
 
 QuickCutConsole::~QuickCutConsole() = default;
@@ -122,6 +134,31 @@ void QuickCutConsole::onKeysDown(const KeyboardKeys & keys, bool * outSwallowKey
             {
                 qDebug() << "Launch directory -> " << action->getTargetPath();
                 executeProcess(action->getTargetPath(), QString());
+            }
+            else if (actionType == Action::ActionAutoText)
+            {
+                qDebug() << "Pasting auto text action -> " << action->getAutoText();
+
+                *outSwallowKey = true;
+                sendInput(action->getSrcKeys(), KeyboardHook::KeyUp);
+
+                auto cp       = QGuiApplication::clipboard();
+                auto cpBackup = new QMimeData();
+                if (cp->mimeData())
+                {
+                    auto mime = cp->mimeData();
+                    for (auto && format : mime->formats())
+                    {
+                        if (format == "application/x-qt-image")
+                            cpBackup->setImageData(cp->image());
+                        else
+                            cpBackup->setData(format, mime->data(format));
+                    }
+                }
+
+                cp->setText(action->getAutoText());
+                sendInput(m_PasteKeys, KeyboardHook::KeyPress);
+                QTimer::singleShot(50, [=] { cp->setMimeData(cpBackup); });
             }
         }
     }

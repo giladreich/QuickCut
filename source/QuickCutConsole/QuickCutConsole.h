@@ -10,11 +10,11 @@
 #    include "QuickCutShared/Hooks/KeyboardHookUnix.h"
 #endif
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 
 class QLocalServer;
 
-class QuickCutConsole : public QCoreApplication
+class QuickCutConsole : public QGuiApplication
 {
 
 public:
@@ -44,4 +44,5 @@ protected:
     // reload the profiles in order to get things synchronized.
     QPointer<QLocalServer> m_LocalSocket;
     QPointer<KeyboardHook> m_Hook;
+    KeyboardKeys           m_PasteKeys;
 };

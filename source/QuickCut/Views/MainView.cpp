@@ -518,7 +518,7 @@ void MainView::onBtnActionDuplicate()
     auto newAction = std::make_shared<Action>(action->getName(), action->getType(),
                                               action->getSrcKeys(), action->getDstKeys(),
                                               action->getTargetPath(), action->getAppArgs());
-
+    newAction->setAutoText(action->getAutoText());
     profile->getActionManager().insert(currIndex, newAction);
 
     saveProfiles();
