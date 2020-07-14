@@ -515,9 +515,13 @@ void MainView::onBtnActionDuplicate()
     auto      profile   = m_Profiles[ui->cbxProfile->currentIndex()];
     auto      action    = profile->getActionManager().getByIndex(currIndex);
 
-    auto newAction = std::make_shared<Action>(action->getName(), action->getType(),
-                                              action->getSrcKeys(), action->getDstKeys(),
-                                              action->getTargetPath(), action->getAppArgs());
+    auto newAction = std::make_shared<Action>();
+    newAction->setName(action->getName());
+    newAction->setType(action->getType());
+    newAction->setSrcKeys(action->getSrcKeys());
+    newAction->setDstKeys(action->getDstKeys());
+    newAction->setTargetPath(action->getTargetPath());
+    newAction->setAppArgs(action->getAppArgs());
     newAction->setAutoText(action->getAutoText());
     profile->getActionManager().insert(currIndex, newAction);
 

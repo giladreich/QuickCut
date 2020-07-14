@@ -96,9 +96,9 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
         QString lastModified = bpt::get(profileJson.second, "lastModified", "");
         int     actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
-        std::shared_ptr<Profile> profile =
-            std::make_shared<Profile>(std::move(profileId), std::move(profileName),
-                                      std::move(lastModified), activeProfileId == profileId);
+        auto profile = std::make_shared<Profile>(profileId, lastModified);
+        profile->setName(profileName);
+        profile->setActive(activeProfileId == profileId);
         profile->getActionManager().setCapacity(actionsCount);
 
         JSON actionsJson = profileJson.second.get_child("actions");
@@ -136,11 +136,15 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
                 dstKeys.push_back(KeyData(keyName, keyCode));
             }
 
-            auto action = std::make_shared<Action>(
-                actionId, actionName, lastModified,
-                QuickCut::fromValue<Action::ActionType>(actionType), srcKeys, dstKeys,
-                targetPath, appArgs, createdDate, enabled);
+            auto action = std::make_shared<Action>(actionId, lastModified, createdDate);
+            action->setName(actionName);
+            action->setType(QuickCut::fromValue<Action::ActionType>(actionType));
+            action->setSrcKeys(srcKeys);
+            action->setDstKeys(dstKeys);
+            action->setTargetPath(targetPath);
+            action->setAppArgs(appArgs);
             action->setAutoText(autoText);
+            action->setEnabled(enabled);
             profile->getActionManager().add(action);
         }
 

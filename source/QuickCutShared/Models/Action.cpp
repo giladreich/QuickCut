@@ -9,88 +9,37 @@ Action::Action() noexcept
     , m_DstKeys()
     , m_TargetPath()
     , m_AppArgs()
+    , m_AutoText()
     , m_CreatedDate(QuickCut::getDateTime())
     , m_Enabled(true)
 {
 }
 
-Action::Action(const QString &      name,
-               const ActionType &   type,
-               const KeyboardKeys & srcKeys,
-               const KeyboardKeys & dstKeys,
-               const QString &      targetPath,
-               const QString &      appArgs,
-               const bool &         enabled) noexcept
-    : BaseModel(QuickCut::createUuid(), name, QuickCut::getDateTime())
-    , m_Type(type)
-    , m_SrcKeys(srcKeys)
-    , m_DstKeys(dstKeys)
-    , m_TargetPath(targetPath)
-    , m_AppArgs(appArgs)
-    , m_CreatedDate(QuickCut::getDateTime())
-    , m_Enabled(enabled)
-{
-}
-
-Action::Action(QString &&      name,
-               ActionType &&   type,
-               KeyboardKeys && srcKeys,
-               KeyboardKeys && dstKeys,
-               QString &&      targetPath,
-               QString &&      appArgs,
-               bool &&         enabled) noexcept
-    : BaseModel(std::move(QuickCut::createUuid()),
-                std::move(name),
-                std::move(QuickCut::getDateTime()))
-    , m_Type(std::move(type))
-    , m_SrcKeys(std::move(srcKeys))
-    , m_DstKeys(std::move(dstKeys))
-    , m_TargetPath(std::move(targetPath))
-    , m_AppArgs(std::move(appArgs))
-    , m_CreatedDate(std::move(QuickCut::getDateTime()))
-    , m_Enabled(std::move(enabled))
-{
-}
-
-Action::Action(const QString &      id,
-               const QString &      name,
-               const QString &      lastModified,
-               const ActionType &   type,
-               const KeyboardKeys & srcKeys,
-               const KeyboardKeys & dstKeys,
-               const QString &      targetPath,
-               const QString &      appArgs,
-               const QString &      createdDate,
-               const bool &         enabled) noexcept
-    : BaseModel(id, name, lastModified)
-    , m_Type(type)
-    , m_SrcKeys(srcKeys)
-    , m_DstKeys(dstKeys)
-    , m_TargetPath(targetPath)
-    , m_AppArgs(appArgs)
+Action::Action(const QString & id,
+               const QString & lastModified,
+               const QString & createdDate) noexcept
+    : BaseModel(id, lastModified)
+    , m_Type(ActionType::ActionInvalid)
+    , m_SrcKeys()
+    , m_DstKeys()
+    , m_TargetPath()
+    , m_AppArgs()
+    , m_AutoText()
     , m_CreatedDate(createdDate)
-    , m_Enabled(enabled)
+    , m_Enabled(true)
 {
 }
 
-Action::Action(QString &&      id,
-               QString &&      name,
-               QString &&      lastModified,
-               ActionType &&   type,
-               KeyboardKeys && srcKeys,
-               KeyboardKeys && dstKeys,
-               QString &&      targetPath,
-               QString &&      appArgs,
-               QString &&      createdDate,
-               bool &&         enabled) noexcept
-    : BaseModel(std::move(id), std::move(name), std::move(lastModified))
-    , m_Type(std::move(type))
-    , m_SrcKeys(std::move(srcKeys))
-    , m_DstKeys(std::move(dstKeys))
-    , m_TargetPath(std::move(targetPath))
-    , m_AppArgs(std::move(appArgs))
+Action::Action(QString && id, QString && lastModified, QString && createdDate) noexcept
+    : BaseModel(std::move(id), std::move(lastModified))
+    , m_Type(ActionType::ActionInvalid)
+    , m_SrcKeys()
+    , m_DstKeys()
+    , m_TargetPath()
+    , m_AppArgs()
+    , m_AutoText()
     , m_CreatedDate(std::move(createdDate))
-    , m_Enabled(std::move(enabled))
+    , m_Enabled(true)
 {
 }
 

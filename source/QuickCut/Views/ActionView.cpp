@@ -236,7 +236,13 @@ void ActionView::onBtnSave()
         auto targetPath = ui->tbxTargetPath->text();
         auto appArgs    = ui->tbxAppArgs->text();
 
-        Action action(name, type, srcKeys, dstKeys, targetPath, appArgs);
+        Action action;
+        action.setName(name);
+        action.setType(type);
+        action.setSrcKeys(srcKeys);
+        action.setDstKeys(dstKeys);
+        action.setTargetPath(targetPath);
+        action.setAppArgs(appArgs);
         action.setAutoText(ui->tbxAutoText->toPlainText());
         emit onCreated(action);
     }

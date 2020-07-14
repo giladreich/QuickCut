@@ -23,45 +23,11 @@ public:
     // Constructs new Action
     Action() noexcept;
 
-    // Constructs new Action
-    Action(const QString &      name,
-           const ActionType &   type,
-           const KeyboardKeys & srcKeys,
-           const KeyboardKeys & dstKeys,
-           const QString &      targetPath,
-           const QString &      appArgs,
-           const bool &         enabled = true) noexcept;
+    Action(const QString & id,
+           const QString & lastModified,
+           const QString & createdDate) noexcept;
 
-    Action(QString &&      name,
-           ActionType &&   type,
-           KeyboardKeys && srcKeys,
-           KeyboardKeys && dstKeys,
-           QString &&      targetPath,
-           QString &&      appArgs,
-           bool &&         enabled = true) noexcept;
-
-    // Constructs existing Action
-    Action(const QString &      id,
-           const QString &      name,
-           const QString &      lastModified,
-           const ActionType &   type,
-           const KeyboardKeys & srcKeys,
-           const KeyboardKeys & dstKeys,
-           const QString &      targetPath,
-           const QString &      appArgs,
-           const QString &      createdDate,
-           const bool &         enabled) noexcept;
-
-    Action(QString &&      id,
-           QString &&      name,
-           QString &&      lastModified,
-           ActionType &&   type,
-           KeyboardKeys && srcKeys,
-           KeyboardKeys && dstKeys,
-           QString &&      targetPath,
-           QString &&      appArgs,
-           QString &&      createdDate,
-           bool &&         enabled) noexcept;
+    Action(QString && id, QString && lastModified, QString && createdDate) noexcept;
 
     // Constructs copy
     Action(const Action & action) = default;

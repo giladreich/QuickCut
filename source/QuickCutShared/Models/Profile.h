@@ -13,16 +13,9 @@ public:
     // Constructs new profile
     Profile() noexcept;
 
-    // Constructs existing profile
-    Profile(const QString & id,
-            const QString & name,
-            const QString & lastModified,
-            bool            active = false) noexcept;
+    Profile(const QString & id, const QString & lastModified) noexcept;
 
-    Profile(QString && id,
-            QString && name,
-            QString && lastModified,
-            bool       active = false) noexcept;
+    Profile(QString && id, QString && lastModified) noexcept;
 
     // Constructs copy
     Profile(const Profile & other);

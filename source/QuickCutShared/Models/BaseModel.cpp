@@ -9,18 +9,16 @@ BaseModel::BaseModel() noexcept
 {
 }
 
-BaseModel::BaseModel(const QString & id,
-                     const QString & name,
-                     const QString & lastModified) noexcept
+BaseModel::BaseModel(const QString & id, const QString & lastModified) noexcept
     : m_Uuid(id)
-    , m_Name(name)
+    , m_Name()
     , m_LastModified(lastModified)
 {
 }
 
-BaseModel::BaseModel(QString && id, QString && name, QString && lastModified) noexcept
+BaseModel::BaseModel(QString && id, QString && lastModified) noexcept
     : m_Uuid(std::move(id))
-    , m_Name(std::move(name))
+    , m_Name()
     , m_LastModified(std::move(lastModified))
 {
 }
