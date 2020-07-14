@@ -21,6 +21,7 @@ public:
     bool load() override;
     bool save() override;
 
+    bool            isFileExists() override;
     bool            isLoadSucceed() override;
     const QString & getConfigFilePath() override;
 

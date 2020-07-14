@@ -36,6 +36,11 @@ bool ProfileManager::save()
     return m_Parser.save(m_Data);
 }
 
+bool ProfileManager::isFileExists()
+{
+    return QFile::exists(m_Parser.getFilePath());
+}
+
 bool ProfileManager::isLoadSucceed()
 {
     return m_LoadSucceed;

@@ -33,6 +33,11 @@ bool PreferenceManager::load()
     return m_LoadSucceed;
 }
 
+bool PreferenceManager::isFileExists()
+{
+    return QFile::exists(m_Parser.getFilePath());
+}
+
 bool PreferenceManager::isLoadSucceed()
 {
     return m_LoadSucceed;

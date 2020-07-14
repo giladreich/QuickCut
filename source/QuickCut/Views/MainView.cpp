@@ -211,6 +211,30 @@ void MainView::initProfiles()
 
     if (!m_Profiles.load() || m_Profiles.empty())
     {
+        // if profiles.json is corrupted, create a backup and re-generate it.
+        if (m_Profiles.isFileExists() && !m_Profiles.isLoadSucceed())
+        {
+            QString file(m_Profiles.getConfigFilePath());
+            int     backupCount = 1;
+            QString fileTmp;
+            do
+            {
+                fileTmp = QString("%1_backup_%2").arg(file).arg(backupCount++);
+                if (!QFile::exists(fileTmp))
+                {
+                    QFile::copy(file, fileTmp);
+                    break;
+                }
+            } while (QFile::exists(fileTmp));
+
+            // TODO(Gilad): Consider implementing attempt to fix the corrupted profiles.json
+            // file and giving the user ability to select Yes/No.
+            QString message = QString("Your Configuration file seems to be corrupted.\n"
+                                      "Backup file is automatically created in:\n %1")
+                                  .arg(fileTmp);
+            QMessageBox::warning(this, "Corrupted Profiles File (profiles.json)", message);
+        }
+
         auto profile = onBtnCreateProfile();
         if (profile)
             m_Profiles.setActiveProfile(profile);
@@ -287,14 +311,35 @@ bool MainView::reloadProfiles()
 
 bool MainView::loadProfiles()
 {
-    return m_Profiles.load();
+    if (!m_Profiles.load())
+    {
+        QMessageBox::warning(
+            this, "Load Configuration File Failed",
+            QString("Something seems to be wrong with your configuration file. "
+                    "Please verify your %1 file and report if needed.")
+                .arg(m_Profiles.getConfigFilePath()));
+        close();
+        return false;
+    }
+
+    return true;
 }
 
 bool MainView::saveProfiles(bool reloadSignal /* = true*/)
 {
-    bool result = m_Profiles.save();
-    if (result && reloadSignal) sendReloadProfiles();
-    return result;
+    if (!m_Profiles.save())
+    {
+        QMessageBox::warning(
+            this, "Update Configuration File Failed",
+            QString("Something seems to be wrong with your configuration file. "
+                    "Please verify your %1 file and report if needed.")
+                .arg(m_Profiles.getConfigFilePath()));
+        close();
+        return false;
+    }
+    if (reloadSignal) sendReloadProfiles();
+
+    return true;
 }
 
 bool MainView::sendReloadProfiles()
