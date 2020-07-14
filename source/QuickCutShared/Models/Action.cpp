@@ -10,7 +10,6 @@ Action::Action() noexcept
     , m_TargetPath()
     , m_AppArgs()
     , m_AutoText()
-    , m_CreatedDate(QuickCut::getDateTime())
     , m_Enabled(true)
 {
 }
@@ -18,27 +17,25 @@ Action::Action() noexcept
 Action::Action(const QString & id,
                const QString & lastModified,
                const QString & createdDate) noexcept
-    : BaseModel(id, lastModified)
+    : BaseModel(id, lastModified, createdDate)
     , m_Type(ActionType::ActionInvalid)
     , m_SrcKeys()
     , m_DstKeys()
     , m_TargetPath()
     , m_AppArgs()
     , m_AutoText()
-    , m_CreatedDate(createdDate)
     , m_Enabled(true)
 {
 }
 
 Action::Action(QString && id, QString && lastModified, QString && createdDate) noexcept
-    : BaseModel(std::move(id), std::move(lastModified))
+    : BaseModel(std::move(id), std::move(lastModified), std::move(createdDate))
     , m_Type(ActionType::ActionInvalid)
     , m_SrcKeys()
     , m_DstKeys()
     , m_TargetPath()
     , m_AppArgs()
     , m_AutoText()
-    , m_CreatedDate(std::move(createdDate))
     , m_Enabled(true)
 {
 }
@@ -107,11 +104,6 @@ void Action::setAutoText(const QString & text)
 {
     m_AutoText     = text;
     m_LastModified = QuickCut::getDateTime();
-}
-
-const QString & Action::getCreatedDate() const
-{
-    return m_CreatedDate;
 }
 
 bool Action::isEnabled() const

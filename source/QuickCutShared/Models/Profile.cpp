@@ -8,14 +8,16 @@ Profile::Profile() noexcept
 {
 }
 
-Profile::Profile(const QString & id, const QString & lastModified) noexcept
-    : BaseModel(id, lastModified)
+Profile::Profile(const QString & id,
+                 const QString & lastModified,
+                 const QString & createdDate) noexcept
+    : BaseModel(id, lastModified, createdDate)
     , m_Active(false)
 {
 }
 
-Profile::Profile(QString && id, QString && lastModified) noexcept
-    : BaseModel(std::move(id), std::move(lastModified))
+Profile::Profile(QString && id, QString && lastModified, QString && createdDate) noexcept
+    : BaseModel(std::move(id), std::move(lastModified), std::move(createdDate))
     , m_Active(false)
 {
 }

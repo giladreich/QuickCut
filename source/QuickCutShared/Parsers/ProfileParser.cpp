@@ -31,6 +31,7 @@ bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
         bpt::put(profileJson, "id", profile->getId());
         bpt::put(profileJson, "name", profile->getName());
         bpt::put(profileJson, "lastModified", profile->getLastModified());
+        bpt::put(profileJson, "createdDate", profile->getCreatedDate());
         profileJson.put("actionsCount", profile->getActionManager().count());
 
         ActionManager & actions = profile->getActionManager();
@@ -45,8 +46,8 @@ bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
             bpt::put(actionJson, "appArgs", action->getAppArgs());
             if (action->getType() == Action::ActionAutoText)
                 bpt::put(actionJson, "autoText", action->getAutoText());
-            bpt::put(actionJson, "createdDate", action->getCreatedDate());
             bpt::put(actionJson, "lastModified", action->getLastModified());
+            bpt::put(actionJson, "createdDate", action->getCreatedDate());
             actionJson.put<bool>("enabled", action->isEnabled());
 
             JSON srcKeysJson;
@@ -94,9 +95,10 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
         QString profileId    = bpt::get(profileJson.second, "id", "");
         QString profileName  = bpt::get(profileJson.second, "name", "");
         QString lastModified = bpt::get(profileJson.second, "lastModified", "");
+        QString createdDate  = bpt::get(profileJson.second, "createdDate", "");
         int     actionsCount = profileJson.second.get<int>("actionsCount", 0);
 
-        auto profile = std::make_shared<Profile>(profileId, lastModified);
+        auto profile = std::make_shared<Profile>(profileId, lastModified, createdDate);
         profile->setName(profileName);
         profile->setActive(activeProfileId == profileId);
         profile->getActionManager().setCapacity(actionsCount);
@@ -112,8 +114,8 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
             QString autoText   = "";
             if (QuickCut::fromValue<Action::ActionType>(actionType) == Action::ActionAutoText)
                 autoText = bpt::get(actionJson.second, "autoText", "");
-            QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             QString lastModified = bpt::get(actionJson.second, "lastModified", "");
+            QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
             bool    enabled      = actionJson.second.get<bool>("enabled", true);
 
             KeyboardKeys srcKeys;

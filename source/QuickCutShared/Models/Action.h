@@ -47,8 +47,6 @@ public:
     const QString & getAutoText() const;
     void            setAutoText(const QString & path);
 
-    const QString & getCreatedDate() const;
-
     bool isEnabled() const;
     void setEnabled(bool enabled);
 
@@ -81,6 +79,5 @@ private:
     QString      m_TargetPath;
     QString      m_AppArgs;
     QString      m_AutoText;
-    QString      m_CreatedDate;
     bool         m_Enabled;
 };

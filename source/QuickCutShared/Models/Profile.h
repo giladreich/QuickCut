@@ -12,10 +12,10 @@ class Profile : public BaseModel
 public:
     // Constructs new profile
     Profile() noexcept;
-
-    Profile(const QString & id, const QString & lastModified) noexcept;
-
-    Profile(QString && id, QString && lastModified) noexcept;
+    Profile(const QString & id,
+            const QString & lastModified,
+            const QString & createdDate) noexcept;
+    Profile(QString && id, QString && lastModified, QString && createdDate) noexcept;
 
     // Constructs copy
     Profile(const Profile & other);
