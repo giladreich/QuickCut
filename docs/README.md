@@ -89,46 +89,7 @@ It's also possible to use combination of keys for a single shortcut:
 ![Create Profile](/media/action_window_map_keycombo.png)
 
 
-This creates a configuration file under `Config/profiles.json` that can be easily shared:
-
-```json
-{
-    "activeProfile": "{9d146d79-fba5-48bc-9841-aee8bea2826a}",
-    "profileCount": 1,
-    "profiles": [
-        {
-            "id": "{9d146d79-fba5-48bc-9841-aee8bea2826a}",
-            "name": "Home Environment",
-            "lastModified": "2019-06-06T08:16:26",
-            "actionsCount": 2,
-            "actions": [
-                {
-                    "id": "{9c6f3bba-fc58-4ebd-98ba-cc70fa503ba7}",
-                    "actionName": "F13 Map to Screenshot",
-                    "type": "ActionKeyMap",
-                    "srcKey": "7c",
-                    "dstKey": "2c",
-                    "targetPath": "",
-                    "appArgs": "",
-                    "createdDate": "2019-06-06T07:52:24"
-                    "lastModified": "2019-06-06T07:52:24",
-                },
-                {
-                    "id": "{e75e41f5-de4f-422d-952f-a0a91bcaf62b}",
-                    "actionName": "CTRL+SHIFT+F14 Start SnippingTool",
-                    "type": "ActionAppStart",
-                    "srcKey": "a2a07d",
-                    "dstKey": "",
-                    "targetPath": "C:\/WINDOWS\/system32\/SnippingTool.exe",
-                    "appArgs": "",
-                    "createdDate": "2019-06-06T08:04:59",
-                    "lastModified": "2019-06-06T08:04:59"
-                }
-            ]
-        }
-    ]
-}
-```
+This creates a configuration file under `Config/profiles.json` that can be easily shared.
 
 #### Summary
 

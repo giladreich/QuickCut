@@ -8,7 +8,7 @@ Action::Action() noexcept
     , m_SrcKeys()
     , m_DstKeys()
     , m_TargetPath()
-    , m_AppArgs()
+    , m_TargetArgs()
     , m_AutoText()
     , m_Enabled(true)
 {
@@ -22,7 +22,7 @@ Action::Action(const QString & id,
     , m_SrcKeys()
     , m_DstKeys()
     , m_TargetPath()
-    , m_AppArgs()
+    , m_TargetArgs()
     , m_AutoText()
     , m_Enabled(true)
 {
@@ -34,7 +34,7 @@ Action::Action(QString && id, QString && lastModified, QString && createdDate) n
     , m_SrcKeys()
     , m_DstKeys()
     , m_TargetPath()
-    , m_AppArgs()
+    , m_TargetArgs()
     , m_AutoText()
     , m_Enabled(true)
 {
@@ -84,14 +84,14 @@ void Action::setTargetPath(const QString & path)
     m_LastModified = QuickCut::getDateTime();
 }
 
-const QString & Action::getAppArgs() const
+const QString & Action::getTargetArgs() const
 {
-    return m_AppArgs;
+    return m_TargetArgs;
 }
 
-void Action::setAppArgs(const QString & args)
+void Action::setTargetArgs(const QString & args)
 {
-    m_AppArgs      = args;
+    m_TargetArgs   = args;
     m_LastModified = QuickCut::getDateTime();
 }
 
@@ -124,7 +124,7 @@ void Action::reset()
     m_SrcKeys.clear();
     m_DstKeys.clear();
     m_TargetPath.clear();
-    m_AppArgs.clear();
+    m_TargetArgs.clear();
 }
 
 const KeyboardKeys & Action::getSrcKeys() const

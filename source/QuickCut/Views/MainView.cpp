@@ -521,7 +521,7 @@ void MainView::onBtnActionDuplicate()
     newAction->setSrcKeys(action->getSrcKeys());
     newAction->setDstKeys(action->getDstKeys());
     newAction->setTargetPath(action->getTargetPath());
-    newAction->setAppArgs(action->getAppArgs());
+    newAction->setTargetArgs(action->getTargetArgs());
     newAction->setAutoText(action->getAutoText());
     profile->getActionManager().insert(currIndex, newAction);
 

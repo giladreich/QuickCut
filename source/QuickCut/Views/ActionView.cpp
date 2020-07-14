@@ -73,8 +73,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetStart->setVisible(false);
             ui->tbxTargetPath->setVisible(false);
             ui->btnTargetPicker->setVisible(false);
-            ui->lblAppArgs->setVisible(false);
-            ui->tbxAppArgs->setVisible(false);
+            ui->lblTargetArgs->setVisible(false);
+            ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
@@ -87,8 +87,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetStart->setVisible(true);
             ui->tbxTargetPath->setVisible(true);
             ui->btnTargetPicker->setVisible(true);
-            ui->lblAppArgs->setVisible(true);
-            ui->tbxAppArgs->setVisible(true);
+            ui->lblTargetArgs->setVisible(true);
+            ui->tbxTargetArgs->setVisible(true);
             ui->tbxAutoText->setVisible(false);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
@@ -101,8 +101,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetStart->setVisible(true);
             ui->tbxTargetPath->setVisible(true);
             ui->btnTargetPicker->setVisible(true);
-            ui->lblAppArgs->setVisible(false);
-            ui->tbxAppArgs->setVisible(false);
+            ui->lblTargetArgs->setVisible(false);
+            ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
@@ -115,8 +115,8 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetStart->setVisible(false);
             ui->tbxTargetPath->setVisible(false);
             ui->btnTargetPicker->setVisible(false);
-            ui->lblAppArgs->setVisible(false);
-            ui->tbxAppArgs->setVisible(false);
+            ui->lblTargetArgs->setVisible(false);
+            ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(true);
             ui->spButtons->changeSize(0, 0, QSizePolicy::Ignored, QSizePolicy::Ignored);
             break;
@@ -141,21 +141,21 @@ void ActionView::onTypeSelChange(int index)
         {
             ui->tbxDstKey->setText(m_Action->getDstKeysName());
             ui->tbxTargetPath->clear();
-            ui->tbxAppArgs->clear();
+            ui->tbxTargetArgs->clear();
             break;
         }
         case Action::ActionFileLaunch:
         {
             ui->tbxDstKey->clear();
             ui->tbxTargetPath->setText(m_Action->getTargetPath());
-            ui->tbxAppArgs->setText(m_Action->getAppArgs());
+            ui->tbxTargetArgs->setText(m_Action->getTargetArgs());
             break;
         }
         case Action::ActionDirLaunch:
         {
             ui->tbxDstKey->clear();
             ui->tbxTargetPath->setText(m_Action->getTargetPath());
-            ui->tbxAppArgs->clear();
+            ui->tbxTargetArgs->clear();
             break;
         }
         case Action::ActionAutoText:
@@ -234,7 +234,7 @@ void ActionView::onBtnSave()
         if (ui->tbxDstKey->m_CurrentKeys) dstKeys = *ui->tbxDstKey->m_CurrentKeys;
 
         auto targetPath = ui->tbxTargetPath->text();
-        auto appArgs    = ui->tbxAppArgs->text();
+        auto targetArgs = ui->tbxTargetArgs->text();
 
         Action action;
         action.setName(name);
@@ -242,7 +242,7 @@ void ActionView::onBtnSave()
         action.setSrcKeys(srcKeys);
         action.setDstKeys(dstKeys);
         action.setTargetPath(targetPath);
-        action.setAppArgs(appArgs);
+        action.setTargetArgs(targetArgs);
         action.setAutoText(ui->tbxAutoText->toPlainText());
         emit onCreated(action);
     }
@@ -263,7 +263,7 @@ void ActionView::onBtnSave()
                                                           : actionBackup.getDstKeys());
 
         m_Action->setTargetPath(ui->tbxTargetPath->text());
-        m_Action->setAppArgs(ui->tbxAppArgs->text());
+        m_Action->setTargetArgs(ui->tbxTargetArgs->text());
         m_Action->setAutoText(ui->tbxAutoText->toPlainText());
 
         emit onSaved();

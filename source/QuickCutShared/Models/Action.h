@@ -41,8 +41,8 @@ public:
     const QString & getTargetPath() const;
     void            setTargetPath(const QString & path);
 
-    const QString & getAppArgs() const;
-    void            setAppArgs(const QString & path);
+    const QString & getTargetArgs() const;
+    void            setTargetArgs(const QString & path);
 
     const QString & getAutoText() const;
     void            setAutoText(const QString & path);
@@ -77,7 +77,7 @@ private:
     KeyboardKeys m_SrcKeys;
     KeyboardKeys m_DstKeys;
     QString      m_TargetPath;
-    QString      m_AppArgs;
+    QString      m_TargetArgs;
     QString      m_AutoText;
     bool         m_Enabled;
 };

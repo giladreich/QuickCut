@@ -43,7 +43,7 @@ bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
             bpt::put(actionJson, "actionName", action->getName());
             bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
             bpt::put(actionJson, "targetPath", action->getTargetPath());
-            bpt::put(actionJson, "appArgs", action->getAppArgs());
+            bpt::put(actionJson, "targetArgs", action->getTargetArgs());
             if (action->getType() == Action::ActionAutoText)
                 bpt::put(actionJson, "autoText", action->getAutoText());
             bpt::put(actionJson, "lastModified", action->getLastModified());
@@ -110,7 +110,7 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
             QString actionName = bpt::get(actionJson.second, "actionName", "");
             QString actionType = bpt::get(actionJson.second, "type", "");
             QString targetPath = bpt::get(actionJson.second, "targetPath", "");
-            QString appArgs    = bpt::get(actionJson.second, "appArgs", "");
+            QString targetArgs = bpt::get(actionJson.second, "targetArgs", "");
             QString autoText   = "";
             if (QuickCut::fromValue<Action::ActionType>(actionType) == Action::ActionAutoText)
                 autoText = bpt::get(actionJson.second, "autoText", "");
@@ -144,7 +144,7 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
             action->setSrcKeys(srcKeys);
             action->setDstKeys(dstKeys);
             action->setTargetPath(targetPath);
-            action->setAppArgs(appArgs);
+            action->setTargetArgs(targetArgs);
             action->setAutoText(autoText);
             action->setEnabled(enabled);
             profile->getActionManager().add(action);
