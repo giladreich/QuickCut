@@ -39,36 +39,28 @@ bool ProfileParser::saveImpl(const std::vector<std::shared_ptr<Profile>> & data)
         for (auto && action : actions)
         {
             JSON actionJson;
+            auto actionType = action->getType();
+
             bpt::put(actionJson, "id", action->getId());
             bpt::put(actionJson, "actionName", action->getName());
-            bpt::put(actionJson, "type", QuickCut::fromKey(action->getType()));
-            bpt::put(actionJson, "targetPath", action->getTargetPath());
-            bpt::put(actionJson, "targetArgs", action->getTargetArgs());
-            if (action->getType() == Action::ActionAutoText)
+            bpt::put(actionJson, "type", QuickCut::fromKey(actionType));
+            if (actionType == Action::ActionFileLaunch ||
+                actionType == Action::ActionDirLaunch)
+                bpt::put(actionJson, "targetPath", action->getTargetPath());
+
+            if (actionType == Action::ActionFileLaunch)
+                bpt::put(actionJson, "targetArgs", action->getTargetArgs());
+
+            if (actionType == Action::ActionAutoText)
                 bpt::put(actionJson, "autoText", action->getAutoText());
+
             bpt::put(actionJson, "lastModified", action->getLastModified());
             bpt::put(actionJson, "createdDate", action->getCreatedDate());
             actionJson.put<bool>("enabled", action->isEnabled());
+            actionJson.push_back(serializeKeys("srcKeys", action->getSrcKeys()));
 
-            JSON srcKeysJson;
-            for (auto && srcKey : action->getSrcKeys())
-            {
-                JSON keyJson;
-                bpt::put(keyJson, "keyName", srcKey.getKeyName());
-                bpt::put(keyJson, "keyCode", srcKey.getKeyCodeHex());
-                srcKeysJson.push_back(std::make_pair("", keyJson));
-            }
-            actionJson.push_back(std::make_pair("srcKeys", srcKeysJson));
-
-            JSON dstKeysJson;
-            for (auto && dstKey : action->getDstKeys())
-            {
-                JSON keyJson;
-                bpt::put(keyJson, "keyName", dstKey.getKeyName());
-                bpt::put(keyJson, "keyCode", dstKey.getKeyCodeHex());
-                dstKeysJson.push_back(std::make_pair("", keyJson));
-            }
-            actionJson.push_back(std::make_pair("dstKeys", dstKeysJson));
+            if (actionType == Action::ActionKeyMap)
+                actionJson.push_back(serializeKeys("dstKeys", action->getDstKeys()));
 
             actionsJson.push_back(std::make_pair("", actionJson));
         }
@@ -106,37 +98,17 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
         JSON actionsJson = profileJson.second.get_child("actions");
         for (auto && actionJson : actionsJson)
         {
-            QString actionId   = bpt::get(actionJson.second, "id", "");
-            QString actionName = bpt::get(actionJson.second, "actionName", "");
-            QString actionType = bpt::get(actionJson.second, "type", "");
-            QString targetPath = bpt::get(actionJson.second, "targetPath", "");
-            QString targetArgs = bpt::get(actionJson.second, "targetArgs", "");
-            QString autoText   = "";
-            if (QuickCut::fromValue<Action::ActionType>(actionType) == Action::ActionAutoText)
-                autoText = bpt::get(actionJson.second, "autoText", "");
-            QString lastModified = bpt::get(actionJson.second, "lastModified", "");
-            QString createdDate  = bpt::get(actionJson.second, "createdDate", "");
-            bool    enabled      = actionJson.second.get<bool>("enabled", true);
-
-            KeyboardKeys srcKeys;
-            JSON         srcKeysJson = actionJson.second.get_child("srcKeys");
-            srcKeys.reserve(srcKeysJson.size());
-            for (auto && srcKey : srcKeysJson)
-            {
-                QString keyName = bpt::get(srcKey.second, "keyName", "");
-                QString keyCode = bpt::get(srcKey.second, "keyCode", "");
-                srcKeys.push_back(KeyData(keyName, keyCode));
-            }
-
-            KeyboardKeys dstKeys;
-            JSON         dstKeysJson = actionJson.second.get_child("dstKeys");
-            dstKeys.reserve(dstKeysJson.size());
-            for (auto && dstKey : dstKeysJson)
-            {
-                QString keyName = bpt::get(dstKey.second, "keyName", "");
-                QString keyCode = bpt::get(dstKey.second, "keyCode", "");
-                dstKeys.push_back(KeyData(keyName, keyCode));
-            }
+            QString      actionId     = bpt::get(actionJson.second, "id", "");
+            QString      actionName   = bpt::get(actionJson.second, "actionName", "");
+            QString      actionType   = bpt::get(actionJson.second, "type", "");
+            QString      targetPath   = bpt::get(actionJson.second, "targetPath", "");
+            QString      targetArgs   = bpt::get(actionJson.second, "targetArgs", "");
+            QString      autoText     = bpt::get(actionJson.second, "autoText", "");
+            QString      lastModified = bpt::get(actionJson.second, "lastModified", "");
+            QString      createdDate  = bpt::get(actionJson.second, "createdDate", "");
+            bool         enabled      = actionJson.second.get<bool>("enabled", true);
+            KeyboardKeys srcKeys      = deserializeKeys("srcKeys", actionJson.second);
+            KeyboardKeys dstKeys      = deserializeKeys("dstKeys", actionJson.second);
 
             auto action = std::make_shared<Action>(actionId, lastModified, createdDate);
             action->setName(actionName);
@@ -154,4 +126,36 @@ bool ProfileParser::parseImpl(std::vector<std::shared_ptr<Profile>> * outData)
     }
 
     return true;
+}
+
+std::pair<const char *, JSON> ProfileParser::serializeKeys(const char *         key,
+                                                           const KeyboardKeys & keys)
+{
+    JSON keysJson;
+    for (auto && k : keys)
+    {
+        JSON keyJson;
+        bpt::put(keyJson, "keyName", k.getKeyName());
+        bpt::put(keyJson, "keyCode", k.getKeyCodeHex());
+        keysJson.push_back(std::make_pair("", keyJson));
+    }
+
+    return std::make_pair(key, keysJson);
+}
+
+KeyboardKeys ProfileParser::deserializeKeys(const char * key, JSON actionJson)
+{
+    auto keysJson = actionJson.get_child_optional(key);
+    if (!keysJson) return {};
+
+    KeyboardKeys keys;
+    keys.reserve(keysJson->size());
+    for (auto && k : *keysJson)
+    {
+        QString keyName = bpt::get(k.second, "keyName", "");
+        QString keyCode = bpt::get(k.second, "keyCode", "");
+        keys.push_back(KeyData(keyName, keyCode));
+    }
+
+    return keys;
 }

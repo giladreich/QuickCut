@@ -15,4 +15,7 @@ public:
 private:
     bool saveImpl(const std::vector<std::shared_ptr<Profile>> & data) override;
     bool parseImpl(std::vector<std::shared_ptr<Profile>> * outData) override;
+
+    std::pair<const char *, JSON> serializeKeys(const char * key, const KeyboardKeys & keys);
+    KeyboardKeys                  deserializeKeys(const char * key, JSON actionJson);
 };
