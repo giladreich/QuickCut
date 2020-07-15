@@ -1,0 +1,8 @@
+*.qs linguist-language=JavaScript
+
+*.cmake linguist-language=CMake
+CMakeLists.txt linguist-language=CMake
+
+*.sh linguist-language=Shell
+*.bat linguist-language=Shell
+*.cmd linguist-language=Shell

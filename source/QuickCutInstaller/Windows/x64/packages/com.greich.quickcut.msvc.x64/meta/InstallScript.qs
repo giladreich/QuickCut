@@ -80,14 +80,31 @@ Component.prototype.installationFinishedPageIsShown = function () {
 
 installMissingRedistributables = function () {
     console.log("********** installMissingRedistributables **********");
+    var needInstall = true;
     var regKey = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\x64";
-    var regValue = installer.execute("reg", new Array("query", regKey, "/v", "Installed"))[0];
-    if (!regValue) {
-        QMessageBox.information("redist.install", "Install Visual Studio Redistributables",
-            "The application requires Visual Studio Redistributables to run and will be installed now.",
+    var command = "Get-ItemProperty -Path Registry::" + regKey;
+    var commandInstalled = "(" + command + " -Name Installed).Installed";
+    var regInstalled = installer.execute("powershell", commandInstalled);
+    if (regInstalled) {
+        var isInstalled = parseInt(regInstalled) == 1;
+        if (isInstalled) {
+            var commandBuild = "(" + command + " -Name Bld).Bld";
+            var regBuild = installer.execute("powershell", commandBuild);
+            if (regBuild) {
+                var buildNumber = parseInt(regBuild);
+                if (buildNumber >= 28720) {
+                    needInstall = false;
+                }
+            }
+        }
+    }
+
+    if (needInstall) {
+        QMessageBox.information("redist.install", "Required Visual Studio Redistributables Installation",
+            "The application requires Visual Studio Redistributables to run and will be automatically installed.",
             QMessageBox.OK);
         console.log("Starting to install missing redistributables...");
-        installer.execute(Dir.toNative("@TargetDir@/vc_redist.x64.exe"), "/passive", "/norestart");
+        installer.execute(Dir.toNative("@TargetDir@/vc_redist.x64.exe"), new Array("/repair", "/passive", "/norestart"));
         console.log("Finished installing redistributables.");
     }
 }
