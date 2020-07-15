@@ -16,18 +16,18 @@ bool PreferenceParser::saveImpl(const Preference & data)
 {
     QString themeName = QuickCut::fromKey<QCTheme::ThemeType>(data.theme().get());
     bpt::put(m_Content, "currentTheme", themeName);
-    m_Content.put("toolBarVisible", data.isToolBarVisible());
-    m_Content.put("statusBarVisible", data.isStatusBarVisible());
+    bpt::put(m_Content, "toolBarVisible", data.isToolBarVisible());
+    bpt::put(m_Content, "statusBarVisible", data.isStatusBarVisible());
 
     return true;
 }
 
 bool PreferenceParser::parseImpl(Preference * outData)
 {
-    QString themeName = bpt::get(m_Content, "currentTheme", "");
+    QString themeName = bpt::get(m_Content, "currentTheme", QString());
     outData->getTheme().set(QuickCut::fromValue<QCTheme::ThemeType>(themeName));
-    outData->setToolBarVisible(m_Content.get<bool>("toolBarVisible", true));
-    outData->setStatusBarVisible(m_Content.get<bool>("statusBarVisible", true));
+    outData->setToolBarVisible(bpt::get(m_Content, "toolBarVisible", true));
+    outData->setStatusBarVisible(bpt::get(m_Content, "statusBarVisible", true));
 
     return true;
 }

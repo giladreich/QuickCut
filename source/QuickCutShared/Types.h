@@ -10,7 +10,11 @@ namespace bpt = boost::property_tree;
 // Typedefs
 class KeyData;
 
-typedef bpt::ptree       JSON;
+#if defined(UNICODE)
+typedef bpt::wptree JSON;
+#else
+typedef bpt::ptree JSON;
+#endif
 typedef QVector<KeyData> KeyboardKeys;
 
 // Macros
