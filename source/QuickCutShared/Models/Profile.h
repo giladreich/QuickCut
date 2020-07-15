@@ -12,6 +12,8 @@ class Profile : public BaseModel
 public:
     // Constructs new profile
     Profile() noexcept;
+
+    // Constructs existing profile
     Profile(const QString & id,
             const QString & lastModified,
             const QString & createdDate) noexcept;

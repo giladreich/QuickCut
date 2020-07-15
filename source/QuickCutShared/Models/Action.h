@@ -23,10 +23,10 @@ public:
     // Constructs new Action
     Action() noexcept;
 
+    // Constructs existing Action
     Action(const QString & id,
            const QString & lastModified,
            const QString & createdDate) noexcept;
-
     Action(QString && id, QString && lastModified, QString && createdDate) noexcept;
 
     // Constructs copy
@@ -74,10 +74,10 @@ public: // Operators
 
 private:
     ActionType   m_Type;
-    KeyboardKeys m_SrcKeys;
-    KeyboardKeys m_DstKeys;
     QString      m_TargetPath;
     QString      m_TargetArgs;
     QString      m_AutoText;
     bool         m_Enabled;
+    KeyboardKeys m_SrcKeys;
+    KeyboardKeys m_DstKeys;
 };

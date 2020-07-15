@@ -16,9 +16,10 @@ class QLocalServer;
 
 class QuickCutConsole : public QGuiApplication
 {
+protected:
+    QuickCutConsole(int argc, char * argv[]);
 
 public:
-    QuickCutConsole(int argc, char * argv[]);
     virtual ~QuickCutConsole();
 
     virtual bool start();
