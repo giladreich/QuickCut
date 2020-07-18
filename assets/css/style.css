@@ -396,7 +396,7 @@ font-family: 'Open Sans', sans-serif;
 .about-left-thumb {}
 
 .about-left-thumb img {
-    max-width: 120%;
+    max-width: 100%;
 }
 
 .about-content {}
