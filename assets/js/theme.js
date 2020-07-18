@@ -21,7 +21,10 @@
     --------------------- */
 
     $(window).on('load', function() {
-        $('#preloader').delay(1000).fadeOut('slow', function() { $(this).remove(); });
+        $('#preloader').delay(350).fadeOut('slow', function() { $(this).remove(); });
+
+        // if page was refreshed on a specific scroll position, update nav visibility.
+        updateNavigationBarState();
     });
 
     /*------------------------------
@@ -38,11 +41,11 @@
             loop: true,
             margin: 30,
             navigation: false,
-            items: 4,
+            items: 2,
             smartSpeed: 1000,
             dots: true,
             autoplay: true,
-            autoplayTimeout: 2000,
+            autoplayTimeout: 3000,
             dotsEach: true,
             responsive: {
                 0: {
@@ -52,13 +55,13 @@
                     items: 2
                 },
                 760: {
-                    items: 4
+                    items: 2
                 },
                 1080: {
-                    items: 4
+                    items: 2
                 },
                 1920: {
-                    items: 4
+                    items: 2
                 }
             }
         });
@@ -120,10 +123,7 @@
     }
     testimonial_list();
 
-    /*---------------------
-    Sticky Header
-    --------------------- */
-    $(window).on('scroll', function() {
+    function updateNavigationBarState() {
         var Wscroll = $(window).scrollTop();
         var header_area = $('.header-area');
         var navbar_fixed_top = 'header_fix';
@@ -133,7 +133,13 @@
         } else {
             header_area.removeClass(navbar_fixed_top);
         }
+    }
 
+    /*---------------------
+    Sticky Header
+    --------------------- */
+    $(window).on('scroll', function() {
+        updateNavigationBarState();
     })
 
     //=========================
@@ -201,6 +207,7 @@
 
     $(window).on("load", function() {
         smoothScrolling($(".main-menu > nav > ul > li > a[href^='#']"), 70);
+        smoothScrolling($(".slider-area.background-image > div> div > div > div > div.btn-area > a[href='#download']"), 20);
     });
 
     //=========================

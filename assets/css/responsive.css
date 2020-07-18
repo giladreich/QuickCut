@@ -151,13 +151,13 @@
 /* Max Size: 320px. */
 @media screen and (max-width: 991px) {
     .logo a img {
-        max-width: 127px;
+        max-width: 80px;
     }
     .logo {
         margin: 27px 0px 20px;
     }
     .header-area {
-		background: #fe601a;
+		background: #39709e;
 		z-index: 9;
 		box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 	}
