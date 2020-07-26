@@ -26,6 +26,7 @@ ActionView::ActionView(QWidget * parent)
     : ActionView(parent, ActionCreate)
 {
     m_Action = std::make_shared<Action>();
+    setWindowTitle("Create Action");
     ui->btnSave->setText("Create");
     onTypeSelChange(0);
 }
@@ -35,6 +36,7 @@ ActionView::ActionView(QWidget * parent, std::shared_ptr<Action> action)
 {
     Q_CHECK_PTR(action);
     m_Action = action;
+    setWindowTitle("Edit Action");
     ui->btnSave->setText("Save");
 
     int typeIndex = static_cast<int>(action->getType());
