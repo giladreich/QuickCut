@@ -68,12 +68,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Gilad Reich"
             VALUE "FileDescription", "QuickCutService"
-            VALUE "FileVersion", "1.0.2.0"
+            VALUE "FileVersion", "2.0.0.0"
             VALUE "InternalName", "QuickCutService.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2019 Reich"
+            VALUE "LegalCopyright", "Copyright (C) 2019-2020 Reich"
             VALUE "OriginalFilename", "QuickCutService.exe"
             VALUE "ProductName", "QuickCut"
-            VALUE "ProductVersion", "1.0.2.0"
+            VALUE "ProductVersion", "2.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
