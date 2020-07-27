@@ -78,6 +78,7 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetArgs->setVisible(false);
             ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
+            resize(size().width(), 200);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
@@ -92,6 +93,7 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetArgs->setVisible(true);
             ui->tbxTargetArgs->setVisible(true);
             ui->tbxAutoText->setVisible(false);
+            resize(size().width(), 220);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
@@ -106,6 +108,7 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetArgs->setVisible(false);
             ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(false);
+            resize(size().width(), 200);
             ui->spButtons->changeSize(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
             break;
         }
@@ -120,6 +123,7 @@ void ActionView::updateVisibility(Action::ActionType type)
             ui->lblTargetArgs->setVisible(false);
             ui->tbxTargetArgs->setVisible(false);
             ui->tbxAutoText->setVisible(true);
+            resize(size().width(), 300);
             ui->spButtons->changeSize(0, 0, QSizePolicy::Ignored, QSizePolicy::Ignored);
             break;
         }
