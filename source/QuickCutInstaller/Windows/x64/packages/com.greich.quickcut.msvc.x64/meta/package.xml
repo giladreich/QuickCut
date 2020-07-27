@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
     <DisplayName>QuickCut x64</DisplayName>
-    <Description>QuickCut is a shortcut keyboard manager that both facilitates key mapping and activates specified processes.</Description>
+    <Description>QuickCut is a cross-platform keyboard manager that both facilitates key mapping and allows the configuration of global hotkeys triggering user defined actions.</Description>
     <Version>2.0.0</Version>
-    <ReleaseDate>2020-07-09</ReleaseDate>
+    <ReleaseDate>2020-07-27</ReleaseDate>
     <Default>true</Default>
     <Script>InstallScript.qs</Script>
     <Licenses>

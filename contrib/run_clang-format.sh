@@ -9,5 +9,5 @@ find \
     source/QuickCutConsole \
     source/QuickCutService \
     source/QuickCutShared \
-    -regex '.*\.\(cpp\|h\|hpp\|cc\|cxx\)' -exec \
-    clang-format -style=file -i {} \;
+    -regex '.*\.\(cpp\|h\|hpp\|cc\|cxx\)' \
+    -exec clang-format -style=file -i {} \;

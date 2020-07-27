@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>112</height>
+    <height>77</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,21 +17,21 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lblText">
      <property name="text">
-      <string>New releases can be found on the GitHub page:</string>
+      <string>Get the latest version from the following url:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="lblGitHub">
+    <widget class="QLabel" name="lblQuickCutWeb">
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>9</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>Link to the &lt;a href=&quot;https://github.com/giladreich/QuickCut/releases&quot;&gt;GitHub Page&lt;/a&gt;</string>
+      <string>&lt;a href=&quot;https://quickcut.greich.com&quot;&gt;https://quickcut.greich.com&lt;/a&gt;</string>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>

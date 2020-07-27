@@ -44,7 +44,7 @@ PROJECT_NUMBER         = 2.0.0
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "QuickCut is a shortcut keyboard manager that both facilitates key mapping and activates specified processes."
+PROJECT_BRIEF          = "QuickCut is a cross-platform keyboard manager that both facilitates key mapping and allows the configuration of global hotkeys triggering user defined actions."
 
 # With the PROJECT_LOGO tag one can specify a logo or an icon that is included
 # in the documentation. The maximum height of the logo should not exceed 55

@@ -125,8 +125,8 @@ if(GENERATE_DOCS)
     set(DOXYGEN_PROJECT_NAME ${PROJECT_NAME})
     set(DOXYGEN_PROJECT_NUMBER v${QUICKCUT_VERSION})
     set(DOXYGEN_PROJECT_BRIEF "\
-            QuickCut is a shortcut keyboard manager that both facilitates key mapping \
-            and activates specified processes. \
+        QuickCut is a cross-platform keyboard manager that both facilitates key mapping and allows the \
+        configuration of global hotkeys triggering user defined actions. \
     ")
     set(DOXYGEN_PROJECT_LOGO ./media/logo.png)
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ./docs/README.md)
