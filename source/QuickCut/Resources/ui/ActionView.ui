@@ -284,11 +284,16 @@ QPushButton#btnSrcKeyPlay[background-image=&quot;stop&quot;] {
  <tabstops>
   <tabstop>tbxName</tabstop>
   <tabstop>cbxType</tabstop>
-  <tabstop>tbxTargetPath</tabstop>
+  <tabstop>btnSrcKeyPlay</tabstop>
+  <tabstop>btnDstKeyPlay</tabstop>
   <tabstop>btnTargetPicker</tabstop>
+  <tabstop>tbxTargetPath</tabstop>
   <tabstop>tbxTargetArgs</tabstop>
+  <tabstop>tbxAutoText</tabstop>
   <tabstop>btnSave</tabstop>
   <tabstop>btnCancel</tabstop>
+  <tabstop>tbxSrcKey</tabstop>
+  <tabstop>tbxDstKey</tabstop>
  </tabstops>
  <resources>
   <include location="../QuickCut.qrc"/>
