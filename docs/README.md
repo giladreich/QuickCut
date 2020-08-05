@@ -14,8 +14,13 @@
         <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?logo=pre-commit" /></a>
 </p>
 
----
+<p align="center">
+    Special thanks to JetBrains for supporting this project.<br>
+    <a href="https://www.jetbrains.com/" alt="JetBrains">
+        <img src="/media/JetBrains.png" width="60px" /></a>
+</p>
 
+---
 # QuickCut
 
 QuickCut is a cross-platform keyboard manager that both facilitates key mapping and allows the configuration of global hotkeys triggering user defined actions.
