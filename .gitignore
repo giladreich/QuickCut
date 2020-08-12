@@ -1,6 +1,7 @@
 bin/
 .vs/
 .vscode/
+.idea/
 GeneratedFiles/
 Release/
 Debug/
@@ -13,3 +14,4 @@ source/QuickCutInstaller/Windows/x*/resources/Manifest.txt
 source/QuickCutInstaller/Windows/x*/resources/QuickCut.ico
 source/QuickCutInstaller/Windows/x*/*.exe
 source/QuickCutInstaller/Windows/x*/packages/com.greich.quickcut.msvc.x*/meta/LICENSE
+cmake-build-*/
